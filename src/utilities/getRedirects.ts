@@ -1,8 +1,16 @@
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { unstable_cache } from 'next/cache'
+import { isDatabaseAvailable } from './checkDatabase'
 
 export async function getRedirects(depth = 1) {
+  // Check if database is available
+  const dbAvailable = await isDatabaseAvailable()
+  if (!dbAvailable) {
+    console.log('Database not available during build, returning empty redirects')
+    return []
+  }
+
   const payload = await getPayload({ config: configPromise })
 
   const { docs: redirects } = await payload.find({

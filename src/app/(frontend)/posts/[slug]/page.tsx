@@ -13,26 +13,44 @@ import type { Post } from '@/payload-types'
 import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
+import { isDatabaseAvailable } from '@/utilities/checkDatabase'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const posts = await payload.find({
-    collection: 'posts',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
+  // Check if database is available during build
+  const dbAvailable = await isDatabaseAvailable()
+  if (!dbAvailable) {
+    console.log('Database not available during build, returning empty static params for posts')
+    return []
+  }
 
-  const params = posts.docs.map(({ slug }) => {
-    return { slug }
-  })
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const posts = await payload.find({
+      collection: 'posts',
+      draft: false,
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      select: {
+        slug: true,
+      },
+      where: {
+        _status: {
+          equals: 'published',
+        },
+      },
+    })
 
-  return params
+    const params = posts.docs.map(({ slug }) => {
+      return { slug }
+    })
+
+    return params || []
+  } catch (error) {
+    console.error('Error in posts generateStaticParams:', error)
+    return []
+  }
 }
 
 type Args = {
@@ -68,7 +86,7 @@ export default async function Post({ params: paramsPromise }: Args) {
           {post.relatedPosts && post.relatedPosts.length > 0 && (
             <RelatedPosts
               className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-              docs={post.relatedPosts.filter((post) => typeof post === 'object')}
+              docs={post.relatedPosts.filter((post): post is Post => typeof post === 'object')}
             />
           )}
         </div>
@@ -87,6 +105,13 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 }
 
 const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
+  // Check if database is available
+  const dbAvailable = await isDatabaseAvailable()
+  if (!dbAvailable) {
+    console.log(`Database not available during build, returning null for post slug: ${slug}`)
+    return null
+  }
+
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })

@@ -3,10 +3,18 @@ import type { Config } from 'src/payload-types'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { unstable_cache } from 'next/cache'
+import { isDatabaseAvailable } from './checkDatabase'
 
 type Collection = keyof Config['collections']
 
 async function getDocument(collection: Collection, slug: string, depth = 0) {
+  // Check if database is available
+  const dbAvailable = await isDatabaseAvailable()
+  if (!dbAvailable) {
+    console.log(`Database not available during build, returning null for document: ${collection}/${slug}`)
+    return null
+  }
+
   const payload = await getPayload({ config: configPromise })
 
   const page = await payload.find({

@@ -11,30 +11,48 @@ import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
+import { isDatabaseAvailable } from '@/utilities/checkDatabase'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const pages = await payload.find({
-    collection: 'pages',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
+  // Check if database is available during build
+  const dbAvailable = await isDatabaseAvailable()
+  if (!dbAvailable) {
+    console.log('Database not available during build, returning empty static params')
+    return []
+  }
 
-  const params = pages.docs
-    ?.filter((doc) => {
-      return doc.slug !== 'home'
-    })
-    .map(({ slug }) => {
-      return { slug }
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const pages = await payload.find({
+      collection: 'pages',
+      draft: false,
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      select: {
+        slug: true,
+      },
+      where: {
+        _status: {
+          equals: 'published',
+        },
+      },
     })
 
-  return params
+    const params = pages.docs
+      ?.filter((doc) => {
+        return doc.slug !== 'home'
+      })
+      .map(({ slug }) => {
+        return { slug }
+      })
+
+    return params || []
+  } catch (error) {
+    console.error('Error in generateStaticParams:', error)
+    return []
+  }
 }
 
 type Args = {
@@ -92,6 +110,13 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 }
 
 const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
+  // Check if database is available
+  const dbAvailable = await isDatabaseAvailable()
+  if (!dbAvailable) {
+    console.log(`Database not available during build, returning null for page slug: ${slug}`)
+    return null
+  }
+
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
