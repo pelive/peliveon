@@ -1,6 +1,6 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
 
-// Used for pre-seeded content so that the homepage is not empty
+// Used for pre-seeded content so that homepage is not empty
 export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
   slug: 'home',
   _status: 'published',
@@ -15,11 +15,7 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
             children: [
               {
                 type: 'text',
-                detail: 0,
-                format: 0,
-                mode: 'normal',
-                style: '',
-                text: 'Payload Website Template',
+                text: 'In Concert',
                 version: 1,
               },
             ],
@@ -33,36 +29,28 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
             type: 'paragraph',
             children: [
               {
+                type: 'text',
+                text: 'PE Live is a pioneering Gospel band reinventing Gospel music in Belgium. ',
+                version: 1,
+              },
+              {
                 type: 'link',
                 children: [
                   {
                     type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: 'Visit the admin dashboard',
+                    text: 'Get tickets here',
                     version: 1,
                   },
                 ],
                 direction: 'ltr',
                 fields: {
                   linkType: 'custom',
-                  newTab: false,
-                  url: '/admin',
+                  newTab: true,
+                  url: 'https://ticketsgent.be/producties/pe-live-in-concert',
                 },
                 format: '',
                 indent: 0,
                 version: 2,
-              },
-              {
-                type: 'text',
-                detail: 0,
-                format: 0,
-                mode: 'normal',
-                style: '',
-                text: ' to make your account and seed content for your website.',
-                version: 1,
               },
             ],
             direction: 'ltr',
@@ -79,10 +67,10 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
       },
     },
   },
+  layout: [],
   meta: {
-    description: 'An open-source website built with Payload and Next.js.',
-    title: 'Payload Website Template',
+    description: 'PE LIVE is a pioneering Gospel band reinventing Gospel music in Belgium. Known for energetic performances and unique blend of Praise, Contemporary Rock, Hip-Hop, Reggae, and Afrobeat.',
+    title: 'PE LIVE - Gospel Band Belgium',
   },
   title: 'Home',
-  layout: [],
 }

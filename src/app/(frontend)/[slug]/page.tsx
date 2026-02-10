@@ -13,6 +13,7 @@ import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { isDatabaseAvailable } from '@/utilities/checkDatabase'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { PEHomePage } from '@/components/PEHomePage'
 
 export async function generateStaticParams() {
   // Check if database is available during build
@@ -83,6 +84,18 @@ export default async function Page({ params: paramsPromise }: Args) {
   }
 
   const { hero, layout } = page
+
+  // Use custom PE layout for home page, standard layout for other pages
+  if (slug === 'home') {
+    return (
+      <article>
+        <PageClient />
+        <PayloadRedirects disableNotFound url={url} />
+        {draft && <LivePreviewListener />}
+        <PEHomePage />
+      </article>
+    )
+  }
 
   return (
     <article className="pt-16 pb-24">
