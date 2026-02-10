@@ -7,6 +7,10 @@ import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { WhoWeAreBlock } from '@/blocks/WhoWeAre/Component'
+import { WhatWeDoBlock } from '@/blocks/WhatWeDo/Component'
+import { UpNextBlock } from '@/blocks/UpNext/Component'
+import { ContactBlock } from '@/blocks/Contact/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -14,6 +18,10 @@ const blockComponents = {
   cta: CallToActionBlock,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
+  whoWeAre: WhoWeAreBlock,
+  whatWeDo: WhatWeDoBlock,
+  upNext: UpNextBlock,
+  contact: ContactBlock,
 }
 
 export const RenderBlocks: React.FC<{
@@ -35,8 +43,13 @@ export const RenderBlocks: React.FC<{
             if (Block) {
               return (
                 <div className="my-16" key={index}>
-                  {/* @ts-expect-error there may be some mismatch between the expected types here */}
-                  <Block {...block} disableInnerContainer />
+                  {blockType === 'formBlock' ? (
+                    // @ts-ignore - FormBlock expects different prop structure
+                    <Block {...block} disableInnerContainer />
+                  ) : (
+                    // @ts-ignore - Custom blocks expect block prop
+                    <Block block={block} disableInnerContainer />
+                  )}
                 </div>
               )
             }

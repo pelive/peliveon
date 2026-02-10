@@ -198,7 +198,17 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | WhoWeAre
+    | WhatWeDo
+    | UpNext
+    | Contact
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -780,6 +790,108 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhoWeAre".
+ */
+export interface WhoWeAre {
+  enable?: boolean | null;
+  backgroundImage?: (number | null) | Media;
+  title: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'whoWeAre';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhatWeDo".
+ */
+export interface WhatWeDo {
+  enable?: boolean | null;
+  title: string;
+  subtitle?: string | null;
+  services?:
+    | {
+        title: string;
+        description: string;
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'whatWeDo';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "UpNext".
+ */
+export interface UpNext {
+  enable?: boolean | null;
+  title: string;
+  subtitle?: string | null;
+  featuredEvent: {
+    title: string;
+    date: string;
+    location: string;
+    description: string;
+    image?: (number | null) | Media;
+    ticketUrl?: string | null;
+  };
+  additionalEvents?:
+    | {
+        title: string;
+        date: string;
+        location: string;
+        description: string;
+        ticketUrl?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  mailingListText?: string | null;
+  mailingListLinkText?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'upNext';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Contact".
+ */
+export interface Contact {
+  enable?: boolean | null;
+  title: string;
+  subtitle?: string | null;
+  email: string;
+  formFields?:
+    | {
+        name: string;
+        label: string;
+        type?: ('text' | 'email' | 'textarea') | null;
+        required?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  submitButtonText?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contact';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1086,6 +1198,10 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        whoWeAre?: T | WhoWeAreSelect<T>;
+        whatWeDo?: T | WhatWeDoSelect<T>;
+        upNext?: T | UpNextSelect<T>;
+        contact?: T | ContactSelect<T>;
       };
   meta?:
     | T
@@ -1182,6 +1298,92 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhoWeAre_select".
+ */
+export interface WhoWeAreSelect<T extends boolean = true> {
+  enable?: T;
+  backgroundImage?: T;
+  title?: T;
+  content?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhatWeDo_select".
+ */
+export interface WhatWeDoSelect<T extends boolean = true> {
+  enable?: T;
+  title?: T;
+  subtitle?: T;
+  services?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "UpNext_select".
+ */
+export interface UpNextSelect<T extends boolean = true> {
+  enable?: T;
+  title?: T;
+  subtitle?: T;
+  featuredEvent?:
+    | T
+    | {
+        title?: T;
+        date?: T;
+        location?: T;
+        description?: T;
+        image?: T;
+        ticketUrl?: T;
+      };
+  additionalEvents?:
+    | T
+    | {
+        title?: T;
+        date?: T;
+        location?: T;
+        description?: T;
+        ticketUrl?: T;
+        id?: T;
+      };
+  mailingListText?: T;
+  mailingListLinkText?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Contact_select".
+ */
+export interface ContactSelect<T extends boolean = true> {
+  enable?: T;
+  title?: T;
+  subtitle?: T;
+  email?: T;
+  formFields?:
+    | T
+    | {
+        name?: T;
+        label?: T;
+        type?: T;
+        required?: T;
+        id?: T;
+      };
+  submitButtonText?: T;
   id?: T;
   blockName?: T;
 }
