@@ -14,7 +14,8 @@ export function CallToAction() {
       <Image
         className="absolute top-1/2 w-full h-screen -translate-y-1/2 opacity-[45%] object-cover"
         src="/pictures/19.jpg"
-        alt=""
+        alt="PE Live band performing on stage with colorful lighting"
+        priority={true}
         width={2347}
         height={1244}
         unoptimized

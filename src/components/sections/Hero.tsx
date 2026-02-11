@@ -12,7 +12,8 @@ export function Hero() {
 			<Image
 				className="absolute top-1/2 w-full min-h-[700px] -translate-y-1/2 opacity-95 -z-20 object-cover"
 				src="/pictures/1.jpg"
-				alt=""
+				alt="PE Live concert performance with dramatic lighting and engaged audience"
+				priority={true}
 				width={2347}
 				height={1244}
 				unoptimized

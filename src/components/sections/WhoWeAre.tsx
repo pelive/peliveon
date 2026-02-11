@@ -14,7 +14,8 @@ export function WhoWeAre() {
       <Image
         className="absolute top-1/2 w-full h-full -translate-y-1/2 opacity-[25%] -z-10 object-cover"
         src="/pictures/10.jpg"
-        alt=""
+        alt="PE Live gospel choir performance with unified group presentation"
+        priority={true}
         width={2347}
         height={1244}
         unoptimized
