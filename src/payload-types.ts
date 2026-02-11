@@ -72,6 +72,8 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    events: Event;
+    'past-performances': PastPerformance;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -94,6 +96,8 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
+    'past-performances': PastPerformancesSelect<false> | PastPerformancesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -892,6 +896,65 @@ export interface Contact {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: number;
+  title: string;
+  /**
+   * e.g., "March 15, 2024" or "July-August 2024"
+   */
+  date: string;
+  location: string;
+  description: string;
+  /**
+   * Check if this is the featured event (shown prominently at the top)
+   */
+  featured?: boolean | null;
+  /**
+   * Image for featured events (required for featured events)
+   */
+  image?: (number | null) | Media;
+  /**
+   * Detailed description for featured events (supports markdown)
+   */
+  fullDescription?: string | null;
+  /**
+   * URL for ticket purchases
+   */
+  ticketUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "past-performances".
+ */
+export interface PastPerformance {
+  id: number;
+  title: string;
+  /**
+   * e.g., "2021", "2022"
+   */
+  year: string;
+  /**
+   * Event name or venue
+   */
+  event: string;
+  description: string;
+  /**
+   * YouTube or video URL for the performance
+   */
+  videoUrl?: string | null;
+  /**
+   * Optional image for the performance
+   */
+  image?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1099,6 +1162,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: number | Event;
+      } | null)
+    | ({
+        relationTo: 'past-performances';
+        value: number | PastPerformance;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1554,6 +1625,36 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  title?: T;
+  date?: T;
+  location?: T;
+  description?: T;
+  featured?: T;
+  image?: T;
+  fullDescription?: T;
+  ticketUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "past-performances_select".
+ */
+export interface PastPerformancesSelect<T extends boolean = true> {
+  title?: T;
+  year?: T;
+  event?: T;
+  description?: T;
+  videoUrl?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

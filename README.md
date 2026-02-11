@@ -301,3 +301,20 @@ You can also deploy your app manually, check out the [deployment documentation](
 ## Questions
 
 If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+
+## TODO
+
+### Email Configuration
+
+- [ ] **Configure Resend DNS Settings**
+  - Visit: https://resend.com/domains/add/cd4681de-b747-4e35-a129-d8a4891e20a7
+  - Add the required DNS records for `pelive.be` domain
+  - This will enable email sending from the contact form to `info@pelive.be`
+  - Required for contact form notifications to work properly
+
+### Development Tasks
+
+- [ ] Add admin user creation script for easier setup
+- [ ] Add more event images to Media collection
+- [ ] Set up automated backups for database
+- [ ] Configure production environment variables

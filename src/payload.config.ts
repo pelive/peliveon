@@ -6,8 +6,10 @@ import { fileURLToPath } from 'url'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 
 import { Categories } from './collections/Categories'
+import { Events } from './collections/Events'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
+import { PastPerformances } from './collections/PastPerformances'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
@@ -63,16 +65,16 @@ export default buildConfig({
       connectionString: process.env.POSTGRES_URL || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Posts, Media, Categories, Users, Events, PastPerformances],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
-    vercelBlobStorage({
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-      collections: {
-        media: {},
-      },
-    }),
+    // vercelBlobStorage({
+    //   token: process.env.BLOB_READ_WRITE_TOKEN,
+    //   collections: {
+    //     media: {},
+    //   },
+    // }),
     ...plugins,
   ],
   secret: process.env.PAYLOAD_SECRET,
