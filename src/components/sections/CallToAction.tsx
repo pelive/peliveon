@@ -31,7 +31,7 @@ export function CallToAction() {
             project, or an innovative performance, we are excited to partner with you and co-create
             something extraordinary. Reach out to us with your idea, and let&apos;s make magic happen!
           </p>
-          <Button href="#contact" color="white" className="mt-10">
+          <Button href="/contact" color="white" className="mt-10">
             Get in touch
           </Button>
         </div>

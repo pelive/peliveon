@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 
@@ -16,12 +16,7 @@ export function Contact() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [submitMessage, setSubmitMessage] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const firstInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    firstInputRef.current?.focus();
-  }, []);
-
+  
   const validateField = (name: string, value: string): string => {
     switch (name) {
       case 'email':
@@ -127,7 +122,6 @@ export function Contact() {
                     First Name
                   </label>
                   <input
-                    ref={firstInputRef}
                     type="text"
                     id="firstname"
                     name="firstname"

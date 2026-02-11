@@ -114,28 +114,6 @@ export default async function Page({ params: paramsPromise }: Args) {
     page = await queryPageBySlug({ slug: decodedSlug })
   }
 
-  // If no admin content exists, show static homepage
-  if (slug === 'home' && (!page || !page.layout || page.layout.length === 0)) {
-    return (
-      <article>
-        <PageClient />
-        <PayloadRedirects disableNotFound url={url} />
-        <PEHomePage />
-      </article>
-    )
-  }
-
-  // Force static content for homepage to match old repo
-  if (slug === 'home') {
-    return (
-      <article>
-        <PageClient />
-        <PayloadRedirects disableNotFound url={url} />
-        <PEHomePage />
-      </article>
-    )
-  }
-
   // If admin content exists, use it
   if (page) {
     return (
@@ -144,17 +122,31 @@ export default async function Page({ params: paramsPromise }: Args) {
         <PayloadRedirects disableNotFound url={url} />
         {draft && <LivePreviewListener />}
         
-        {/* Show admin-edited hero if exists, otherwise use static hero */}
-        {page.hero && page.hero.type !== 'none' ? (
+        {/* Show admin-edited hero if exists */}
+        {page.hero && page.hero.type !== 'none' && (
           <RenderHero {...page.hero} />
-        ) : (
-          <PEHomePage />
         )}
         
         {/* Show admin-edited blocks if they exist */}
         {page.layout && page.layout.length > 0 && (
           <RenderBlocks blocks={page.layout} />
         )}
+        
+        {/* If no hero or layout, show static homepage */}
+        {(!page.hero || page.hero.type === 'none') && (!page.layout || page.layout.length === 0) && (
+          <PEHomePage />
+        )}
+      </article>
+    )
+  }
+
+  // If no admin content exists for homepage, show static homepage
+  if (slug === 'home') {
+    return (
+      <article>
+        <PageClient />
+        <PayloadRedirects disableNotFound url={url} />
+        <PEHomePage />
       </article>
     )
   }
