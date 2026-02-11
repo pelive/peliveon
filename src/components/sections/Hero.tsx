@@ -29,8 +29,33 @@ export function Hero() {
 					<p className="mt-5 font-display text-lg text-slate-100 uppercase">
 						Info & Tickets <span className="relative text-red-600">|| </span>
 						<a href="https://ticketsgent.be/producties/pe-live-in-concert"
-						   target="_blank" rel="noopener noreferrer">&#x1F517; ticketsgent.be</a>
+						   target="_blank">&#x1F517; ticketsgent.be</a>
 					</p>
+					<ul
+						role="list"
+						className="mt-8 flex flex-row items-center justify-center gap-y-0 gap-x-8 xl:gap-x-12"
+					>
+						{[
+							[
+								{ name: "PE Live", logo: "/logos/pelive-small.svg" },
+								{ name: "Stad Gent", logo: "/logos/gent-colorful.svg" },
+								{ name: "NTGent", logo: "/logos/ntgent.svg" },
+							],
+						].map((group, groupIndex) => (
+							<li key={groupIndex}>
+								<ul
+									role="list"
+									className="flex flex-row items-center sm:gap-x-12"
+								>
+									{group.map((company) => (
+										<li key={company.name} className="flex">
+											<Image src={company.logo} alt={company.name} width={120} height={60} unoptimized/>
+										</li>
+									))}
+								</ul>
+							</li>
+						))}
+					</ul>
 				</div>
 			</Container>
 		</section>

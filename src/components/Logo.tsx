@@ -1,10 +1,9 @@
 import Image from 'next/image'
-import logoPELive from '/logos/pelive-small.svg';
 
 export function Logo({ className = '' }: { className?: string }) {
   return (
     <Image 
-      src={logoPELive}
+      src="/logos/pelive-small.svg"
       alt="PE LIVE"
       className={className}
       width={120}

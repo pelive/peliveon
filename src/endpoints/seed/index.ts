@@ -225,18 +225,43 @@ export const seed = async ({
           {
             link: {
               type: 'custom',
-              label: 'Posts',
-              url: '/posts',
+              label: 'Hero',
+              url: '/#home',
             },
           },
           {
             link: {
-              type: 'reference',
+              type: 'custom',
+              label: 'Who We Are',
+              url: '/#about',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'What We Do',
+              url: '/#works',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Facts',
+              url: '/#facts',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
               label: 'Contact',
-              reference: {
-                relationTo: 'pages',
-                value: contactPage.id,
-              },
+              url: '/#contact',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Up Next',
+              url: '/#upcoming',
             },
           },
         ],

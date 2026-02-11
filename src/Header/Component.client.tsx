@@ -7,7 +7,6 @@ import React, { useEffect, useState } from 'react'
 import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
-import { HeaderNav } from './Nav'
 
 interface HeaderClientProps {
   data: Header | null
@@ -30,12 +29,36 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-8 flex justify-between">
-        <Link href="/">
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
-        </Link>
-        <HeaderNav data={data} />
+    <header className="py-10">
+      <div className="container relative z-20" {...(theme ? { 'data-theme': theme } : {})}>
+        <div className="flex justify-between items-center">
+          <Link href="/">
+            <Logo loading="eager" priority="high" className="h-10 w-auto" />
+          </Link>
+          
+          {/* Event Info and Ticket Button */}
+          <div className="flex items-center gap-x-5 md:gap-x-8">
+            <p className="font-display text-lg sm:text-2xl text-slate-100 uppercase">
+              <span className="mx-2">SAT, 28 SEP 2024</span>
+              <span className="relative text-red-600"> || </span>
+              <span className="mx-2">20:00</span>
+              <span className="relative text-red-600"> || </span>
+              <br className="block lg:hidden" />
+              <a href="https://ntgent.be/nl/plan-uw-bezoek/bereikbaarheid"
+                 target="_blank" rel="noopener noreferrer">&#x1F517; NTGent</a>
+            </p>
+            <a 
+              href="https://ticketsgent.be/producties/pe-live-in-concert"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors font-medium"
+            >
+              <span>
+                <span className="hidden lg:inline">Info &</span> Tickets
+              </span>
+            </a>
+          </div>
+        </div>
       </div>
     </header>
   )

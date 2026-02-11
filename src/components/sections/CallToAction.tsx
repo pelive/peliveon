@@ -2,6 +2,9 @@
 
 import Image from 'next/image'
 
+import {Button} from '@/components/Button'
+import {Container} from '@/components/Container'
+
 export function CallToAction() {
   return (
     <section
@@ -16,7 +19,7 @@ export function CallToAction() {
         height={1244}
         unoptimized
       />
-      <div className="container mx-auto px-4 relative">
+      <Container className="relative">
         <div className="mx-auto max-w-lg text-center">
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl tracking-tight text-slate-50">
             Got An Idea?
@@ -27,14 +30,11 @@ export function CallToAction() {
             project, or an innovative performance, we are excited to partner with you and co-create
             something extraordinary. Reach out to us with your idea, and let&apos;s make magic happen!
           </p>
-          <a 
-            href="#contact" 
-            className="mt-10 inline-flex items-center justify-center rounded-full bg-white px-8 py-3 text-base font-semibold text-slate-900 shadow-lg hover:bg-slate-100 transition-colors duration-200"
-          >
+          <Button href="#contact" color="white" className="mt-10">
             Get in touch
-          </a>
+          </Button>
         </div>
-      </div>
+      </Container>
     </section>
   )
 }
