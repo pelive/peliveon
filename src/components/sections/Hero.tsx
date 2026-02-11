@@ -8,7 +8,7 @@ export function Hero() {
 	return (
 		<section
 			id="home"
-			className="relative w-screen h-screen min-h-[700px] overflow-hidden pt-32">
+			className="relative w-screen h-screen min-h-[700px] overflow-hidden">
 			<Image
 				className="absolute top-1/2 w-full min-h-[700px] -translate-y-1/2 opacity-95 -z-20 object-cover"
 				src="/pictures/1.jpg"
@@ -17,9 +17,9 @@ export function Hero() {
 				height={1244}
 				unoptimized
 			/>
-			<Container className="absolute h-screen min-h-[700px] pt-64 lg:pt-96 flex flex-col justify-center items-center text-center">
+			<Container className="absolute inset-0 flex items-center justify-center">
 				<div
-					className="flex flex-col items-center justify-center absolute bottom-0 mt-36 mb-16 lg:mt-44 lg:mb-48">
+					className="flex flex-col items-center justify-center text-center">
 					<p className="font-display text-4xl sm:text-7xl text-slate-100 uppercase">
 						In Concert
 					</p>

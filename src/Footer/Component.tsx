@@ -4,31 +4,44 @@ import React from 'react'
 
 import type { Footer } from '@/payload-types'
 
-import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
-import { CMSLink } from '@/components/Link'
-import { Logo } from '@/components/Logo/Logo'
+import { Container } from '@/components/Container'
+import { FaFacebook, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa'
 
 export async function Footer() {
-  const footerData: Footer | null = await getCachedGlobal('footer', 1)()
-
-  const navItems = footerData?.navItems || []
-
   return (
-    <footer className="mt-auto border-t border-border bg-black dark:bg-card text-white">
-      <div className="container py-8 gap-8 flex flex-col md:flex-row md:justify-between">
-        <Link className="flex items-center" href="/">
-          <Logo />
-        </Link>
-
-        <div className="flex flex-col-reverse items-start md:flex-row gap-4 md:items-center">
-          <ThemeSelector />
-          <nav className="flex flex-col md:flex-row gap-4">
-            {navItems.map(({ link }, i) => {
-              return <CMSLink className="text-white" key={i} {...link} />
-            })}
-          </nav>
+    <footer className="bg-slate-50">
+      <Container>
+        <div
+          className="flex flex-col items-center border-t border-slate-400/10 py-10 sm:flex-row-reverse sm:justify-between">
+          <div className="flex gap-x-6">
+            <Link href="https://instagram.com/peliveon" target="_blank" className="group"
+                  aria-label="PE LIVE on Instagram">
+              <FaInstagram className="h-6 w-6 fill-slate-500 group-hover:fill-slate-700"/>
+            </Link>
+            <Link href="https://facebook.com/peliveon" target="_blank" className="group"
+                  aria-label="PE LIVE on Facebook">
+              <FaFacebook className="h-6 w-6 fill-slate-500 group-hover:fill-slate-700"/>
+            </Link>
+            <Link href="https://tiktok.com/@peliveon" target="_blank" className="group"
+                  aria-label="PE LIVE on TikTok">
+              <FaTiktok className="h-6 w-6 fill-slate-500 group-hover:fill-slate-700"/>
+            </Link>
+            <Link href="https://youtube.com/@pelive" target="_blank" className="group"
+                  aria-label="PE LIVE on YouTube">
+              <FaYoutube className="h-6 w-6 fill-slate-500 group-hover:fill-slate-700"/>
+            </Link>
+          </div>
+          <div className="mt-6 text-sm text-slate-500 sm:mt-0">
+            Copyright &copy; {new Date().getFullYear()} PE LIVE. All rights
+            reserved. Designed by {" "}
+            Covalliant
+            {/*<Link href="https://covalliant.com" target="_blank">
+              Covalliant
+            </Link>*/}
+            .
+          </div>
         </div>
-      </div>
+      </Container>
     </footer>
   )
 }
