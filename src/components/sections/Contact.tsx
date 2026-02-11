@@ -47,7 +47,7 @@ export function Contact() {
         setSubmitStatus('error');
         setSubmitMessage(data.error || 'Failed to send message');
       }
-    } catch (error) {
+    } catch (_error) {
       setSubmitStatus('error');
       setSubmitMessage('Failed to send message. Please try again later.');
     } finally {

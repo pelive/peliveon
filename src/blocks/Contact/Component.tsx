@@ -28,7 +28,13 @@ export const ContactBlock: React.FC<{ block: ContactType }> = ({ block }) => {
     })
   }
 
-  const renderField = (field: any) => {
+  const renderField = (field: {
+    name?: string;
+    type?: string | null;
+    required?: boolean | null;
+    label?: string;
+    placeholder?: string;
+  }) => {
     if (!field.name) return null
 
     switch (field.type) {
@@ -37,7 +43,7 @@ export const ContactBlock: React.FC<{ block: ContactType }> = ({ block }) => {
           <textarea
             name={field.name}
             id={field.name}
-            required={field.required}
+            required={field.required || undefined}
             value={formData[field.name] || ''}
             onChange={handleChange}
             rows={4}
@@ -51,7 +57,7 @@ export const ContactBlock: React.FC<{ block: ContactType }> = ({ block }) => {
             type="email"
             name={field.name}
             id={field.name}
-            required={field.required}
+            required={field.required || undefined}
             value={formData[field.name] || ''}
             onChange={handleChange}
             className="mt-1 block w-full rounded-lg border-0 bg-slate-800 px-4 py-3 text-white shadow-sm ring-1 ring-inset ring-slate-700 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
@@ -64,7 +70,7 @@ export const ContactBlock: React.FC<{ block: ContactType }> = ({ block }) => {
             type="text"
             name={field.name}
             id={field.name}
-            required={field.required}
+            required={field.required || undefined}
             value={formData[field.name] || ''}
             onChange={handleChange}
             className="mt-1 block w-full rounded-lg border-0 bg-slate-800 px-4 py-3 text-white shadow-sm ring-1 ring-inset ring-slate-700 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"

@@ -44,10 +44,10 @@ export const RenderBlocks: React.FC<{
               return (
                 <div className="my-16" key={index}>
                   {blockType === 'formBlock' ? (
-                    // @ts-ignore - FormBlock expects different prop structure
+                    // @ts-expect-error - FormBlock expects different prop structure
                     <Block {...block} disableInnerContainer />
                   ) : (
-                    // @ts-ignore - Custom blocks expect block prop
+                    // @ts-expect-error - Custom blocks expect block prop
                     <Block block={block} disableInnerContainer />
                   )}
                 </div>

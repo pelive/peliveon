@@ -960,7 +960,7 @@ export interface PastPerformance {
 export interface Redirect {
   id: number;
   /**
-   * You will need to rebuild the website when changing this field.
+   * You will need to rebuild website when changing this field.
    */
   from: string;
   to?: {

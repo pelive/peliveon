@@ -3,7 +3,7 @@ import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import { resendAdapter } from '@payloadcms/email-resend'
 
 import { Categories } from './collections/Categories'
 import { Events } from './collections/Events'
@@ -72,6 +72,11 @@ export default buildConfig({
   ],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
+  email: resendAdapter({
+    apiKey: process.env.RESEND_API_KEY!,
+    from: process.env.FROM_EMAIL || 'noreply@pelive.be',
+    name: 'Pelive Website',
+  } as any),
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
