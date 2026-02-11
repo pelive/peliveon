@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useState } from 'react'
+import { Container } from '@/components/Container'
+import { Button } from '@/components/Button'
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -56,22 +58,26 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="py-20 lg:py-32">
-      <div className="container">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Get in touch</h2>
-            <p className="text-lg text-gray-600 mb-8">
-              Book an unforgettable performance or collaborate on your next event.
+    <section id="contact" className="relative bg-zinc-950 py-32">
+      <Container>
+        <div className="mx-auto max-w-5xl">
+          <div className="text-center mb-20">
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl tracking-tight text-slate-50 mb-6">
+              Get in Touch
+            </h2>
+            <p className="mt-4 font-bold tracking-tight text-lg sm:text-xl text-white max-w-3xl mx-auto">
+              We would be delighted to discuss how we can bring your vision to life. 
+              Whether you're planning an intimate gathering or a grand celebration, 
+              our team is ready to create an unforgettable experience.
             </p>
           </div>
           
-          <div className="bg-white p-8 rounded-lg shadow-lg">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="firstname" className="block text-sm font-medium text-gray-700 mb-2">
-                    First name
+          <div className="bg-zinc-900/50 backdrop-blur-xl p-12 rounded-3xl border border-zinc-800 shadow-2xl">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label htmlFor="firstname" className="block text-sm font-medium text-zinc-300 uppercase tracking-wide">
+                    First Name
                   </label>
                   <input
                     type="text"
@@ -80,12 +86,12 @@ export function Contact() {
                     value={formData.firstname}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:ring-2 focus:ring-zinc-600 focus:border-zinc-600 focus:bg-zinc-800/70 transition-all duration-200"
                   />
                 </div>
-                <div>
-                  <label htmlFor="lastname" className="block text-sm font-medium text-gray-700 mb-2">
-                    Last name
+                <div className="space-y-2">
+                  <label htmlFor="lastname" className="block text-sm font-medium text-zinc-300 uppercase tracking-wide">
+                    Last Name
                   </label>
                   <input
                     type="text"
@@ -94,14 +100,14 @@ export function Contact() {
                     value={formData.lastname}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:ring-2 focus:ring-zinc-600 focus:border-zinc-600 focus:bg-zinc-800/70 transition-all duration-200"
                   />
                 </div>
               </div>
               
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
+              <div className="space-y-2">
+                <label htmlFor="email" className="block text-sm font-medium text-zinc-300 uppercase tracking-wide">
+                  Email Address
                 </label>
                 <input
                   type="email"
@@ -110,13 +116,13 @@ export function Contact() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:ring-2 focus:ring-zinc-600 focus:border-zinc-600 focus:bg-zinc-800/70 transition-all duration-200"
                 />
               </div>
               
-              <div>
-                <label htmlFor="number" className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone number
+              <div className="space-y-2">
+                <label htmlFor="number" className="block text-sm font-medium text-zinc-300 uppercase tracking-wide">
+                  Phone Number
                 </label>
                 <input
                   type="tel"
@@ -124,13 +130,13 @@ export function Contact() {
                   name="number"
                   value={formData.number}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:ring-2 focus:ring-zinc-600 focus:border-zinc-600 focus:bg-zinc-800/70 transition-all duration-200"
                 />
               </div>
               
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                  Message
+              <div className="space-y-2">
+                <label htmlFor="message" className="block text-sm font-medium text-zinc-300 uppercase tracking-wide">
+                  Your Message
                 </label>
                 <textarea
                   id="message"
@@ -138,45 +144,47 @@ export function Contact() {
                   value={formData.message}
                   onChange={handleChange}
                   required
-                  rows={5}
-                  placeholder="Your message..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  rows={6}
+                  placeholder="Tell us about your vision..."
+                  className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:ring-2 focus:ring-zinc-600 focus:border-zinc-600 focus:bg-zinc-800/70 transition-all duration-200 resize-none"
                 />
               </div>
               
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-red-600 text-white py-3 px-6 rounded-md hover:bg-red-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-              >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
-              </button>
+              <div className="pt-4">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-4 px-8 text-base font-medium"
+                >
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                </Button>
+              </div>
             </form>
             
             {submitStatus !== 'idle' && (
-              <div className={`mt-4 p-4 rounded-md ${
+              <div className={`mt-6 p-6 rounded-xl border ${
                 submitStatus === 'success' 
-                  ? 'bg-green-50 text-green-800 border border-green-200' 
-                  : 'bg-red-50 text-red-800 border border-red-200'
+                  ? 'bg-emerald-500/10 text-emerald-200 border-emerald-500/20' 
+                  : 'bg-rose-500/10 text-rose-200 border-rose-500/20'
               }`}>
                 {submitMessage}
               </div>
             )}
           </div>
           
-          <div className="text-center mt-8">
-            <p className="text-gray-600">
-              Or reach out directly at:{' '}
+          <div className="text-center mt-12">
+            <p className="text-slate-300 text-lg">
+              Prefer to email directly? Reach us at{' '}
               <a 
                 href="mailto:info@pelive.be" 
-                className="text-blue-600 hover:underline font-medium"
+                className="text-slate-50 hover:text-white font-medium transition-colors duration-200"
               >
                 info@pelive.be
               </a>
             </p>
           </div>
         </div>
-      </div>
+      </Container>
     </section>
   )
 }
