@@ -34,7 +34,7 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
-    user: Users.slug,
+    user: 'users',
     livePreview: {
       breakpoints: [
         {
@@ -58,23 +58,16 @@ export default buildConfig({
       ],
     },
   },
-  // This config helps us configure global or default features that the other editors can inherit
+  collections: [Pages, Posts, Media, Categories, Users, Events, PastPerformances],
+  cors: [getServerSideURL()].filter(Boolean),
+  globals: [Header, Footer],
   editor: defaultLexical,
   db: vercelPostgresAdapter({
     pool: {
       connectionString: process.env.POSTGRES_URL || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Events, PastPerformances],
-  cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
   plugins: [
-    // vercelBlobStorage({
-    //   token: process.env.BLOB_READ_WRITE_TOKEN,
-    //   collections: {
-    //     media: {},
-    //   },
-    // }),
     ...plugins,
   ],
   secret: process.env.PAYLOAD_SECRET,
