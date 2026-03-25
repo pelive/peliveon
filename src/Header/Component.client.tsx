@@ -12,6 +12,12 @@ interface HeaderClientProps {
   data: Header | null
 }
 
+type NavItem = {
+  label: string
+  url: string
+  newTab?: boolean | null
+}
+
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
   /* Storing the value in a useState to avoid hydration errors */
   const [theme, setTheme] = useState<string | null>(null)
@@ -28,36 +34,56 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerTheme])
 
+  const defaultNavItems: NavItem[] = [
+    { label: 'Home', url: '#home' },
+    { label: 'About', url: '#about' },
+    { label: 'Services', url: '#services' },
+    { label: 'Up Next', url: '#upcoming' },
+    { label: 'Contact', url: '#contact' },
+  ]
+
+  const navItems: NavItem[] =
+    _data?.navItems?.map(({ link }) => ({
+      label: link.label,
+      url:
+        link.type === 'custom'
+          ? link.url || '#'
+          : link.reference?.relationTo === 'pages' &&
+              typeof link.reference.value === 'object' &&
+              link.reference.value?.slug
+            ? `/${link.reference.value.slug}`
+            : '#',
+      newTab: link.newTab,
+    })) || defaultNavItems
+
   return (
     <header className="py-10">
       <div className="container relative z-20" {...(theme ? { 'data-theme': theme } : {})}>
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between gap-8">
           <Link href="/">
             <Logo loading="eager" priority="high" className="h-10 w-auto" />
           </Link>
-          
-          {/* Event Info and Ticket Button */}
-          <div className="flex items-center gap-x-5 md:gap-x-8">
-            <p className="font-display text-lg sm:text-2xl text-slate-100 uppercase">
-              <span className="mx-2">SAT, 28 SEP 2024</span>
-              <span className="relative text-red-600"> || </span>
-              <span className="mx-2">20:00</span>
-              <span className="relative text-red-600"> || </span>
-              <br className="block lg:hidden" />
-              <a href="https://ntgent.be/nl/plan-uw-bezoek/bereikbaarheid"
-                 target="_blank" rel="noopener noreferrer">&#x1F517; NTGent</a>
-            </p>
-            <a 
-              href="https://ticketsgent.be/producties/pe-live-in-concert"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors font-medium"
-            >
-              <span>
-                <span className="hidden lg:inline">Info &</span> Tickets
-              </span>
-            </a>
-          </div>
+
+          <nav className="hidden items-center gap-6 md:flex">
+            {navItems.map((item) => (
+              <a
+                key={`${item.label}-${item.url}`}
+                href={item.url}
+                target={item.newTab ? '_blank' : undefined}
+                rel={item.newTab ? 'noopener noreferrer' : undefined}
+                className="font-display text-sm uppercase tracking-[0.2em] text-slate-100 transition-colors hover:text-red-400"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
+          <a
+            href="#contact"
+            className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-gray-100 md:hidden"
+          >
+            Contact
+          </a>
         </div>
       </div>
     </header>

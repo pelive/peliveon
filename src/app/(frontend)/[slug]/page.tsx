@@ -107,12 +107,21 @@ export default async function Page({ params: paramsPromise }: Args) {
   const decodedSlug = decodeURIComponent(slug)
   const url = '/' + decodedSlug
 
+  if (slug === 'home') {
+    return (
+      <article>
+        <PageClient />
+        <PayloadRedirects disableNotFound url={url} />
+        {draft && <LivePreviewListener />}
+        <PEHomePage />
+      </article>
+    )
+  }
+
   // Try to get admin-edited page first
   let page: RequiredDataFromCollectionSlug<'pages'> | null = null
-  
-  if (slug === 'home') {
-    page = await queryPageBySlug({ slug: decodedSlug })
-  }
+
+  page = await queryPageBySlug({ slug: decodedSlug })
 
   // If admin content exists, use it
   if (page) {
@@ -136,17 +145,6 @@ export default async function Page({ params: paramsPromise }: Args) {
         {(!page.hero || page.hero.type === 'none') && (!page.layout || page.layout.length === 0) && (
           <PEHomePage />
         )}
-      </article>
-    )
-  }
-
-  // If no admin content exists for homepage, show static homepage
-  if (slug === 'home') {
-    return (
-      <article>
-        <PageClient />
-        <PayloadRedirects disableNotFound url={url} />
-        <PEHomePage />
       </article>
     )
   }

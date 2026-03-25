@@ -4,7 +4,7 @@ export const Events: CollectionConfig = {
   slug: 'events',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'date', 'location', 'featured'],
+    defaultColumns: ['title', 'eventDate', 'location', 'featured'],
   },
   fields: [
     {
@@ -13,11 +13,30 @@ export const Events: CollectionConfig = {
       required: true,
     },
     {
-      name: 'date',
-      type: 'text',
+      name: 'eventDate',
+      type: 'date',
       required: true,
       admin: {
-        description: 'e.g., "March 15, 2024" or "July-August 2024"',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+        description: 'The actual date of the event',
+      },
+    },
+    {
+      name: 'summary',
+      type: 'textarea',
+      required: true,
+      admin: {
+        description: 'Brief summary for listings and previews',
+      },
+    },
+    {
+      name: 'fullDescription',
+      type: 'richText',
+      required: true,
+      admin: {
+        description: 'Complete event details and information',
       },
     },
     {
@@ -26,16 +45,21 @@ export const Events: CollectionConfig = {
       required: true,
     },
     {
-      name: 'description',
-      type: 'textarea',
-      required: true,
-    },
-    {
       name: 'featured',
-      type: 'checkbox',
-      defaultValue: false,
+      type: 'radio',
+      options: [
+        {
+          label: 'Not Featured',
+          value: 'none',
+        },
+        {
+          label: 'Featured Event',
+          value: 'featured',
+        },
+      ],
+      defaultValue: 'none',
       admin: {
-        description: 'Check if this is the featured event (shown prominently at the top)',
+        description: 'Only one event can be featured at a time',
       },
     },
     {
@@ -43,14 +67,7 @@ export const Events: CollectionConfig = {
       type: 'relationship',
       relationTo: 'media',
       admin: {
-        description: 'Image for featured events (required for featured events)',
-      },
-    },
-    {
-      name: 'fullDescription',
-      type: 'textarea',
-      admin: {
-        description: 'Detailed description for featured events (supports markdown)',
+        description: 'Event image (recommended for featured events)',
       },
     },
     {
@@ -62,4 +79,26 @@ export const Events: CollectionConfig = {
     },
   ],
   timestamps: true,
+  hooks: {
+    beforeChange: [
+      async ({ data, operation, req }) => {
+        // If this event is being set as featured, unset all other featured events
+        if (data.featured === 'featured' && operation === 'update' && data.id) {
+          await req.payload.update({
+            collection: 'events',
+            where: {
+              and: [
+                { featured: { equals: 'featured' } },
+                { id: { not_equals: data.id } },
+              ],
+            },
+            data: { featured: 'none' },
+            overrideAccess: true,
+            req,
+          })
+        }
+        return data
+      },
+    ],
+  },
 }

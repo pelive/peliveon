@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 
 import type { Contact as ContactType } from '@/payload-types'
@@ -7,7 +8,7 @@ import type { Contact as ContactType } from '@/payload-types'
 export const ContactBlock: React.FC<{ block: ContactType }> = ({ block }) => {
   const [formData, setFormData] = useState<Record<string, string>>({})
 
-  const { title, subtitle, email, formFields, submitButtonText } = block
+  const { title, subtitle, backgroundImage, email, formFields, submitButtonText } = block
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -86,7 +87,17 @@ export const ContactBlock: React.FC<{ block: ContactType }> = ({ block }) => {
       aria-label="Contact"
       className="relative w-screen bg-zinc-900 py-32"
     >
-      <div className="container mx-auto px-4">
+      {backgroundImage && typeof backgroundImage === 'object' && backgroundImage.url && (
+        <Image
+          className="absolute inset-0 h-full w-full object-cover opacity-20"
+          src={backgroundImage.url}
+          alt=""
+          fill
+          unoptimized
+        />
+      )}
+      <div className="absolute inset-0 bg-zinc-950/80" />
+      <div className="container relative mx-auto px-4">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl tracking-tight text-slate-50">
             {title}

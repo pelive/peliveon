@@ -1,75 +1,93 @@
 'use client'
 
+import Image from 'next/image'
 import React, { useState } from 'react'
-import { Container } from '@/components/Container'
-import { Button } from '@/components/Button'
 
-export function Contact() {
-  const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    number: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [submitMessage, setSubmitMessage] = useState('');
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  
+import { Button } from '@/components/Button'
+import { Container } from '@/components/Container'
+
+type ContactField = {
+  name: string
+  label: string
+  type?: 'text' | 'email' | 'textarea' | null
+  required?: boolean | null
+  id?: string | null
+}
+
+type ContactData = {
+  enable?: boolean | null
+  title: string
+  subtitle?: string | null
+  backgroundImage?: {
+    url?: string | null
+  } | number | null
+  email: string
+  formFields?: ContactField[] | null
+  submitButtonText?: string | null
+}
+
+export function Contact({ data }: { data: ContactData }) {
+  if (!data?.enable) return null
+
+  const fields = data.formFields || []
+  const initialData = fields.reduce<Record<string, string>>((acc, field) => {
+    acc[field.name] = ''
+    return acc
+  }, {})
+
+  const [formData, setFormData] = useState<Record<string, string>>(initialData)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [submitMessage, setSubmitMessage] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+
   const validateField = (name: string, value: string): string => {
     switch (name) {
       case 'email':
-        if (!value) return 'Email is required';
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Please enter a valid email';
-        return '';
-      case 'firstname':
-      case 'lastname':
-        if (!value.trim()) return `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
-        return '';
+        if (!value) return 'Email is required'
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Please enter a valid email'
+        return ''
       case 'message':
-        if (!value.trim()) return 'Message is required';
-        if (value.length < 10) return 'Message must be at least 10 characters';
-        return '';
+        if (!value.trim()) return 'Message is required'
+        if (value.length < 10) return 'Message must be at least 10 characters'
+        return ''
       default:
-        return '';
+        return !value.trim() ? `${name.charAt(0).toUpperCase() + name.slice(1)} is required` : ''
     }
-  };
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
+    const { name, value } = e.target
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
-    }));
-    
-    // Clear error for this field when user starts typing
+      [name]: value,
+    }))
+
     if (fieldErrors[name]) {
-      setFieldErrors(prev => ({
+      setFieldErrors((prev) => ({
         ...prev,
-        [name]: ''
-      }));
+        [name]: '',
+      }))
     }
-  };
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Validate all fields
-    const errors: Record<string, string> = {};
-    Object.keys(formData).forEach(key => {
-      const error = validateField(key, formData[key as keyof typeof formData]);
-      if (error) errors[key] = error;
-    });
-    
+    e.preventDefault()
+
+    const errors: Record<string, string> = {}
+    Object.keys(formData).forEach((key) => {
+      const error = validateField(key, formData[key] || '')
+      if (error) errors[key] = error
+    })
+
     if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
-      return;
+      setFieldErrors(errors)
+      return
     }
 
-    setIsSubmitting(true);
-    setSubmitStatus('idle');
-    setSubmitMessage('');
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+    setSubmitMessage('')
 
     try {
       const response = await fetch('/api/contact', {
@@ -78,158 +96,101 @@ export function Contact() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      });
+      })
 
-      const data = await response.json();
+      const responseData = await response.json()
 
       if (response.ok) {
-        setSubmitStatus('success');
-        setSubmitMessage(data.message);
-        setFormData({ firstname: "", lastname: "", email: "", number: "", message: "" });
-        setFieldErrors({});
+        setSubmitStatus('success')
+        setSubmitMessage(responseData.message)
+        setFormData(initialData)
+        setFieldErrors({})
       } else {
-        setSubmitStatus('error');
-        setSubmitMessage(data.error || 'Failed to send message');
+        setSubmitStatus('error')
+        setSubmitMessage(responseData.error || 'Failed to send message')
       }
     } catch (_error) {
-      setSubmitStatus('error');
-      setSubmitMessage('Failed to send message. Please try again later.');
+      setSubmitStatus('error')
+      setSubmitMessage('Failed to send message. Please try again later.')
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <section id="contact" className="relative bg-zinc-950 py-32">
+      {data.backgroundImage && typeof data.backgroundImage === 'object' && data.backgroundImage.url && (
+        <Image
+          className="absolute inset-0 h-full w-full object-cover opacity-20"
+          src={data.backgroundImage.url}
+          alt=""
+          fill
+          unoptimized
+        />
+      )}
+      <div className="absolute inset-0 bg-zinc-950/80" />
       <Container>
-        <div className="mx-auto max-w-5xl">
+        <div className="relative mx-auto max-w-5xl">
           <div className="text-center mb-20">
             <h2 className="font-display text-3xl sm:text-4xl md:text-5xl tracking-tight text-slate-50 mb-6">
-              Get in Touch
+              {data.title}
             </h2>
             <p className="mt-4 font-bold tracking-tight text-lg sm:text-xl text-white max-w-3xl mx-auto">
-              We would be delighted to discuss how we can bring your vision to life. 
-              Whether you're planning an intimate gathering or a grand celebration, 
-              our team is ready to create an unforgettable experience.
+              {data.subtitle}
             </p>
           </div>
-          
+
           <div className="bg-zinc-900/50 backdrop-blur-xl p-12 rounded-3xl border border-zinc-800 shadow-2xl">
             <form onSubmit={handleSubmit} className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-2">
-                  <label htmlFor="firstname" className="block text-sm font-medium text-zinc-300 uppercase tracking-wide">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    id="firstname"
-                    name="firstname"
-                    value={formData.firstname}
-                    onChange={handleChange}
-                    required
-                    aria-required="true"
-                    aria-describedby={fieldErrors.firstname ? "firstname-error" : undefined}
-                    className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:ring-2 focus:ring-zinc-600 focus:border-zinc-600 focus:bg-zinc-800/70 transition-all duration-200"
-                  />
-                  {fieldErrors.firstname && (
-                    <p id="firstname-error" className="text-rose-400 text-sm mt-1" role="alert">
-                      {fieldErrors.firstname}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="lastname" className="block text-sm font-medium text-zinc-300 uppercase tracking-wide">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    id="lastname"
-                    name="lastname"
-                    value={formData.lastname}
-                    onChange={handleChange}
-                    required
-                    aria-required="true"
-                    aria-describedby={fieldErrors.lastname ? "lastname-error" : undefined}
-                    className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:ring-2 focus:ring-zinc-600 focus:border-zinc-600 focus:bg-zinc-800/70 transition-all duration-200"
-                  />
-                  {fieldErrors.lastname && (
-                    <p id="lastname-error" className="text-rose-400 text-sm mt-1" role="alert">
-                      {fieldErrors.lastname}
-                    </p>
-                  )}
-                </div>
+                {fields.map((field) => (
+                  <div
+                    key={field.id || field.name}
+                    className={field.type === 'textarea' ? 'space-y-2 md:col-span-2' : 'space-y-2'}
+                  >
+                    <label htmlFor={field.name} className="block text-sm font-medium text-zinc-300 uppercase tracking-wide">
+                      {field.label}
+                    </label>
+                    {field.type === 'textarea' ? (
+                      <textarea
+                        id={field.name}
+                        name={field.name}
+                        value={formData[field.name] || ''}
+                        onChange={handleChange}
+                        required={field.required || undefined}
+                        rows={6}
+                        aria-required={field.required || undefined}
+                        aria-describedby={fieldErrors[field.name] ? `${field.name}-error` : undefined}
+                        className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:ring-2 focus:ring-zinc-600 focus:border-zinc-600 focus:bg-zinc-800/70 transition-all duration-200 resize-none"
+                      />
+                    ) : (
+                      <input
+                        type={field.type === 'email' ? 'email' : 'text'}
+                        id={field.name}
+                        name={field.name}
+                        value={formData[field.name] || ''}
+                        onChange={handleChange}
+                        required={field.required || undefined}
+                        aria-required={field.required || undefined}
+                        aria-describedby={fieldErrors[field.name] ? `${field.name}-error` : undefined}
+                        className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:ring-2 focus:ring-zinc-600 focus:border-zinc-600 focus:bg-zinc-800/70 transition-all duration-200"
+                      />
+                    )}
+                    {fieldErrors[field.name] && (
+                      <p id={`${field.name}-error`} className="text-rose-400 text-sm mt-1" role="alert">
+                        {fieldErrors[field.name]}
+                      </p>
+                    )}
+                  </div>
+                ))}
               </div>
-              
-              <div className="space-y-2">
-                <label htmlFor="email" className="block text-sm font-medium text-zinc-300 uppercase tracking-wide">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  aria-required="true"
-                  aria-describedby={fieldErrors.email ? "email-error" : undefined}
-                  className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:ring-2 focus:ring-zinc-600 focus:border-zinc-600 focus:bg-zinc-800/70 transition-all duration-200"
-                />
-                {fieldErrors.email && (
-                  <p id="email-error" className="text-rose-400 text-sm mt-1" role="alert">
-                    {fieldErrors.email}
-                  </p>
-                )}
-              </div>
-              
-              <div className="space-y-2">
-                <label htmlFor="number" className="block text-sm font-medium text-zinc-300 uppercase tracking-wide">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  id="number"
-                  name="number"
-                  value={formData.number}
-                  onChange={handleChange}
-                  aria-describedby="number-help"
-                  className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:ring-2 focus:ring-zinc-600 focus:border-zinc-600 focus:bg-zinc-800/70 transition-all duration-200"
-                />
-                <p id="number-help" className="text-zinc-500 text-sm mt-1">
-                  Optional - for faster response
-                </p>
-              </div>
-              
-              <div className="space-y-2">
-                <label htmlFor="message" className="block text-sm font-medium text-zinc-300 uppercase tracking-wide">
-                  Your Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={6}
-                  placeholder="Tell us about your vision..."
-                  aria-required="true"
-                  aria-describedby={fieldErrors.message ? "message-error" : undefined}
-                  className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:ring-2 focus:ring-zinc-600 focus:border-zinc-600 focus:bg-zinc-800/70 transition-all duration-200 resize-none"
-                />
-                {fieldErrors.message && (
-                  <p id="message-error" className="text-rose-400 text-sm mt-1" role="alert">
-                    {fieldErrors.message}
-                  </p>
-                )}
-              </div>
-              
+
               <div className="pt-4">
                 <Button
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full py-4 px-8 text-base font-medium relative"
-                  aria-describedby={submitStatus !== 'idle' ? "submit-status" : undefined}
+                  aria-describedby={submitStatus !== 'idle' ? 'submit-status' : undefined}
                 >
                   {isSubmitting ? (
                     <>
@@ -239,30 +200,35 @@ export function Contact() {
                       </svg>
                       Sending...
                     </>
-                  ) : 'Send Message'}
+                  ) : (data.submitButtonText || 'Send Message')}
                 </Button>
               </div>
             </form>
-            
+
             {submitStatus !== 'idle' && (
-              <div id="submit-status" className={`mt-6 p-6 rounded-xl border ${
-                submitStatus === 'success' 
-                  ? 'bg-emerald-500/10 text-emerald-200 border-emerald-500/20' 
-                  : 'bg-rose-500/10 text-rose-200 border-rose-500/20'
-              }`} role="alert" aria-live="polite">
+              <div
+                id="submit-status"
+                className={`mt-6 p-6 rounded-xl border ${
+                  submitStatus === 'success'
+                    ? 'bg-emerald-500/10 text-emerald-200 border-emerald-500/20'
+                    : 'bg-rose-500/10 text-rose-200 border-rose-500/20'
+                }`}
+                role="alert"
+                aria-live="polite"
+              >
                 {submitMessage}
               </div>
             )}
           </div>
-          
+
           <div className="text-center mt-12">
             <p className="text-slate-300 text-lg">
               Prefer to email directly? Reach us at{' '}
-              <a 
-                href="mailto:info@pelive.be" 
+              <a
+                href={`mailto:${data.email}`}
                 className="text-slate-50 hover:text-white font-medium transition-colors duration-200"
               >
-                info@pelive.be
+                {data.email}
               </a>
             </p>
           </div>

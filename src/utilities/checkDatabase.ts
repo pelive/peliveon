@@ -5,13 +5,8 @@ export async function isDatabaseAvailable(): Promise<boolean> {
   try {
     const payload = await getPayload({ config: configPromise })
     
-    // Try a simple query to check if database is accessible
-    await payload.find({
-      collection: 'pages',
-      limit: 1,
-      pagination: false,
-      overrideAccess: false,
-    })
+    // Try a simple database connection check
+    await payload.db.drizzle.execute('SELECT 1')
     
     return true
   } catch (error) {

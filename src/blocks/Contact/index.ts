@@ -24,6 +24,12 @@ export const Contact: Block = {
       defaultValue: 'Ready to bring the power and passion of PE LIVE to your event? We\'d love to hear from you!',
     },
     {
+      name: 'backgroundImage',
+      type: 'relationship',
+      relationTo: 'media',
+      label: 'Background Image',
+    },
+    {
       name: 'email',
       type: 'text',
       defaultValue: 'info@pelive.be',

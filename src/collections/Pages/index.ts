@@ -11,6 +11,7 @@ import { WhoWeAre } from '../../blocks/WhoWeAre'
 import { WhatWeDo } from '../../blocks/WhatWeDo'
 import { UpNext } from '../../blocks/UpNext'
 import { Contact } from '../../blocks/Contact'
+import { PastPerformances } from '../../blocks/PastPerformances'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -76,7 +77,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, WhoWeAre, WhatWeDo, UpNext, Contact],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, WhoWeAre, WhatWeDo, UpNext, Contact, PastPerformances],
               required: true,
               admin: {
                 initCollapsed: true,

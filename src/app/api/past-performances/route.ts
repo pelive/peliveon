@@ -6,13 +6,24 @@ export async function GET() {
   try {
     const payload = await getPayload({ config })
     
-    const performances = await payload.find({
-      collection: 'past-performances',
-      sort: '-year',
-      limit: 10,
+    const now = new Date()
+    
+    // Get all events and sort by date (most recent first)
+    const events = await payload.find({
+      collection: 'events',
+      sort: '-eventDate',
+      limit: 50,
     })
 
-    return NextResponse.json(performances)
+    // Filter for past events (dates that have already passed)
+    const pastEvents = events.docs.filter(event => {
+      const eventDate = new Date(event.eventDate as string)
+      return eventDate < now
+    })
+
+    return NextResponse.json({
+      pastEvents
+    })
   } catch (error) {
     console.error('Error fetching past performances:', error)
     return NextResponse.json(

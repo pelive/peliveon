@@ -8,11 +8,11 @@ import { MediumImpactHero } from '@/heros/MediumImpact'
 
 const heroes = {
   highImpact: HighImpactHero,
-  lowImpact: LowImpactHero,
+  lowImpact: (props: Page['hero']) => <LowImpactHero {...props} richText={props.richText} />,
   mediumImpact: MediumImpactHero,
 }
 
-export const RenderHero: React.FC<Page['hero']> = (props) => {
+export const RenderHero: React.FC<Page['hero']> = (props: Page['hero']) => {
   const { type } = props || {}
 
   if (!type || type === 'none') return null

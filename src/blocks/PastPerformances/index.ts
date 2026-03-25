@@ -1,8 +1,8 @@
 import type { Block } from 'payload'
 
-export const UpNext: Block = {
-  slug: 'upNext',
-  interfaceName: 'UpNext',
+export const PastPerformances: Block = {
+  slug: 'pastPerformances',
+  interfaceName: 'PastPerformances',
   fields: [
     {
       name: 'enable',
@@ -13,7 +13,7 @@ export const UpNext: Block = {
     {
       name: 'title',
       type: 'text',
-      defaultValue: 'Up Next',
+      defaultValue: 'Past Performances',
       label: 'Section Title',
       required: true,
     },
@@ -21,23 +21,31 @@ export const UpNext: Block = {
       name: 'subtitle',
       type: 'textarea',
       label: 'Subtitle',
-      defaultValue: "Don't miss out on our upcoming performances and events. Join us as we continue to bring the power of Gospel music to audiences across Belgium!",
+      defaultValue: 'Relive the magic of our previous performances. Explore our journey through the power of Gospel music across Belgium.',
     },
     {
       name: 'maxEvents',
       type: 'number',
-      defaultValue: 3,
+      defaultValue: 6,
       admin: {
-        description: 'Maximum number of upcoming events to display',
+        description: 'Maximum number of past events to display',
         step: 1,
       },
     },
     {
-      name: 'showFeatured',
+      name: 'showGallery',
       type: 'checkbox',
       defaultValue: true,
       admin: {
-        description: 'Show featured event prominently at the top',
+        description: 'Display events in a gallery format with images',
+      },
+    },
+    {
+      name: 'groupByYear',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Group performances by year',
       },
     },
     {
@@ -48,17 +56,17 @@ export const UpNext: Block = {
           name: 'title',
           type: 'text',
           label: 'Fallback Title',
-          defaultValue: 'No Upcoming Events',
+          defaultValue: 'No Past Performances Yet',
         },
         {
           name: 'message',
           type: 'textarea',
           label: 'Fallback Message',
-          defaultValue: 'Check back soon for upcoming performances and events!',
+          defaultValue: 'We\'re just getting started! Check back soon to see our amazing performances.',
         },
       ],
       admin: {
-        description: 'Content to display when no upcoming events are available',
+        description: 'Content to display when no past events are available',
       },
     },
   ],

@@ -3,149 +3,41 @@
 import Image from "next/image";
 import React from "react";
 
-const images = {
-  bgt: "/avatars/bgt.png",
-  parkpop: "/avatars/parkpop.png",
-  mia: "/avatars/mia.png",
-  heartbeat: "/avatars/heartbeat.png",
-  epiphany: "/avatars/epiphany.png",
-  gentsteFeesten: "/avatars/gentsefeesten.jpg",
+type MediaValue = {
+  url?: string | null;
+} | number | null;
+
+type FactsData = {
+  enable?: boolean | null;
+  title: string;
+  description: string;
+  backgroundImage?: MediaValue;
+  brandsTitle: string;
+  brandLogos?: {
+    name: string;
+    logo: MediaValue;
+    id?: string | null;
+  }[] | null;
+  artistsTitle: string;
+  artists?: {
+    name: string;
+    id?: string | null;
+  }[] | null;
+  performancesTitle: string;
+  performances?: {
+    column: number;
+    content: string;
+    name: string;
+    year: string;
+    image?: MediaValue;
+    links?: {
+      name: string;
+      url: string;
+      id?: string | null;
+    }[] | null;
+    id?: string | null;
+  }[] | null;
 };
-
-const logos = {
-  belgiumsGotTalent: "/logos/got-talent.svg",
-  deMias: "/logos/mias.svg",
-  vtm: "/logos/vtm.svg",
-  een: "/logos/een.svg",
-  playNostalgie: "/logos/play-nostalgie.svg",
-  samsung: "/logos/samsung.svg",
-  ugent: "/logos/ugent.svg",
-  stadGent: "/logos/gent.svg",
-  deCentrale: "/logos/de-centrale.svg",
-};
-
-const backgroundImage = "/background-faqs.jpg";
-
-interface Performance {
-  name: string;
-  year: string;
-  links?: { name: string; url: string }[];
-  image?: string;
-}
-
-const performances: { content: string; performance: Performance }[][] = [
-  [
-    {
-      content:
-        'PE LIVE made history by bringing Gospel music to the Belgian commercial scene for the first time on Belgium\'s Got Talent. Their electrifying performance earned them the Golden Buzzer from Bart Peeters and won the admiration of many.',
-      performance: {
-        name: 'BGT (Belgium\'s Got Talent)',
-        year: '2021',
-        links: [
-          {
-            name: 'Dance Performance',
-            url: 'https://vtm.be/deze-gospel-positivos-krijgen-iedereen-aan-het-dansen~vff8d5e31-d881-4f66-97ee-2cd81c00e794'
-          },
-          {
-            name: 'Gospel with Attitude',
-            url: 'https://vtm.be/kippenvel-pe-live-brengt-gospel-met-attitude~vef1f3ec0-74f6-4c9d-8722-a4109b6d35f2'
-          },
-        ],
-        image: images.bgt,
-      },
-    },
-    {
-      content:
-        'At Parkpop, PE LIVE brought incredible energy to the stage, captivating the younger generation. They have performed at this festival for two consecutive years, setting the stage on fire and connecting with the students of Ghent University.',
-      performance: {
-        name: 'Parkpop',
-        year: '2023/24',
-        links: [
-          {name: 'Parkpop Performance', url: 'https://youtube.com/watch?v=3naMnpuMTiQ&ab_channel=PELive'},
-        ],
-        image: images.parkpop,
-      },
-    },
-    {
-      content:
-        'At the Vlaamse Kermis, PE LIVE delivered an intimate performance filled with warmth and energy, sharing the joy and good news of the Gospel with the audience. The night was a beautiful blend of excitement and connection with the fans.',
-      performance: {
-        name: 'Vlaamse Kermis',
-        year: '2022',
-      },
-    },
-  ],
-  [
-    {
-      content:
-        'They had a beautiful and incredible moment at the MIA Awards, performing live on stage with Bart Peeters for his new single "Winter Dip". This performance was a highlight of the Belgian awards show.',
-      performance: {
-        name: 'MIA Awards',
-        year: '2022',
-        links: [
-          {
-            name: 'MIA Awards Performance',
-            url: 'https://youtube.com/watch?v=Rsw9DpKWIvI&ab_channel=MuziekbijVRT1'
-          },
-        ],
-        image: images.mia,
-      },
-    },
-    {
-      content:
-        'Epiphany is PE LIVE\'s annual concert, a night of art, craft, music, and dance. The first edition after a three-year break was held at De Centrale, where they filled the venue to capacity. This year, the event will move to NTGent, promising an even grander experience.',
-      performance: {
-        name: 'Epiphany',
-        year: '2023',
-        links: [
-          {name: 'Epiphany Performance 1', url: 'https://youtube.com/watch?v=ekKXeRidzAk&ab_channel=PELive'},
-          {name: 'Epiphany Performance 2', url: 'https://youtube.com/watch?v=GFB7vgClXrc&ab_channel=PELive'},
-          {name: 'Epiphany Performance 3', url: 'https://youtube.com/watch?v=UqlrmHWoHaM&ab_channel=PELive'},
-        ],
-        image: images.epiphany,
-      },
-    },
-    {
-      content:
-        'The Candlelight Session is PE LIVE\'s yearly collaboration with major brands like Samsung and Play Nostalgie. This event, held in December, creates a warm Christmas atmosphere with Gospel music, leaving the audience with heartwarming memories.',
-      performance: {
-        name: 'Candlelight Session',
-        year: '2023',
-      },
-    },
-  ],
-  [
-    {
-      content:
-        'PE LIVE set the stage on fire at the Gentse Feesten, transitioning from street performances to the main stage at Korenmarkt. They are still the reigning champions of the street performance "Straatmuzikant" competition, as the competition has not been held again.',
-      performance: {
-        name: 'Gentse Feesten',
-        year: '2019, 2022',
-        image: images.gentsteFeesten,
-      },
-    },
-    {
-      content:
-        'The Heartbeat Sessions were born out of a request from the City of Ghent during COVID-19, recognizing PE LIVE\'s contribution to uplifting spirits. This collaboration with De Centrale was a significant moment for the group, offering inspiration to the people of Ghent.',
-      performance: {
-        name: 'Heartbeat Sessions',
-        year: '2021',
-        links: [
-          {name: 'Heartbeat Session #6', url: 'https://youtube.com/watch?v=tyFmIItCZyg'},
-        ],
-        image: images.heartbeat,
-      },
-    },
-    {
-      content:
-        'At Patershol Feesten, PE LIVE connected with the older generation, showcasing how their music resonates with all ages. This festival, aimed at an older audience, was a significant moment for the group as they uplifted spirits with their performance.',
-      performance: {
-        name: 'Patershol Feesten',
-        year: '2019',
-      },
-    },
-  ],
-]
 
 function QuoteIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -156,65 +48,57 @@ function QuoteIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   )
 }
 
-export function FactsAndFigures() {
+export function FactsAndFigures({ data }: { data: FactsData }) {
+  if (!data?.enable) return null
+
+  const performanceColumns = [1, 2, 3].map((column) =>
+    (data.performances || []).filter((performance) => performance.column === column),
+  )
+
   return (
     <section
       id="facts"
       aria-label="Facts & Figures"
       className="relative overflow-hidden bg-slate-50 py-20 sm:py-32"
     >
-      <Image
-        className="absolute left-1/2 top-0 max-w-none -translate-y-1/4 translate-x-[-30%]"
-        src={backgroundImage}
-        alt=""
-        width={1558}
-        height={946}
-        unoptimized
-      />
+      {data.backgroundImage && typeof data.backgroundImage === "object" && data.backgroundImage.url && (
+        <Image
+          className="absolute left-1/2 top-0 max-w-none -translate-y-1/4 translate-x-[-30%]"
+          src={data.backgroundImage.url}
+          alt=""
+          width={1558}
+          height={946}
+          unoptimized
+        />
+      )}
       <div className="container mx-auto px-4 relative">
         <div className="mx-auto max-w-2xl md:text-center">
           <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
-            Facts & Figures
+            {data.title}
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
-            PE LIVE has been a trailblazer in the Belgian Gospel music scene, continuously pushing the
-            boundaries with our vibrant performances and diverse repertoire. Our journey has been marked by
-            collaborations with renowned artists and performances on prestigious stages.
+            {data.description}
           </p>
         </div>
         <div className="mt-20 lg:mt-32 text-center">
           <p className="font-display text-xl text-slate-900">
-            Brands we&apos;ve worked with
+            {data.brandsTitle}
           </p>
           <ul
             role="list"
             className="mt-16 flex items-center justify-center gap-x-8 sm:flex-col sm:gap-x-0 sm:gap-y-10 xl:flex-row xl:gap-x-12 xl:gap-y-0"
           >
-            {[
-              [
-                {name: 'Belgium\'s Got Talent', logo: logos.belgiumsGotTalent},
-                {name: 'De MIA\'s', logo: logos.deMias},
-                {name: 'VTM', logo: logos.vtm},
-              ],
-              [
-                {name: 'EEN', logo: logos.een},
-                {name: 'Play Nostalgie', logo: logos.playNostalgie},
-                {name: 'Samsung', logo: logos.samsung},
-              ],
-              [
-                {name: 'UGent', logo: logos.ugent},
-                {name: 'Stad Gent', logo: logos.stadGent},
-                {name: 'De Centrale', logo: logos.deCentrale},
-              ],
-            ].map((group, groupIndex) => (
+            {[0, 1, 2].map((groupIndex) => (
               <li key={groupIndex}>
                 <ul
                   role="list"
                   className="flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0"
                 >
-                  {group.map((company) => (
-                    <li key={company.name} className="flex">
-                      <Image src={company.logo} alt={company.name} width={120} height={60} unoptimized/>
+                  {(data.brandLogos || []).slice(groupIndex * 3, groupIndex * 3 + 3).map((company) => (
+                    <li key={company.id || company.name} className="flex">
+                      {company.logo && typeof company.logo === "object" && company.logo.url && (
+                        <Image src={company.logo.url} alt={company.name} width={120} height={60} unoptimized/>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -224,55 +108,51 @@ export function FactsAndFigures() {
         </div>
         <div className="mt-20 lg:mt-32 text-center">
           <p className="font-display text-xl text-slate-900">
-            Artists we&apos;ve worked with
+            {data.artistsTitle}
           </p>
           <div
             className="mt-16 font-serif text-2xl text-slate-900 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-12">
-            <span>Bart Peeters</span>
-            <span>Paul Michiels</span>
-            <span>Jasper Steverlinck</span>
-            <span>Laura Tesoro</span>
-            <span>Grace (The Voice)</span>
-            <span>Mentissa (The Voice)</span>
-            <span>Jeremie (The Voice)</span>
+            {(data.artists || []).map((artist) => (
+              <span key={artist.id || artist.name}>{artist.name}</span>
+            ))}
           </div>
         </div>
         <div className="mt-20 lg:mt-32 text-center">
           <p className="font-display text-xl text-slate-900">
-            Stages we&apos;ve performed on
+            {data.performancesTitle}
           </p>
         </div>
         <ul
           role="list"
           className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
         >
-          {performances.map((column, columnIndex) => (
+          {performanceColumns.map((column, columnIndex) => (
             <li key={columnIndex}>
               <ul role="list" className="flex flex-col gap-y-6 sm:gap-y-8">
-                {column.map((performances, performanceIndex) => (
-                  <li key={performanceIndex}>
+                {column.map((performance) => (
+                  <li key={performance.id || `${performance.name}-${performance.year}`}>
                     <figure
                       className="relative rounded-2xl bg-white p-6 shadow-xl shadow-slate-900/10">
                       <QuoteIcon className="absolute left-6 top-6 fill-slate-100 opacity-15"/>
                       <blockquote className="relative">
                         <p className="text-lg tracking-tight text-slate-900">
-                          {performances.content}
+                          {performance.content}
                         </p>
                       </blockquote>
                       <figcaption
                         className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
                         <div>
                           <div className="font-display text-base text-slate-900">
-                            {performances.performance.name}
+                            {performance.name}
                           </div>
                           <div className="mt-1 text-sm text-slate-500">
-                            {performances.performance.year}
+                            {performance.year}
                           </div>
-                          {performances.performance.links &&
-                            performances.performance.links.length > 0 && (
+                          {performance.links &&
+                            performance.links.length > 0 && (
                               <div className="mt-1 text-sm text-blue-500">
-                                {performances.performance.links.map((link, index) => (
-                                  <div key={index}>
+                                {performance.links.map((link) => (
+                                  <div key={link.id || `${performance.name}-${link.name}`}>
                                     <a href={link.url} target="_blank"
                                        rel="noopener noreferrer">{link.name}</a>
                                   </div>
@@ -281,12 +161,12 @@ export function FactsAndFigures() {
                             )}
                         </div>
                       </figcaption>
-                      {performances.performance.image && (
+                      {performance.image && typeof performance.image === "object" && performance.image.url && (
                         <div className="mt-5 overflow-hidden rounded-xl bg-slate-50">
                           <Image
                             className="h-40 w-full object-cover"
-                            src={performances.performance.image}
-                            alt={performances.performance.name}
+                            src={performance.image.url}
+                            alt={performance.name}
                             width={56}
                             height={56}
                           />

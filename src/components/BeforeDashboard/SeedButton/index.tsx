@@ -7,7 +7,7 @@ import './index.scss'
 
 const SuccessMessage: React.FC = () => (
   <div>
-    Database seeded! You can now{' '}
+    Front page content seeded! You can now{' '}
     <a target="_blank" href="/">
       visit your website
     </a>
@@ -24,7 +24,7 @@ export const SeedButton: React.FC = () => {
       e.preventDefault()
 
       if (seeded) {
-        toast.info('Database already seeded.')
+        toast.info('Front page content already seeded.')
         return
       }
       if (loading) {
@@ -48,7 +48,7 @@ export const SeedButton: React.FC = () => {
                     resolve(true)
                     setSeeded(true)
                   } else {
-                    reject('An error occurred while seeding.')
+                    reject('An error occurred while seeding the front page.')
                   }
                 })
                 .catch((error) => {
@@ -59,9 +59,9 @@ export const SeedButton: React.FC = () => {
             }
           }),
           {
-            loading: 'Seeding with data....',
+            loading: 'Seeding front page content...',
             success: <SuccessMessage />,
-            error: 'An error occurred while seeding.',
+            error: 'An error occurred while seeding the front page.',
           },
         )
       } catch (err) {

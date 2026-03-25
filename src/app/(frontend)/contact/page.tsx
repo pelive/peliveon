@@ -1,13 +1,19 @@
 import { Metadata } from 'next'
+
+import type { Config } from '@/payload-types'
 import { Contact } from '@/components/sections/Contact'
 import { Container } from '@/components/Container'
+import { getCachedGlobal } from '@/utilities/getGlobals'
 
 export const metadata: Metadata = {
   title: 'Contact - PE LIVE',
   description: 'Get in touch with PE LIVE gospel music band for bookings and inquiries.',
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const frontPage = (await getCachedGlobal('frontPage', 1)()) as Config['globals']['frontPage'] | null
+  const contactData = frontPage?.contact
+
   return (
     <main className="min-h-screen">
       <Container className="py-16">
@@ -22,7 +28,7 @@ export default function ContactPage() {
           </div>
         </div>
       </Container>
-      <Contact />
+      {contactData ? <Contact data={contactData} /> : null}
     </main>
   )
 }

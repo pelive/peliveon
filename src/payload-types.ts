@@ -73,7 +73,6 @@ export interface Config {
     categories: Category;
     users: User;
     events: Event;
-    'past-performances': PastPerformance;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -97,7 +96,6 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
-    'past-performances': PastPerformancesSelect<false> | PastPerformancesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -116,10 +114,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    frontPage: FrontPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    frontPage: FrontPageSelect<false> | FrontPageSelect<true>;
   };
   locale: null;
   user: User;
@@ -212,6 +212,7 @@ export interface Page {
     | WhatWeDo
     | UpNext
     | Contact
+    | PastPerformances
   )[];
   meta?: {
     title?: string | null;
@@ -847,26 +848,21 @@ export interface UpNext {
   enable?: boolean | null;
   title: string;
   subtitle?: string | null;
-  featuredEvent: {
-    title: string;
-    date: string;
-    location: string;
-    description: string;
-    image?: (number | null) | Media;
-    ticketUrl?: string | null;
+  /**
+   * Maximum number of upcoming events to display
+   */
+  maxEvents?: number | null;
+  /**
+   * Show featured event prominently at the top
+   */
+  showFeatured?: boolean | null;
+  /**
+   * Content to display when no upcoming events are available
+   */
+  fallbackContent?: {
+    title?: string | null;
+    message?: string | null;
   };
-  additionalEvents?:
-    | {
-        title: string;
-        date: string;
-        location: string;
-        description: string;
-        ticketUrl?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  mailingListText?: string | null;
-  mailingListLinkText?: string | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'upNext';
@@ -879,6 +875,7 @@ export interface Contact {
   enable?: boolean | null;
   title: string;
   subtitle?: string | null;
+  backgroundImage?: (number | null) | Media;
   email: string;
   formFields?:
     | {
@@ -896,60 +893,81 @@ export interface Contact {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PastPerformances".
+ */
+export interface PastPerformances {
+  enable?: boolean | null;
+  title: string;
+  subtitle?: string | null;
+  /**
+   * Maximum number of past events to display
+   */
+  maxEvents?: number | null;
+  /**
+   * Display events in a gallery format with images
+   */
+  showGallery?: boolean | null;
+  /**
+   * Group performances by year
+   */
+  groupByYear?: boolean | null;
+  /**
+   * Content to display when no past events are available
+   */
+  fallbackContent?: {
+    title?: string | null;
+    message?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'pastPerformances';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
  */
 export interface Event {
   id: number;
   title: string;
   /**
-   * e.g., "March 15, 2024" or "July-August 2024"
+   * The actual date of the event
    */
-  date: string;
+  eventDate: string;
+  /**
+   * Brief summary for listings and previews
+   */
+  summary: string;
+  /**
+   * Complete event details and information
+   */
+  fullDescription: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   location: string;
-  description: string;
   /**
-   * Check if this is the featured event (shown prominently at the top)
+   * Only one event can be featured at a time
    */
-  featured?: boolean | null;
+  featured?: ('none' | 'featured') | null;
   /**
-   * Image for featured events (required for featured events)
+   * Event image (recommended for featured events)
    */
   image?: (number | null) | Media;
-  /**
-   * Detailed description for featured events (supports markdown)
-   */
-  fullDescription?: string | null;
   /**
    * URL for ticket purchases
    */
   ticketUrl?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "past-performances".
- */
-export interface PastPerformance {
-  id: number;
-  title: string;
-  /**
-   * e.g., "2021", "2022"
-   */
-  year: string;
-  /**
-   * Event name or venue
-   */
-  event: string;
-  description: string;
-  /**
-   * YouTube or video URL for the performance
-   */
-  videoUrl?: string | null;
-  /**
-   * Optional image for the performance
-   */
-  image?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -1168,10 +1186,6 @@ export interface PayloadLockedDocument {
         value: number | Event;
       } | null)
     | ({
-        relationTo: 'past-performances';
-        value: number | PastPerformance;
-      } | null)
-    | ({
         relationTo: 'redirects';
         value: number | Redirect;
       } | null)
@@ -1273,6 +1287,7 @@ export interface PagesSelect<T extends boolean = true> {
         whatWeDo?: T | WhatWeDoSelect<T>;
         upNext?: T | UpNextSelect<T>;
         contact?: T | ContactSelect<T>;
+        pastPerformances?: T | PastPerformancesSelect<T>;
       };
   meta?:
     | T
@@ -1411,28 +1426,14 @@ export interface UpNextSelect<T extends boolean = true> {
   enable?: T;
   title?: T;
   subtitle?: T;
-  featuredEvent?:
+  maxEvents?: T;
+  showFeatured?: T;
+  fallbackContent?:
     | T
     | {
         title?: T;
-        date?: T;
-        location?: T;
-        description?: T;
-        image?: T;
-        ticketUrl?: T;
+        message?: T;
       };
-  additionalEvents?:
-    | T
-    | {
-        title?: T;
-        date?: T;
-        location?: T;
-        description?: T;
-        ticketUrl?: T;
-        id?: T;
-      };
-  mailingListText?: T;
-  mailingListLinkText?: T;
   id?: T;
   blockName?: T;
 }
@@ -1444,6 +1445,7 @@ export interface ContactSelect<T extends boolean = true> {
   enable?: T;
   title?: T;
   subtitle?: T;
+  backgroundImage?: T;
   email?: T;
   formFields?:
     | T
@@ -1455,6 +1457,26 @@ export interface ContactSelect<T extends boolean = true> {
         id?: T;
       };
   submitButtonText?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PastPerformances_select".
+ */
+export interface PastPerformancesSelect<T extends boolean = true> {
+  enable?: T;
+  title?: T;
+  subtitle?: T;
+  maxEvents?: T;
+  showGallery?: T;
+  groupByYear?: T;
+  fallbackContent?:
+    | T
+    | {
+        title?: T;
+        message?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1632,27 +1654,13 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface EventsSelect<T extends boolean = true> {
   title?: T;
-  date?: T;
+  eventDate?: T;
+  summary?: T;
+  fullDescription?: T;
   location?: T;
-  description?: T;
   featured?: T;
   image?: T;
-  fullDescription?: T;
   ticketUrl?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "past-performances_select".
- */
-export interface PastPerformancesSelect<T extends boolean = true> {
-  title?: T;
-  year?: T;
-  event?: T;
-  description?: T;
-  videoUrl?: T;
-  image?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1991,6 +1999,127 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "frontPage".
+ */
+export interface FrontPage {
+  id: number;
+  hero: {
+    eyebrow: string;
+    titlePrefix: string;
+    titleHighlight: string;
+    ticketLabel: string;
+    ticketUrl: string;
+    backgroundImage: number | Media;
+    partnerLogos?:
+      | {
+          name: string;
+          logo: number | Media;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  whoWeAre: {
+    enable?: boolean | null;
+    backgroundImage?: (number | null) | Media;
+    title: string;
+    content: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+  };
+  whatWeDo: {
+    enable?: boolean | null;
+    title: string;
+    subtitle?: string | null;
+    services?:
+      | {
+          title: string;
+          description: string;
+          image?: (number | null) | Media;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  callToAction: {
+    enable?: boolean | null;
+    title: string;
+    description: string;
+    buttonText: string;
+    buttonLink: string;
+    backgroundImage?: (number | null) | Media;
+  };
+  factsAndFigures: {
+    enable?: boolean | null;
+    title: string;
+    description: string;
+    backgroundImage?: (number | null) | Media;
+    brandsTitle: string;
+    brandLogos?:
+      | {
+          name: string;
+          logo: number | Media;
+          id?: string | null;
+        }[]
+      | null;
+    artistsTitle: string;
+    artists?:
+      | {
+          name: string;
+          id?: string | null;
+        }[]
+      | null;
+    performancesTitle: string;
+    performances?:
+      | {
+          column: number;
+          content: string;
+          name: string;
+          year: string;
+          image?: (number | null) | Media;
+          links?:
+            | {
+                name: string;
+                url: string;
+                id?: string | null;
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  contact: {
+    enable?: boolean | null;
+    title: string;
+    subtitle?: string | null;
+    backgroundImage?: (number | null) | Media;
+    email: string;
+    formFields?:
+      | {
+          name: string;
+          label: string;
+          type?: ('text' | 'email' | 'textarea') | null;
+          required?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+    submitButtonText?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2030,6 +2159,125 @@ export interface FooterSelect<T extends boolean = true> {
               label?: T;
             };
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "frontPage_select".
+ */
+export interface FrontPageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        eyebrow?: T;
+        titlePrefix?: T;
+        titleHighlight?: T;
+        ticketLabel?: T;
+        ticketUrl?: T;
+        backgroundImage?: T;
+        partnerLogos?:
+          | T
+          | {
+              name?: T;
+              logo?: T;
+              id?: T;
+            };
+      };
+  whoWeAre?:
+    | T
+    | {
+        enable?: T;
+        backgroundImage?: T;
+        title?: T;
+        content?: T;
+      };
+  whatWeDo?:
+    | T
+    | {
+        enable?: T;
+        title?: T;
+        subtitle?: T;
+        services?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+              id?: T;
+            };
+      };
+  callToAction?:
+    | T
+    | {
+        enable?: T;
+        title?: T;
+        description?: T;
+        buttonText?: T;
+        buttonLink?: T;
+        backgroundImage?: T;
+      };
+  factsAndFigures?:
+    | T
+    | {
+        enable?: T;
+        title?: T;
+        description?: T;
+        backgroundImage?: T;
+        brandsTitle?: T;
+        brandLogos?:
+          | T
+          | {
+              name?: T;
+              logo?: T;
+              id?: T;
+            };
+        artistsTitle?: T;
+        artists?:
+          | T
+          | {
+              name?: T;
+              id?: T;
+            };
+        performancesTitle?: T;
+        performances?:
+          | T
+          | {
+              column?: T;
+              content?: T;
+              name?: T;
+              year?: T;
+              image?: T;
+              links?:
+                | T
+                | {
+                    name?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+            };
+      };
+  contact?:
+    | T
+    | {
+        enable?: T;
+        title?: T;
+        subtitle?: T;
+        backgroundImage?: T;
+        email?: T;
+        formFields?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              type?: T;
+              required?: T;
+              id?: T;
+            };
+        submitButtonText?: T;
       };
   updatedAt?: T;
   createdAt?: T;

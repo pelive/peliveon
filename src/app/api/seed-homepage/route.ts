@@ -27,6 +27,7 @@ export async function POST() {
       data: {
         title: 'Home',
         slug: 'home',
+        _status: 'published',
         hero: {
           type: 'lowImpact',
           richText: {
@@ -267,17 +268,28 @@ export async function POST() {
           },
           {
             blockType: 'upNext',
+            enable: true,
             title: 'Up Next',
             subtitle: "Don't miss out on our upcoming performances and events. Join us as we continue to bring the power of Gospel music to audiences across Belgium!",
-            featuredEvent: {
-              title: 'PE LIVE IN CONCERT',
-              date: 'Coming Soon',
-              location: 'NTGent, Ghent',
-              description: 'Get ready for an unforgettable night of gospel music like you\'ve never seen before!'
+            maxEvents: 3,
+            showFeatured: true,
+            fallbackContent: {
+              title: 'No Upcoming Events',
+              message: 'Check back soon for upcoming performances and events!',
             },
-            additionalEvents: [],
-            mailingListText: 'Want to stay updated with our latest events?',
-            mailingListLinkText: 'Join our mailing list'
+          },
+          {
+            blockType: 'pastPerformances',
+            enable: true,
+            title: 'Past Performances',
+            subtitle: 'Relive the magic of our previous performances.',
+            maxEvents: 6,
+            showGallery: true,
+            groupByYear: false,
+            fallbackContent: {
+              title: 'No Past Performances Yet',
+              message: 'We\'re just getting started! Check back soon to see our amazing performances.',
+            },
           }
         ]
       }

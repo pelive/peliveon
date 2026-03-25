@@ -9,10 +9,10 @@ import { Categories } from './collections/Categories'
 import { Events } from './collections/Events'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
-import { PastPerformances } from './collections/PastPerformances'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
+import { FrontPage } from './FrontPage/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
@@ -58,9 +58,9 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Pages, Posts, Media, Categories, Users, Events, PastPerformances],
+  collections: [Pages, Posts, Media, Categories, Users, Events],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, FrontPage],
   editor: defaultLexical,
   db: vercelPostgresAdapter({
     pool: {
@@ -75,7 +75,7 @@ export default buildConfig({
   email: resendAdapter({
     apiKey: process.env.RESEND_API_KEY!,
     from: process.env.FROM_EMAIL || 'noreply@pelive.be',
-    name: 'Pelive Website',
+    name: 'PE Live Website',
   } as any),
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),

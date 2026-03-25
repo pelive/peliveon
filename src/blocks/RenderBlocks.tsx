@@ -11,8 +11,9 @@ import { WhoWeAreBlock } from '@/blocks/WhoWeAre/Component'
 import { WhatWeDoBlock } from '@/blocks/WhatWeDo/Component'
 import { UpNextBlock } from '@/blocks/UpNext/Component'
 import { ContactBlock } from '@/blocks/Contact/Component'
+import { PastPerformancesBlock } from '@/blocks/PastPerformances/Component'
 
-const blockComponents = {
+const blockComponents: Record<string, React.ComponentType<any>> = {
   archive: ArchiveBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
@@ -22,6 +23,7 @@ const blockComponents = {
   whatWeDo: WhatWeDoBlock,
   upNext: UpNextBlock,
   contact: ContactBlock,
+  pastPerformances: PastPerformancesBlock,
 }
 
 export const RenderBlocks: React.FC<{
@@ -37,17 +39,18 @@ export const RenderBlocks: React.FC<{
         {blocks.map((block, index) => {
           const { blockType } = block
 
+          // Debug: Log block data
+          console.log(`RenderBlocks - block ${index}:`, block)
+
           if (blockType && blockType in blockComponents) {
             const Block = blockComponents[blockType]
 
             if (Block) {
               return (
-                <div className="my-16" key={index}>
+                <div className="my-16" key={block.id || index}>
                   {blockType === 'formBlock' ? (
-                    // @ts-expect-error - FormBlock expects different prop structure
                     <Block {...block} disableInnerContainer />
                   ) : (
-                    // @ts-expect-error - Custom blocks expect block prop
                     <Block block={block} disableInnerContainer />
                   )}
                 </div>
