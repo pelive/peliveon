@@ -20,6 +20,38 @@ const nextConfig = {
       }),
     ],
   },
+  cacheLife: {
+    frontPage: {
+      stale: 3600,
+      revalidate: 900,
+      expire: 86400,
+    },
+    header: {
+      stale: 3600,
+      revalidate: 900,
+      expire: 86400,
+    },
+    footer: {
+      stale: 3600,
+      revalidate: 900,
+      expire: 86400,
+    },
+    pages: {
+      stale: 3600,
+      revalidate: 900,
+      expire: 86400,
+    },
+    posts: {
+      stale: 3600,
+      revalidate: 900,
+      expire: 86400,
+    },
+    redirect: {
+      stale: 3600,
+      revalidate: 900,
+      expire: 86400,
+    },
+  },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],

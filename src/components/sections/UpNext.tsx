@@ -43,14 +43,52 @@ export function UpNext() {
         const eventsResponse = await fetch('/api/events');
         if (eventsResponse.ok) {
           const eventsData = await eventsResponse.json();
-          setUpcomingEvents(eventsData.docs || []);
+          // API returns { featuredEvent, upcomingEvents, additionalEvents }
+          const allEvents = eventsData.upcomingEvents || [];
+          setUpcomingEvents(allEvents.map((event: any) => {
+            // Extract plain text from Lexical fullDescription
+            let fullDescText = event.summary;
+            if (event.fullDescription?.root?.children) {
+              fullDescText = event.fullDescription.root.children
+                .map((node: any) => 
+                  node.children?.map((child: any) => child.text).join('') || ''
+                )
+                .join('\n');
+            }
+            
+            return {
+              id: event.id,
+              title: event.title,
+              date: new Date(event.eventDate).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              }),
+              location: event.location,
+              description: event.summary,
+              featured: event.featured === 'featured',
+              image: event.image,
+              fullDescription: fullDescText,
+              ticketUrl: event.ticketUrl,
+            };
+          }));
         }
 
         // Fetch past performances
         const pastResponse = await fetch('/api/past-performances');
         if (pastResponse.ok) {
           const pastData = await pastResponse.json();
-          setPastPerformances(pastData.docs || []);
+          // API returns { pastEvents }
+          const pastEvents = pastData.pastEvents || [];
+          setPastPerformances(pastEvents.map((event: any) => ({
+            id: event.id,
+            title: event.title,
+            year: new Date(event.eventDate).getFullYear().toString(),
+            event: event.location,
+            description: event.summary,
+            image: event.image,
+            videoUrl: event.ticketUrl, // Using ticketUrl as videoUrl for now
+          })));
         }
       } catch (error) {
         console.error('Error fetching event data:', error);

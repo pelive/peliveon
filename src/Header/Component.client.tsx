@@ -8,6 +8,22 @@ import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
 
+function MenuIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  )
+}
+
+function CloseIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  )
+}
+
 interface HeaderClientProps {
   data: Header | null
 }
@@ -21,6 +37,7 @@ type NavItem = {
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
   /* Storing the value in a useState to avoid hydration errors */
   const [theme, setTheme] = useState<string | null>(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
 
@@ -57,35 +74,79 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
     })) || defaultNavItems
 
   return (
-    <header className="py-10">
-      <div className="container relative z-20" {...(theme ? { 'data-theme': theme } : {})}>
-        <div className="flex items-center justify-between gap-8">
-          <Link href="/">
-            <Logo loading="eager" priority="high" className="h-10 w-auto" />
-          </Link>
+    <>
+      <header className="py-10">
+        <div className="container relative z-20" {...(theme ? { 'data-theme': theme } : {})}>
+          <div className="flex items-center justify-between gap-8">
+            <Link href="/">
+              <Logo loading="eager" priority="high" className="h-10 w-auto" />
+            </Link>
 
-          <nav className="hidden items-center gap-6 md:flex">
-            {navItems.map((item) => (
-              <a
-                key={`${item.label}-${item.url}`}
-                href={item.url}
-                target={item.newTab ? '_blank' : undefined}
-                rel={item.newTab ? 'noopener noreferrer' : undefined}
-                className="font-display text-sm uppercase tracking-[0.2em] text-slate-100 transition-colors hover:text-red-400"
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
+            {/* Desktop Navigation */}
+            <nav className="hidden items-center gap-6 md:flex">
+              {navItems.map((item) => (
+                <a
+                  key={`${item.label}-${item.url}`}
+                  href={item.url}
+                  target={item.newTab ? '_blank' : undefined}
+                  rel={item.newTab ? 'noopener noreferrer' : undefined}
+                  className="font-display text-sm uppercase tracking-[0.2em] text-slate-100 transition-colors hover:text-red-400"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
 
-          <a
-            href="#contact"
-            className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-gray-100 md:hidden"
-          >
-            Contact
-          </a>
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden text-white p-2"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <CloseIcon className="h-6 w-6" />
+              ) : (
+                <MenuIcon className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 bg-zinc-950 md:hidden">
+          <div className="container py-10">
+            <div className="flex items-center justify-between mb-8">
+              <Link href="/" onClick={() => setMobileMenuOpen(false)}>
+                <Logo loading="eager" priority="high" className="h-10 w-auto" />
+              </Link>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-white p-2"
+                aria-label="Close menu"
+              >
+                <CloseIcon className="h-6 w-6" />
+              </button>
+            </div>
+            
+            <nav className="flex flex-col gap-6">
+              {navItems.map((item) => (
+                <a
+                  key={`mobile-${item.label}-${item.url}`}
+                  href={item.url}
+                  target={item.newTab ? '_blank' : undefined}
+                  rel={item.newTab ? 'noopener noreferrer' : undefined}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="font-display text-2xl uppercase tracking-[0.2em] text-slate-100 transition-colors hover:text-red-400 py-3 border-b border-slate-800"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </div>
+      )}
+    </>
   )
 }

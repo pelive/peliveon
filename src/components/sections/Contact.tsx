@@ -121,7 +121,7 @@ export function Contact({ data }: { data: ContactData }) {
     <section id="contact" className="relative bg-zinc-950 py-32">
       {data.backgroundImage && typeof data.backgroundImage === 'object' && data.backgroundImage.url && (
         <Image
-          className="absolute inset-0 h-full w-full object-cover opacity-20"
+          className="absolute inset-0 h-full w-full object-cover opacity-40"
           src={data.backgroundImage.url}
           alt=""
           fill

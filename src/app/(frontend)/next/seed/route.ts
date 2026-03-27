@@ -293,81 +293,95 @@ export async function seedFrontPage(payload: Payload) {
   const pastDate1 = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000) // 90 days ago
   const pastDate2 = new Date(now.getTime() - 180 * 24 * 60 * 60 * 1000) // 180 days ago
 
-  // Check if events already exist
+  // Delete all existing events first to ensure clean seed
   const existingEvents = await payload.find({
     collection: 'events',
-    limit: 1,
-    pagination: false,
+    limit: 100,
   })
 
-  if (existingEvents.docs.length === 0) {
-    // Create upcoming events
-    await payload.create({
+  payload.logger.info(`Found ${existingEvents.totalDocs} existing events, deleting them...`)
+  
+  for (const event of existingEvents.docs) {
+    await payload.delete({
       collection: 'events',
-      data: {
-        title: 'Epiphany Reloaded',
-        eventDate: futureDate1.toISOString(),
-        location: 'NTGent, Ghent',
-        summary: 'Our annual concert celebrating art, craft, music, and dance. Join us for an unforgettable evening of Gospel music.',
-        fullDescription: lexicalParagraphs([
-          'Epiphany Reloaded is PE LIVE\'s signature annual concert, bringing together the best of art, craft, music, and dance in one spectacular evening.',
-          'After the success of our previous editions, we\'re taking it to the next level at NTGent with enhanced production, special guest performances, and an experience you won\'t forget.',
-        ]),
-        featured: 'featured',
-        image: media.performanceEpiphany,
-        ticketUrl: 'https://ticketsgent.be/producties/pe-live-in-concert',
-      },
-    })
-
-    await payload.create({
-      collection: 'events',
-      data: {
-        title: 'Summer Gospel Festival',
-        eventDate: futureDate2.toISOString(),
-        location: 'Korenmarkt, Ghent',
-        summary: 'Join us for an outdoor Gospel celebration during the Gentse Feesten.',
-        fullDescription: lexicalParagraphs([
-          'PE LIVE returns to the Gentse Feesten with a powerful outdoor performance at Korenmarkt.',
-          'Experience the energy of live Gospel music in the heart of Ghent\'s biggest summer festival.',
-        ]),
-        featured: 'none',
-        image: media.performanceGentseFeesten,
-      },
-    })
-
-    // Create past events
-    await payload.create({
-      collection: 'events',
-      data: {
-        title: 'Candlelight Session 2023',
-        eventDate: pastDate1.toISOString(),
-        location: 'De Centrale, Ghent',
-        summary: 'An intimate evening of Gospel music in collaboration with Samsung and Play Nostalgie.',
-        fullDescription: lexicalParagraphs([
-          'The Candlelight Session brought warmth and joy to the holiday season with an intimate Gospel performance.',
-          'Thank you to everyone who joined us for this special evening of music and celebration.',
-        ]),
-        featured: 'none',
-        image: media.performanceHeartbeat,
-      },
-    })
-
-    await payload.create({
-      collection: 'events',
-      data: {
-        title: 'Parkpop Festival',
-        eventDate: pastDate2.toISOString(),
-        location: 'UGent Campus, Ghent',
-        summary: 'PE LIVE brought incredible energy to Parkpop, connecting with students and music lovers.',
-        fullDescription: lexicalParagraphs([
-          'Our performance at Parkpop was an unforgettable experience, bringing Gospel music to the younger generation.',
-          'The energy was electric as we shared our music with thousands of festival-goers.',
-        ]),
-        featured: 'none',
-        image: media.performanceParkpop,
-      },
+      id: event.id,
     })
   }
+
+  payload.logger.info('Creating new events...')
+  payload.logger.info(`Future date 1: ${futureDate1.toISOString()}`)
+  payload.logger.info(`Future date 2: ${futureDate2.toISOString()}`)
+  
+  // Create upcoming events
+  const event1 = await payload.create({
+    collection: 'events',
+    data: {
+      title: 'Epiphany Reloaded',
+      eventDate: futureDate1.toISOString(),
+      location: 'NTGent, Ghent',
+      summary: 'Our annual concert celebrating art, craft, music, and dance. Join us for an unforgettable evening of Gospel music.',
+      fullDescription: lexicalParagraphs([
+        'Epiphany Reloaded is PE LIVE\'s signature annual concert, bringing together the best of art, craft, music, and dance in one spectacular evening.',
+        'After the success of our previous editions, we\'re taking it to the next level at NTGent with enhanced production, special guest performances, and an experience you won\'t forget.',
+      ]),
+      featured: 'featured',
+      image: media.performanceEpiphany,
+      ticketUrl: 'https://ticketsgent.be/producties/pe-live-in-concert',
+    },
+  })
+  payload.logger.info(`Created event: ${event1.title} on ${event1.eventDate}`)
+
+  const event2 = await payload.create({
+    collection: 'events',
+    data: {
+      title: 'Summer Gospel Festival',
+      eventDate: futureDate2.toISOString(),
+      location: 'Korenmarkt, Ghent',
+      summary: 'Join us for an outdoor Gospel celebration during the Gentse Feesten.',
+      fullDescription: lexicalParagraphs([
+        'PE LIVE returns to the Gentse Feesten with a powerful outdoor performance at Korenmarkt.',
+        'Experience the energy of live Gospel music in the heart of Ghent\'s biggest summer festival.',
+      ]),
+      featured: 'none',
+      image: media.performanceGentseFeesten,
+    },
+  })
+  payload.logger.info(`Created event: ${event2.title} on ${event2.eventDate}`)
+
+  // Create past events
+  const event3 = await payload.create({
+    collection: 'events',
+    data: {
+      title: 'Candlelight Session 2023',
+      eventDate: pastDate1.toISOString(),
+      location: 'De Centrale, Ghent',
+      summary: 'An intimate evening of Gospel music in collaboration with Samsung and Play Nostalgie.',
+      fullDescription: lexicalParagraphs([
+        'The Candlelight Session brought warmth and joy to the holiday season with an intimate Gospel performance.',
+        'Thank you to everyone who joined us for this special evening of music and celebration.',
+      ]),
+      featured: 'none',
+      image: media.performanceHeartbeat,
+    },
+  })
+  payload.logger.info(`Created event: ${event3.title} on ${event3.eventDate}`)
+
+  const event4 = await payload.create({
+    collection: 'events',
+    data: {
+      title: 'Parkpop Festival',
+      eventDate: pastDate2.toISOString(),
+      location: 'UGent Campus, Ghent',
+      summary: 'PE LIVE brought incredible energy to Parkpop, connecting with students and music lovers.',
+      fullDescription: lexicalParagraphs([
+        'Our performance at Parkpop was an unforgettable experience, bringing Gospel music to the younger generation.',
+        'The energy was electric as we shared our music with thousands of festival-goers.',
+      ]),
+      featured: 'none',
+      image: media.performanceParkpop,
+    },
+  })
+  payload.logger.info(`Created event: ${event4.title} on ${event4.eventDate}`)
 
   return {
     message: 'Front page and events seeded successfully.',
