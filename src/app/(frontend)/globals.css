@@ -145,6 +145,8 @@
 
 html {
   opacity: 0;
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem; /* Account for header height */
 }
 
 html[data-theme='dark'],

@@ -176,17 +176,19 @@ export function UpNext() {
         )}
 
         {/* Other Events Section */}
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl tracking-tight text-slate-900">
-            More Upcoming Events
-          </h2>
-          <p className="mt-4 text-lg tracking-tight text-slate-700">
-            Don&apos;t miss out on our other upcoming performances and events. Join us as we continue to bring the power of Gospel music to audiences across Belgium!
-          </p>
-        </div>
+        {upcomingEvents.filter(event => !event.featured).length > 0 && (
+          <>
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl tracking-tight text-slate-900">
+                More Upcoming Events
+              </h2>
+              <p className="mt-4 text-lg tracking-tight text-slate-700">
+                Don&apos;t miss out on our other upcoming performances and events. Join us as we continue to bring the power of Gospel music to audiences across Belgium!
+              </p>
+            </div>
 
-        <div className="mt-16 grid gap-8 lg:grid-cols-2">
-          {upcomingEvents.filter(event => !event.featured).map((event) => (
+            <div className={`mt-16 grid gap-8 ${upcomingEvents.filter(event => !event.featured).length === 1 ? 'lg:grid-cols-1 max-w-2xl mx-auto' : 'lg:grid-cols-2'}`}>
+              {upcomingEvents.filter(event => !event.featured).map((event) => (
             <div
               key={event.id}
               className="relative rounded-2xl bg-white p-8 shadow-xl ring-1 ring-slate-900/10 transition-all duration-300 hover:shadow-2xl hover:scale-105"
@@ -218,10 +220,11 @@ export function UpNext() {
                 </a>
               </div>
             </div>
-          ))}
-        </div>
+              ))}
+            </div>
+          </>
+        )}
 
-        
         {/* Past Performances Section */}
         <div className="mt-32">
           <div className="mx-auto max-w-2xl text-center">
@@ -233,7 +236,7 @@ export function UpNext() {
             </p>
           </div>
 
-          <div className="mt-16 grid gap-8 lg:grid-cols-3">
+          <div className={`mt-16 grid gap-8 ${pastPerformances.length === 1 ? 'lg:grid-cols-1 max-w-2xl mx-auto' : pastPerformances.length === 2 ? 'lg:grid-cols-2' : 'lg:grid-cols-3'}`}>
             {pastPerformances.map((performance) => (
               <div key={performance.id} className="relative rounded-2xl bg-white p-8 shadow-xl ring-1 ring-slate-900/10 transition-all duration-300 hover:shadow-2xl hover:scale-105">
                 <div className="flex items-center justify-between mb-4">

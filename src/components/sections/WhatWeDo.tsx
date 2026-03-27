@@ -50,7 +50,7 @@ export function WhatWeDo({ data }: { data: WhatWeDoData }) {
 
   return (
     <section
-      id="services"
+      id="works"
       aria-label="What We Do"
       className="relative overflow-hidden pb-28 pt-20 sm:py-32"
     >

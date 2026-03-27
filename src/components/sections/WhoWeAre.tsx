@@ -40,7 +40,7 @@ export function WhoWeAre({ data }: { data: WhoWeAreData }) {
           <h2 className="mb-10 font-display text-3xl sm:text-4xl md:text-5xl text-slate-50">
             {data.title}
           </h2>
-          <div className="mt-4 font-bold z-10 text-lg sm:text-xl text-white">
+          <div className="mt-4 font-bold z-10 text-lg sm:text-xl text-white [&_p]:mb-6 [&_p:last-child]:mb-0">
             <RichText data={data.content} enableGutter={false} />
           </div>
         </div>
