@@ -43,7 +43,22 @@ async function run() {
 
   // Confirm the connection (push happens during connect above).
   await payload.db.drizzle.execute('SELECT 1')
-  console.log('Schema sync complete — database is up to date with the Payload config.')
+
+  // Payload stamps the dev-push migration row on every successful push, so
+  // this timestamp is hard evidence of when the schema was last applied.
+  try {
+    const result = (await payload.db.drizzle.execute(
+      `SELECT updated_at FROM payload_migrations WHERE batch = '-1' ORDER BY updated_at DESC LIMIT 1`,
+    )) as { rows?: { updated_at?: string }[] }
+    const stamped = result.rows?.[0]?.updated_at
+    console.log(
+      stamped
+        ? `Schema sync complete — last schema push applied at ${stamped}.`
+        : 'Schema sync complete — no dev-push record found (schema may be managed by migrations).',
+    )
+  } catch {
+    console.log('Schema sync complete — database is up to date with the Payload config.')
+  }
   process.exit(0)
 }
 
