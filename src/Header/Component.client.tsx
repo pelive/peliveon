@@ -25,7 +25,7 @@ function CloseIcon({ className }: { className?: string }) {
 
 interface HeaderClientProps {
   data: Header | null
-  ticketUrl: string
+  ticketUrl: string | null
   bookingEmail: string
 }
 
@@ -108,14 +108,16 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data, ticketU
                 {item.label}
               </a>
             ))}
-            <a
-              href={ticketUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-accent px-5 py-3 font-display text-xs font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:bg-accent-hover"
-            >
-              Get Tickets
-            </a>
+            {ticketUrl && (
+              <a
+                href={ticketUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-accent px-5 py-3 font-display text-xs font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:bg-accent-hover"
+              >
+                Get Tickets
+              </a>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -175,15 +177,17 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data, ticketU
           </nav>
 
           <div className="mt-auto p-5">
-            <a
-              href={ticketUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex min-h-14 items-center justify-center gap-2.5 bg-accent font-display text-sm font-semibold uppercase tracking-[0.14em] text-white"
-            >
-              Get Tickets <span aria-hidden="true">→</span>
-            </a>
+            {ticketUrl && (
+              <a
+                href={ticketUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex min-h-14 items-center justify-center gap-2.5 bg-accent font-display text-sm font-semibold uppercase tracking-[0.14em] text-white"
+              >
+                Get Tickets <span aria-hidden="true">→</span>
+              </a>
+            )}
             <p className="mb-0 mt-5 text-[10px] uppercase tracking-[0.2em] text-zinc-500">Booking</p>
             <a href={`mailto:${bookingEmail}`} className="font-display text-lg text-stone-100">
               {bookingEmail}

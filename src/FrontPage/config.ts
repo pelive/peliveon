@@ -61,6 +61,37 @@ export const FrontPage: GlobalConfig = {
                   },
                 },
                 {
+                  name: 'fallback',
+                  type: 'group',
+                  admin: {
+                    description:
+                      'Default hero shown when there is no upcoming featured event (no dates, no ticket buttons)',
+                  },
+                  fields: [
+                    {
+                      name: 'eyebrow',
+                      type: 'text',
+                      defaultValue: 'Gospel · Ghent, Belgium',
+                    },
+                    {
+                      name: 'titlePrefix',
+                      type: 'text',
+                      defaultValue: 'Gospel music',
+                    },
+                    {
+                      name: 'titleHighlight',
+                      type: 'text',
+                      defaultValue: 'with an attitude.',
+                    },
+                    {
+                      name: 'subtitle',
+                      type: 'textarea',
+                      defaultValue:
+                        'Black American-style Gospel from Ghent — twenty-plus voices, a live band, and a room that never stays seated.',
+                    },
+                  ],
+                },
+                {
                   name: 'backgroundImage',
                   type: 'relationship',
                   relationTo: 'media',

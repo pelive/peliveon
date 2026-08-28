@@ -126,15 +126,17 @@ export async function UpNext({ copy }: { copy?: UpNextCopy | null }) {
                 )}
               </div>
               <div className="mt-auto flex flex-wrap gap-3.5 pt-9">
-                <a
-                  href={featuredEvent.ticketUrl || "https://ticketsgent.be/producties/pe-live-in-concert"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex min-h-12 items-center gap-2.5 bg-accent px-7 font-display text-sm font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-accent-hover"
-                  aria-label={`Get tickets for ${featuredEvent.title} (opens in a new tab)`}
-                >
-                  Get Tickets <span aria-hidden="true">→</span>
-                </a>
+                {featuredEvent.ticketUrl && (
+                  <a
+                    href={featuredEvent.ticketUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-12 items-center gap-2.5 bg-accent px-7 font-display text-sm font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-accent-hover"
+                    aria-label={`Get tickets for ${featuredEvent.title} (opens in a new tab)`}
+                  >
+                    Get Tickets <span aria-hidden="true">→</span>
+                  </a>
+                )}
                 <a
                   href="#contact"
                   className="inline-flex min-h-12 items-center border border-white/30 px-6 font-display text-sm font-medium uppercase tracking-[0.14em] text-stone-100 transition-colors hover:border-white"

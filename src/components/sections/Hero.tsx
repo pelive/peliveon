@@ -18,6 +18,12 @@ type HeroData = {
 	ticketLabel: string;
 	ticketUrl: string;
 	secondaryCtaLabel?: string | null;
+	fallback?: {
+		eyebrow?: string | null;
+		titlePrefix?: string | null;
+		titleHighlight?: string | null;
+		subtitle?: string | null;
+	} | null;
 	backgroundImage?: {
 		url?: string | null;
 	} | number | null;
@@ -38,9 +44,9 @@ const formatEventTime = (date: string): string =>
 		minute: "2-digit",
 	});
 
-function titleLines(data: HeroData): [string, string | null] {
-	const prefix = (data.titlePrefix || "").trim();
-	const highlight = (data.titleHighlight || "").trim();
+function titleLines(prefixRaw: string, highlightRaw: string): [string, string | null] {
+	const prefix = (prefixRaw || "").trim();
+	const highlight = (highlightRaw || "").trim();
 
 	if (prefix && prefix !== "#") return [prefix, highlight || null];
 
@@ -53,7 +59,17 @@ function titleLines(data: HeroData): [string, string | null] {
 export function Hero({ data, featuredEvent }: { data: HeroData; featuredEvent?: Event | null }) {
 	if (!data) return null;
 
-	const [lineOne, lineTwo] = titleLines(data);
+	// Featured-event mode: show branding, date rail and ticket CTAs.
+	// Default mode (no upcoming featured event): band fallback, booking CTA only.
+	const isFeatured = Boolean(featuredEvent);
+	const fallback = data.fallback;
+	const eyebrow = isFeatured ? data.eyebrow : fallback?.eyebrow || data.eyebrow;
+	const [lineOne, lineTwo] = isFeatured
+		? titleLines(data.titlePrefix, data.titleHighlight)
+		: titleLines(
+				fallback?.titlePrefix || data.titlePrefix,
+				fallback?.titleHighlight || data.titleHighlight,
+			);
 	const backgroundUrl =
 		data.backgroundImage && typeof data.backgroundImage === "object"
 			? data.backgroundImage.url
@@ -82,7 +98,7 @@ export function Hero({ data, featuredEvent }: { data: HeroData; featuredEvent?: 
 				<div className="relative mx-auto w-full max-w-[90rem] px-5 pb-16 pt-40 sm:px-10 lg:px-16 lg:pb-20">
 					<p className="mb-4 flex items-center gap-3.5 font-display text-xs font-medium uppercase tracking-[0.34em] text-stone-100">
 						<span className="block h-px w-11 bg-accent" aria-hidden="true" />
-						{data.eyebrow}
+						{eyebrow}
 					</p>
 					<h1 className="font-display text-6xl font-extrabold uppercase leading-[0.88] tracking-[-0.035em] text-white sm:text-8xl lg:text-[8.25rem]">
 						{lineOne}
@@ -93,6 +109,11 @@ export function Hero({ data, featuredEvent }: { data: HeroData; featuredEvent?: 
 							</>
 						)}
 					</h1>
+					{!isFeatured && fallback?.subtitle && (
+						<p className="mt-6 max-w-[52ch] text-lg leading-relaxed text-zinc-300">
+							{fallback.subtitle}
+						</p>
+					)}
 
 					<div className="mt-8 flex flex-wrap items-end justify-between gap-8 lg:mt-11">
 						{featuredEvent && (
@@ -121,20 +142,27 @@ export function Hero({ data, featuredEvent }: { data: HeroData; featuredEvent?: 
 						)}
 
 						<div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
-							<a
-								href={data.ticketUrl}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="inline-flex min-h-[3.25rem] items-center justify-center gap-3 bg-accent px-8 font-display text-sm font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-							>
-								{data.ticketLabel}
-								<span aria-hidden="true" className="text-lg leading-none">→</span>
-							</a>
+							{featuredEvent && (
+								<a
+									href={featuredEvent.ticketUrl || data.ticketUrl}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="inline-flex min-h-[3.25rem] items-center justify-center gap-3 bg-accent px-8 font-display text-sm font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+								>
+									{data.ticketLabel}
+									<span aria-hidden="true" className="text-lg leading-none">→</span>
+								</a>
+							)}
 							<a
 								href="#contact"
-								className="inline-flex min-h-[3.25rem] items-center justify-center border border-white/35 px-7 font-display text-sm font-medium uppercase tracking-[0.14em] text-stone-100 transition-colors hover:border-white hover:bg-white/5"
+								className={
+									isFeatured
+										? "inline-flex min-h-[3.25rem] items-center justify-center border border-white/35 px-7 font-display text-sm font-medium uppercase tracking-[0.14em] text-stone-100 transition-colors hover:border-white hover:bg-white/5"
+										: "inline-flex min-h-[3.25rem] items-center justify-center gap-3 bg-accent px-8 font-display text-sm font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+								}
 							>
 								{data.secondaryCtaLabel || "Book the band"}
+								{!isFeatured && <span aria-hidden="true" className="text-lg leading-none">→</span>}
 							</a>
 						</div>
 					</div>
