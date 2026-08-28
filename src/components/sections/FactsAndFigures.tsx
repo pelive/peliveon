@@ -61,7 +61,7 @@ export function FactsAndFigures({ data }: { data: FactsData }) {
     >
       <div className="mx-auto w-full max-w-[90rem] px-5 sm:px-10 lg:px-16">
         <div className="mb-16 max-w-[60ch] lg:mb-20">
-          <p className="mb-5 text-[11px] uppercase tracking-[0.28em] text-accent">
+          <p className="mb-5 text-[11px] uppercase tracking-[0.28em] text-magenta">
             {data.eyebrow || "Facts & figures"}
           </p>
           <h2 className="mb-5 font-display text-4xl font-bold leading-none tracking-[-0.03em] text-white sm:text-5xl">
@@ -105,7 +105,7 @@ export function FactsAndFigures({ data }: { data: FactsData }) {
             <p className="m-0 flex flex-wrap items-baseline gap-x-4 gap-y-3 font-display text-xl font-light text-zinc-200 sm:text-2xl">
               {artists.map((artist, index) => (
                 <React.Fragment key={artist.id || artist.name}>
-                  {index > 0 && <span className="text-accent" aria-hidden="true">·</span>}
+                  {index > 0 && <span className="text-magenta" aria-hidden="true">·</span>}
                   <span>{artist.name}</span>
                 </React.Fragment>
               ))}
@@ -151,7 +151,7 @@ export function FactsAndFigures({ data }: { data: FactsData }) {
                         />
                         <span
                           aria-hidden="true"
-                          className="absolute inset-0 flex items-center justify-center pt-8 font-display text-8xl font-extrabold leading-none text-accent/75"
+                          className="absolute inset-0 flex items-center justify-center pt-8 font-display text-8xl font-extrabold leading-none text-magenta/75"
                         >
                           &ldquo;
                         </span>
@@ -172,7 +172,7 @@ export function FactsAndFigures({ data }: { data: FactsData }) {
                             href={link.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-accent no-underline hover:underline"
+                            className="text-magenta no-underline hover:underline"
                           >
                             {link.name}
                           </a>

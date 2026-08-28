@@ -46,7 +46,7 @@ export function WhoWeAre({ data }: { data: WhoWeAreData }) {
     <section id="about" aria-label="Who We Are" className="w-full bg-ink py-24 lg:py-36">
       <div className="mx-auto grid w-full max-w-[90rem] grid-cols-1 items-start gap-16 px-5 sm:px-10 lg:grid-cols-2 lg:gap-24 lg:px-16">
         <div>
-          <p className="mb-5 text-[11px] uppercase tracking-[0.28em] text-accent">
+          <p className="mb-5 text-[11px] uppercase tracking-[0.28em] text-magenta">
             {data.eyebrow || "Who we are"}
           </p>
           <h2 className="mb-8 font-display text-4xl font-bold leading-[0.98] tracking-[-0.03em] text-white sm:text-5xl lg:text-6xl">
@@ -63,7 +63,7 @@ export function WhoWeAre({ data }: { data: WhoWeAreData }) {
                   key={stat.id || stat.label}
                   className={`pt-6 ${index === 0 ? "pr-10" : "px-10 first:pl-0"} ${index === stats.length - 1 ? "pr-0" : ""}`}
                 >
-                  <dd className="m-0 font-display text-4xl font-bold text-accent">{stat.value}</dd>
+                  <dd className="m-0 font-display text-4xl font-bold text-magenta">{stat.value}</dd>
                   <dt className="mt-1.5 text-xs uppercase tracking-[0.16em] text-zinc-400">{stat.label}</dt>
                 </div>
               ))}

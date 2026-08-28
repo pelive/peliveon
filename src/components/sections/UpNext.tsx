@@ -100,7 +100,7 @@ export async function UpNext({ copy }: { copy?: UpNextCopy | null }) {
             </div>
             <div className="flex flex-col p-7 sm:p-12 lg:p-14">
               <div className="flex items-baseline gap-4 border-b border-white/15 pb-5">
-                <span className="font-display text-6xl font-extrabold leading-[0.85] text-accent sm:text-7xl">
+                <span className="font-display text-6xl font-extrabold leading-[0.85] text-magenta sm:text-7xl">
                   {dayOfMonth(featuredEvent.eventDate)}
                 </span>
                 <div>
@@ -203,7 +203,7 @@ export async function UpNext({ copy }: { copy?: UpNextCopy | null }) {
                 return (
                   <article
                     key={event.id}
-                    className="border border-paper-ink/10 bg-white transition-[border-color,box-shadow] duration-300 hover:border-accent hover:shadow-[0_18px_40px_-24px_rgba(20,16,15,0.45)]"
+                    className="border border-paper-ink/10 bg-white transition-[border-color,box-shadow] duration-300 hover:border-magenta hover:shadow-[0_18px_40px_-24px_rgba(20,16,15,0.45)]"
                   >
                     {imageUrl && (
                       <div className="relative h-52 w-full overflow-hidden">
@@ -229,7 +229,7 @@ export async function UpNext({ copy }: { copy?: UpNextCopy | null }) {
                           href={event.ticketUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="mt-5 inline-block border-b border-accent pb-1 font-display text-xs font-semibold uppercase tracking-[0.18em] text-paper-ink no-underline transition-colors hover:text-accent-deep"
+                          className="mt-5 inline-block border-b border-magenta pb-1 font-display text-xs font-semibold uppercase tracking-[0.18em] text-paper-ink no-underline transition-colors hover:text-magenta"
                           aria-label={`Watch ${event.title} (opens in a new tab)`}
                         >
                           Watch <span aria-hidden="true">→</span>

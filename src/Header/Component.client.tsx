@@ -98,7 +98,11 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data, ticketU
         <div className="mx-auto flex h-20 w-full max-w-[90rem] items-center justify-between gap-8 px-5 sm:px-10 lg:px-16">
           <Link href="/" className="flex items-center gap-3" aria-label="PE LIVE — home">
             <Logo loading="eager" priority="high" className="h-9 w-auto sm:h-10" />
-            <span className="block h-1.5 w-1.5 bg-accent" aria-hidden="true" />
+            <span className="block h-6 w-px bg-magenta/45" aria-hidden="true" />
+            <span className="font-display text-lg font-extrabold leading-none tracking-[-0.02em] text-stone-100">
+              PE LIVE
+            </span>
+            <span className="block h-1.5 w-1.5 bg-magenta" aria-hidden="true" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -109,7 +113,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data, ticketU
                 href={item.url}
                 target={item.newTab ? '_blank' : undefined}
                 rel={item.newTab ? 'noopener noreferrer' : undefined}
-                className="border-b border-transparent py-1.5 font-display text-xs uppercase tracking-[0.22em] text-zinc-200 transition-colors hover:border-accent hover:text-white"
+                className="border-b border-transparent py-1.5 font-display text-xs uppercase tracking-[0.22em] text-zinc-200 transition-colors hover:border-magenta hover:text-white"
               >
                 {item.label}
               </a>
@@ -156,7 +160,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data, ticketU
               aria-label="PE LIVE — home"
             >
               <Logo loading="eager" priority="high" className="h-9 w-auto" />
-              <span className="block h-1.5 w-1.5 bg-accent" aria-hidden="true" />
+              <span className="block h-1.5 w-1.5 bg-magenta" aria-hidden="true" />
             </Link>
             <button
               onClick={() => setMobileMenuOpen(false)}
@@ -175,7 +179,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data, ticketU
                 target={item.newTab ? '_blank' : undefined}
                 rel={item.newTab ? 'noopener noreferrer' : undefined}
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex min-h-16 items-center border-b border-white/10 font-display text-2xl font-semibold uppercase tracking-[-0.01em] text-stone-100 transition-colors hover:text-accent"
+                className="flex min-h-16 items-center border-b border-white/10 font-display text-2xl font-semibold uppercase tracking-[-0.01em] text-stone-100 transition-colors hover:text-magenta"
               >
                 {item.label}
               </a>

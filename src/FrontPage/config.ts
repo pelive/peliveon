@@ -26,7 +26,15 @@ export const FrontPage: GlobalConfig = {
                   name: 'eyebrow',
                   type: 'text',
                   required: true,
-                  defaultValue: 'In Concert',
+                  defaultValue: 'PE LIVE · In Concert, Ghent',
+                },
+                {
+                  name: 'tagline',
+                  type: 'text',
+                  defaultValue: 'Sing · Feel · Connect',
+                  admin: {
+                    description: 'Brand tagline shown under the hero title and in the footer',
+                  },
                 },
                 {
                   name: 'titlePrefix',
