@@ -2030,6 +2030,15 @@ export interface FrontPage {
      * Label of the outlined button next to Get Tickets (links to the contact section)
      */
     secondaryCtaLabel?: string | null;
+    /**
+     * Default hero shown when there is no upcoming featured event (no dates, no ticket buttons)
+     */
+    fallback?: {
+      eyebrow?: string | null;
+      titlePrefix?: string | null;
+      titleHighlight?: string | null;
+      subtitle?: string | null;
+    };
     backgroundImage: number | Media;
     partnerLogos?:
       | {
@@ -2244,6 +2253,14 @@ export interface FrontPageSelect<T extends boolean = true> {
         ticketLabel?: T;
         ticketUrl?: T;
         secondaryCtaLabel?: T;
+        fallback?:
+          | T
+          | {
+              eyebrow?: T;
+              titlePrefix?: T;
+              titleHighlight?: T;
+              subtitle?: T;
+            };
         backgroundImage?: T;
         partnerLogos?:
           | T

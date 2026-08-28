@@ -5,6 +5,7 @@ import type { Footer as FooterType } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { getUpcomingEvents } from '@/utilities/getEvents'
 
 type NavItem = {
   label: string
@@ -27,7 +28,14 @@ const defaultSocials = [
 ]
 
 export async function Footer() {
-  const footer = (await getCachedGlobal('footer', 1)()) as FooterType | null
+  const [footer, upcomingEvents] = await Promise.all([
+    getCachedGlobal('footer', 1)() as Promise<FooterType | null>,
+    getUpcomingEvents(),
+  ])
+
+  // Ticket CTA only exists while there is a featured event that has not
+  // passed yet (getUpcomingEvents already excludes past events).
+  const featuredEvent = upcomingEvents.find((event) => event.featured === 'featured')
 
   const navItems: NavItem[] =
     footer?.navItems && footer.navItems.length > 0
@@ -49,7 +57,7 @@ export async function Footer() {
   const tagline =
     footer?.tagline || 'Black American-style Gospel from Ghent, Belgium. Gospel music with an attitude.'
   const bookingEmail = footer?.bookingEmail || 'info@pelive.be'
-  const ticketUrl = footer?.ticketUrl || 'https://ticketsgent.be/producties/pe-live-in-concert'
+  const ticketUrl = featuredEvent ? featuredEvent.ticketUrl || footer?.ticketUrl || null : null
   const creditLabel = footer?.creditLabel || 'Pilarres'
   const creditUrl = footer?.creditUrl || 'https://pilarres.com'
 
@@ -107,16 +115,18 @@ export async function Footer() {
             >
               {bookingEmail}
             </a>
-            <div>
-              <a
-                href={ticketUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 inline-flex items-center gap-2.5 border border-white/30 px-5 py-3.5 font-display text-xs font-semibold uppercase tracking-[0.16em] text-white no-underline transition-colors hover:border-accent hover:bg-accent/10"
-              >
-                Get Tickets <span aria-hidden="true">→</span>
-              </a>
-            </div>
+            {ticketUrl && (
+              <div>
+                <a
+                  href={ticketUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 inline-flex items-center gap-2.5 border border-white/30 px-5 py-3.5 font-display text-xs font-semibold uppercase tracking-[0.16em] text-white no-underline transition-colors hover:border-accent hover:bg-accent/10"
+                >
+                  Get Tickets <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            )}
           </div>
         </div>
 
