@@ -15,8 +15,8 @@ export const metadata: Metadata = {
 
 export default async function ContactPage() {
   const [frontPage, footer] = await Promise.all([
-    getCachedGlobal('frontPage', 1)() as Promise<Config['globals']['frontPage'] | null>,
-    getCachedGlobal('footer', 1)() as Promise<Config['globals']['footer'] | null>,
+    getCachedGlobal('frontPage', 1)().catch(() => null) as Promise<Config['globals']['frontPage'] | null>,
+    getCachedGlobal('footer', 1)().catch(() => null) as Promise<Config['globals']['footer'] | null>,
   ])
   const contactData = frontPage?.contact
   const bannerImage =

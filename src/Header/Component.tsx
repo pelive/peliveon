@@ -7,8 +7,8 @@ import type { Config, Header } from '@/payload-types'
 
 export async function Header() {
   const [headerData, frontPage, upcomingEvents] = await Promise.all([
-    getCachedGlobal('header', 1)() as Promise<Header | null>,
-    getCachedGlobal('frontPage', 1)() as Promise<Config['globals']['frontPage'] | null>,
+    getCachedGlobal('header', 1)().catch(() => null) as Promise<Header | null>,
+    getCachedGlobal('frontPage', 1)().catch(() => null) as Promise<Config['globals']['frontPage'] | null>,
     getUpcomingEvents(),
   ])
 

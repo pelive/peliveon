@@ -12,8 +12,8 @@ import { getUpcomingEvents } from '@/utilities/getEvents'
 
 export async function PEHomePage() {
   const [frontPage, footer, upcomingEvents] = await Promise.all([
-    getCachedGlobal('frontPage', 1)() as Promise<Config['globals']['frontPage'] | null>,
-    getCachedGlobal('footer', 1)() as Promise<Config['globals']['footer'] | null>,
+    getCachedGlobal('frontPage', 1)().catch(() => null) as Promise<Config['globals']['frontPage'] | null>,
+    getCachedGlobal('footer', 1)().catch(() => null) as Promise<Config['globals']['footer'] | null>,
     getUpcomingEvents(),
   ])
 
