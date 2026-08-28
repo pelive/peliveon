@@ -73,10 +73,10 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   email: resendAdapter({
-    apiKey: process.env.RESEND_API_KEY!,
-    from: process.env.FROM_EMAIL || 'noreply@pelive.be',
-    name: 'PE Live Website',
-  } as any),
+    apiKey: process.env.RESEND_API_KEY || '',
+    defaultFromAddress: process.env.FROM_EMAIL || 'noreply@pelive.be',
+    defaultFromName: 'PE Live Website',
+  }),
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },

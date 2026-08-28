@@ -10,6 +10,54 @@ export const Footer: GlobalConfig = {
   },
   fields: [
     {
+      name: 'tagline',
+      type: 'textarea',
+      defaultValue: 'Black American-style Gospel from Ghent, Belgium. Gospel music with an attitude.',
+    },
+    {
+      name: 'bookingEmail',
+      type: 'text',
+      defaultValue: 'info@pelive.be',
+    },
+    {
+      name: 'ticketUrl',
+      type: 'text',
+      defaultValue: 'https://ticketsgent.be/producties/pe-live-in-concert',
+    },
+    {
+      name: 'socialLinks',
+      type: 'array',
+      maxRows: 6,
+      admin: {
+        description: 'Social profiles shown in the footer and contact section',
+      },
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'url',
+          type: 'text',
+          required: true,
+        },
+      ],
+    },
+    {
+      name: 'creditLabel',
+      type: 'text',
+      defaultValue: 'Pilarres',
+      admin: {
+        description: '"Website by …" credit in the footer bottom bar',
+      },
+    },
+    {
+      name: 'creditUrl',
+      type: 'text',
+      defaultValue: 'https://pilarres.com',
+    },
+    {
       name: 'navItems',
       type: 'array',
       fields: [

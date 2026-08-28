@@ -1,11 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import clsx from "clsx";
-
-import { Container } from "@/components/Container";
 
 type Service = {
   title: string;
@@ -18,33 +15,19 @@ type Service = {
 
 type WhatWeDoData = {
   enable?: boolean | null;
+  eyebrow?: string | null;
   title: string;
   subtitle?: string | null;
   services?: Service[] | null;
 };
 
+const serviceImage = (service: Service): string | null =>
+  service.image && typeof service.image === "object" && service.image.url
+    ? service.image.url
+    : null;
+
 export function WhatWeDo({ data }: { data: WhatWeDoData }) {
   const services = data?.services || [];
-
-  const [tabOrientation, setTabOrientation] = useState<"horizontal" | "vertical">("horizontal");
-  const [backgroundImage, setBackgroundImage] = useState<string | null>(
-    services[0]?.image && typeof services[0].image === "object" ? services[0].image.url || null : null,
-  );
-
-  useEffect(() => {
-    const lgMediaQuery = window.matchMedia("(min-width: 1024px)");
-
-    function onMediaQueryChange({ matches }: { matches: boolean }) {
-      setTabOrientation(matches ? "vertical" : "horizontal");
-    }
-
-    onMediaQueryChange(lgMediaQuery);
-    lgMediaQuery.addEventListener("change", onMediaQueryChange);
-
-    return () => {
-      lgMediaQuery.removeEventListener("change", onMediaQueryChange);
-    };
-  }, []);
 
   if (!data?.enable || services.length === 0) return null;
 
@@ -52,91 +35,79 @@ export function WhatWeDo({ data }: { data: WhatWeDoData }) {
     <section
       id="works"
       aria-label="What We Do"
-      className="relative overflow-hidden pb-28 pt-20 sm:py-32"
+      className="w-full border-t border-white/10 bg-ink-2 py-24 lg:py-36"
     >
-      {backgroundImage && (
-        <Image
-          className="absolute top-0 left-0 w-full h-full object-cover opacity-15 -z-10"
-          src={backgroundImage}
-          alt=""
-          width={800}
-          height={600}
-          priority
-        />
-      )}
-      <Container className="relative">
-        <div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
-          <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
-            {data.title}
-          </h2>
-          <p className="mt-6 text-lg tracking-tight text-white">
-            {data.subtitle}
-          </p>
-        </div>
-        <TabGroup
-          className="z-10 grid grid-cols-1 items-center gap-y-2 pt-10 lg:pt-0 mt-16 md:mt-20 sm:gap-y-6"
-          vertical={tabOrientation === "vertical"}
-          onChange={(index) => {
-            const image = services[index]?.image;
-            setBackgroundImage(image && typeof image === "object" ? image.url || null : null);
-          }}
-        >
-          {({ selectedIndex }) => (
-            <>
-              <div className="-mx-4 flex overflow-x-auto pb-4 sm:mx-0 sm:overflow-visible sm:pb-0 lg:col-span-5">
-                <TabList className="z-10 relative flex gap-x-3 gap-y-1 mx-auto px-4 items-center">
-                  {services.map((feature, featureIndex) => (
-                    <div
-                      key={feature.id || feature.title}
-                      className={clsx(
-                        "group relative items-center rounded-full px-4 py-1",
-                        selectedIndex === featureIndex ? "bg-white ring-1 ring-inset" : "hover:bg-white/10",
-                      )}
-                    >
-                      <h3>
-                        <Tab
-                          className={clsx(
-                            "font-display text-sm lg:text-lg ui-not-focus-visible:outline-none",
-                            selectedIndex === featureIndex ? "text-blue-600" : "text-blue-100 hover:text-white",
-                          )}
-                        >
-                          <span className="absolute inset-0 rounded-full text-center" />
-                          {feature.title}
-                        </Tab>
-                      </h3>
-                    </div>
-                  ))}
-                </TabList>
-              </div>
-              <TabPanels>
-                {services.map((feature) => (
-                  <TabPanel key={feature.id || feature.title} unmount={false}>
-                    <div className="relative">
-                      <div className="absolute -inset-x-4 bottom-[-2.25rem] top-[-5.95rem] bg-black/70 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl" />
-                      <p className="relative mx-auto max-w-4xl text-lg lg:text-xl text-white sm:text-center">
-                        {feature.description}
-                      </p>
-                    </div>
-                    <div className="mt-[2.2rem] w-auto overflow-hidden rounded-b-xl bg-slate-50 shadow-sm shadow-blue-950/25">
-                      {feature.image && typeof feature.image === "object" && feature.image.url && (
-                        <Image
-                          className="w-full"
-                          src={feature.image.url}
-                          alt=""
-                          width={800}
-                          height={600}
-                          priority
-                          sizes="(min-width: 1024px) 67.8125rem, (min-width: 640px) 100vw, 45rem"
-                        />
-                      )}
-                    </div>
-                  </TabPanel>
-                ))}
-              </TabPanels>
-            </>
+      <div className="mx-auto w-full max-w-[90rem] px-5 sm:px-10 lg:px-16">
+        <div className="mb-12 flex flex-wrap items-end justify-between gap-10 lg:mb-16">
+          <div>
+            <p className="mb-5 text-[11px] uppercase tracking-[0.28em] text-accent">
+              {data.eyebrow || "What we do"}
+            </p>
+            <h2 className="font-display text-4xl font-bold leading-[0.98] tracking-[-0.03em] text-white sm:text-5xl lg:text-6xl">
+              {data.title}
+            </h2>
+          </div>
+          {data.subtitle && (
+            <p className="m-0 max-w-[46ch] text-lg leading-relaxed text-zinc-400">{data.subtitle}</p>
           )}
+        </div>
+
+        <TabGroup as="div" className="grid grid-cols-1 border-t border-white/10 lg:grid-cols-[22.5rem_1fr]">
+          <TabList className="flex overflow-x-auto border-b border-white/10 lg:flex-col lg:overflow-visible lg:border-b-0 lg:border-r">
+            {services.map((service, index) => (
+              <Tab
+                key={service.id || service.title}
+                className={clsx(
+                  "flex-none cursor-pointer border-b-2 border-transparent px-5 py-5 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent",
+                  "lg:border-b lg:border-l-2 lg:border-b-white/10 lg:px-8 lg:py-7",
+                  "data-selected:border-accent data-selected:bg-white/5 lg:data-selected:border-l-accent lg:data-selected:border-b-white/10",
+                  "text-zinc-400 data-selected:text-white hover:text-white",
+                )}
+              >
+                <span className="mb-2 block text-[11px] uppercase tracking-[0.2em] opacity-60">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="block font-display text-lg font-semibold tracking-[-0.01em] sm:text-2xl">
+                  {service.title}
+                </span>
+              </Tab>
+            ))}
+          </TabList>
+
+          <TabPanels className="relative">
+            {services.map((service) => {
+              const imageUrl = serviceImage(service);
+              return (
+                <TabPanel key={service.id || service.title} unmount={false}>
+                  {imageUrl && (
+                    <div className="relative h-64 w-full overflow-hidden sm:h-96">
+                      <Image
+                        src={imageUrl}
+                        alt=""
+                        fill
+                        sizes="(min-width: 1024px) 60rem, 100vw"
+                        className="object-cover object-[50%_30%]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-ink-2/70 to-transparent" aria-hidden="true" />
+                    </div>
+                  )}
+                  <div className="px-0 py-9 lg:px-12">
+                    <p className="mb-6 max-w-[70ch] text-lg leading-relaxed text-zinc-300">
+                      {service.description}
+                    </p>
+                    <a
+                      href="#contact"
+                      className="inline-flex items-center gap-2.5 border-b border-accent pb-1.5 font-display text-[13px] font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:text-accent"
+                    >
+                      Request this set <span aria-hidden="true">→</span>
+                    </a>
+                  </div>
+                </TabPanel>
+              );
+            })}
+          </TabPanels>
         </TabGroup>
-      </Container>
+      </div>
     </section>
   );
 }

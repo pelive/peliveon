@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 
 import { cn } from '@/utilities/ui'
-import { Inter, Lexend, Noto_Serif_Georgian } from 'next/font/google'
+import { Inter, Lexend } from 'next/font/google'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
@@ -29,17 +29,11 @@ const lexend = Lexend({
   variable: '--font-lexend',
 })
 
-const georgia = Noto_Serif_Georgian({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-georgia',
-})
-
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
 
   return (
-    <html className={cn('h-full scroll-smooth antialiased', inter.variable, lexend.variable, georgia.variable)} lang="en" suppressHydrationWarning>
+    <html className={cn('h-full scroll-smooth antialiased', inter.variable, lexend.variable)} lang="en" suppressHydrationWarning>
       <head>
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
@@ -62,7 +56,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           }}
         />
       </head>
-      <body className="flex h-full flex-col bg-black bg-cover bg-center bg-fixed">
+      <body className="flex h-full flex-col bg-ink font-sans text-stone-100">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-black"

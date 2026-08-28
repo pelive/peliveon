@@ -127,7 +127,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   // If admin content exists, use it
   if (page) {
     return (
-      <article className="pt-16 pb-24">
+      <article className="bg-ink pt-32 pb-24">
         <PageClient />
         <PayloadRedirects disableNotFound url={url} />
         {draft && <LivePreviewListener />}

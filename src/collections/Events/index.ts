@@ -45,6 +45,13 @@ export const Events: CollectionConfig = {
       required: true,
     },
     {
+      name: 'doorsTime',
+      type: 'text',
+      admin: {
+        description: 'Optional doors/show times shown on the featured event, e.g. "19:30 / 20:00"',
+      },
+    },
+    {
       name: 'featured',
       type: 'radio',
       options: [

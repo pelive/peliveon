@@ -60,22 +60,22 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
   })
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="bg-ink pt-40 pb-24">
       <PageClient />
       <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none text-center">
-          <h1 className="mb-8 lg:mb-16">Search</h1>
-
-          <div className="max-w-[50rem] mx-auto">
-            <Search />
-          </div>
+        <div className="mx-auto max-w-[50rem] text-center">
+          <p className="mb-4 text-[11px] uppercase tracking-[0.28em] text-accent">Search</p>
+          <h1 className="mb-8 font-display text-3xl font-semibold text-white sm:text-4xl lg:mb-12">
+            Find a show or a story
+          </h1>
+          <Search />
         </div>
       </div>
 
       {posts.totalDocs > 0 ? (
         <CollectionArchive posts={posts.docs as CardPostData[]} />
       ) : (
-        <div className="container">No results found.</div>
+        <div className="container text-zinc-400">No results found.</div>
       )}
     </div>
   )
@@ -83,6 +83,9 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Payload Website Template Search`,
+    title: 'Search',
+    alternates: {
+      canonical: '/search',
+    },
   }
 }

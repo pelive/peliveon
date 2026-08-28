@@ -35,12 +35,13 @@ export default async function Page({ params: paramsPromise }: Args) {
   })
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="bg-ink pt-40 pb-24">
       <PageClient />
       <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none">
-          <h1>Posts</h1>
-        </div>
+        <p className="mb-4 text-[11px] uppercase tracking-[0.28em] text-accent">News</p>
+        <h1 className="m-0 font-display text-4xl font-bold leading-none tracking-[-0.03em] text-white sm:text-5xl">
+          From the road
+        </h1>
       </div>
 
       <div className="container mb-8">
@@ -66,7 +67,10 @@ export default async function Page({ params: paramsPromise }: Args) {
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { pageNumber } = await paramsPromise
   return {
-    title: `Payload Website Template Posts Page ${pageNumber || ''}`,
+    title: `News — Page ${pageNumber || ''}`,
+    alternates: {
+      canonical: `/posts/page/${pageNumber}`,
+    },
   }
 }
 

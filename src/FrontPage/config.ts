@@ -53,6 +53,14 @@ export const FrontPage: GlobalConfig = {
                   defaultValue: 'https://ticketsgent.be/producties/pe-live-in-concert',
                 },
                 {
+                  name: 'secondaryCtaLabel',
+                  type: 'text',
+                  defaultValue: 'Book the band',
+                  admin: {
+                    description: 'Label of the outlined button next to Get Tickets (links to the contact section)',
+                  },
+                },
+                {
                   name: 'backgroundImage',
                   type: 'relationship',
                   relationTo: 'media',
@@ -92,6 +100,11 @@ export const FrontPage: GlobalConfig = {
                   defaultValue: true,
                 },
                 {
+                  name: 'eyebrow',
+                  type: 'text',
+                  defaultValue: 'Who we are',
+                },
+                {
                   name: 'backgroundImage',
                   type: 'relationship',
                   relationTo: 'media',
@@ -108,6 +121,42 @@ export const FrontPage: GlobalConfig = {
                   editor: defaultLexical,
                   required: true,
                 },
+                {
+                  name: 'stats',
+                  type: 'array',
+                  maxRows: 4,
+                  admin: {
+                    description: 'Headline numbers shown under the text, e.g. "10+ / Years on stage"',
+                  },
+                  fields: [
+                    {
+                      name: 'value',
+                      type: 'text',
+                      required: true,
+                    },
+                    {
+                      name: 'label',
+                      type: 'text',
+                      required: true,
+                    },
+                  ],
+                },
+                {
+                  name: 'images',
+                  type: 'array',
+                  maxRows: 3,
+                  admin: {
+                    description: 'Photo collage next to the text (first image is the large one)',
+                  },
+                  fields: [
+                    {
+                      name: 'image',
+                      type: 'relationship',
+                      relationTo: 'media',
+                      required: true,
+                    },
+                  ],
+                },
               ],
             },
           ],
@@ -123,6 +172,11 @@ export const FrontPage: GlobalConfig = {
                   name: 'enable',
                   type: 'checkbox',
                   defaultValue: true,
+                },
+                {
+                  name: 'eyebrow',
+                  type: 'text',
+                  defaultValue: 'What we do',
                 },
                 {
                   name: 'title',
@@ -216,6 +270,11 @@ export const FrontPage: GlobalConfig = {
                   name: 'enable',
                   type: 'checkbox',
                   defaultValue: true,
+                },
+                {
+                  name: 'eyebrow',
+                  type: 'text',
+                  defaultValue: 'Facts & figures',
                 },
                 {
                   name: 'title',
@@ -332,6 +391,45 @@ export const FrontPage: GlobalConfig = {
           ],
         },
         {
+          label: 'Up Next',
+          fields: [
+            {
+              name: 'upNext',
+              type: 'group',
+              fields: [
+                {
+                  name: 'eyebrow',
+                  type: 'text',
+                  defaultValue: 'The programme',
+                },
+                {
+                  name: 'title',
+                  type: 'text',
+                  defaultValue: 'Up next',
+                },
+                {
+                  name: 'infoLine',
+                  type: 'text',
+                  defaultValue: 'Tickets via ticketsgent.be · booking info@pelive.be',
+                  admin: {
+                    description: 'Short line shown next to the section title',
+                  },
+                },
+                {
+                  name: 'moreTitle',
+                  type: 'text',
+                  defaultValue: 'More upcoming',
+                },
+                {
+                  name: 'pastTitle',
+                  type: 'text',
+                  defaultValue: 'Past performances',
+                },
+              ],
+            },
+          ],
+        },
+        {
           label: 'Contact',
           fields: [
             {
@@ -342,6 +440,11 @@ export const FrontPage: GlobalConfig = {
                   name: 'enable',
                   type: 'checkbox',
                   defaultValue: true,
+                },
+                {
+                  name: 'eyebrow',
+                  type: 'text',
+                  defaultValue: 'Book us',
                 },
                 {
                   name: 'title',

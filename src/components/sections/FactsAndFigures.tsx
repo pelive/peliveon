@@ -7,6 +7,7 @@ type MediaValue = {
 
 type FactsData = {
   enable?: boolean | null;
+  eyebrow?: string | null;
   title: string;
   description: string;
   backgroundImage?: MediaValue;
@@ -37,147 +38,113 @@ type FactsData = {
   }[] | null;
 };
 
-function QuoteIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
-  return (
-    <svg aria-hidden="true" width={105} height={78} {...props}>
-      <path
-        d="M25.086 77.292c-4.821 0-9.115-1.205-12.882-3.616-3.767-2.561-6.78-6.102-9.04-10.622C1.054 58.534 0 53.411 0 47.686c0-5.273.904-10.396 2.712-15.368 1.959-4.972 4.746-9.567 8.362-13.786a59.042 59.042 0 0 1 12.43-11.3C28.325 3.917 33.599 1.507 39.324 0l11.074 13.786c-6.479 2.561-11.677 5.951-15.594 10.17-3.767 4.219-5.65 7.835-5.65 10.848 0 1.356.377 2.863 1.13 4.52.904 1.507 2.637 3.089 5.198 4.746 3.767 2.41 6.328 4.972 7.684 7.684 1.507 2.561 2.26 5.5 2.26 8.814 0 5.123-1.959 9.19-5.876 12.204-3.767 3.013-8.588 4.52-14.464 4.52Zm54.24 0c-4.821 0-9.115-1.205-12.882-3.616-3.767-2.561-6.78-6.102-9.04-10.622-2.11-4.52-3.164-9.643-3.164-15.368 0-5.273.904-10.396 2.712-15.368 1.959-4.972 4.746-9.567 8.362-13.786a59.042 59.042 0 0 1 12.43-11.3C82.565 3.917 87.839 1.507 93.564 0l11.074 13.786c-6.479 2.561-11.677 5.951-15.594 10.17-3.767 4.219-5.65 7.835-5.65 10.848 0 1.356.377 2.863 1.13 4.52.904 1.507 2.637 3.089 5.198 4.746 3.767 2.41 6.328 4.972 7.684 7.684 1.507 2.561 2.26 5.5 2.26 8.814 0 5.123-1.959 9.19-5.876 12.204-3.767 3.013-8.588 4.52-14.464 4.52Z"/>
-    </svg>
-  )
-}
+const mediaUrl = (value?: MediaValue): string | null =>
+  value && typeof value === "object" && value.url ? value.url : null;
 
 export function FactsAndFigures({ data }: { data: FactsData }) {
-  if (!data?.enable) return null
+  if (!data?.enable) return null;
 
-  const performanceColumns = [1, 2, 3].map((column) =>
-    (data.performances || []).filter((performance) => performance.column === column),
-  )
+  const logos = (data.brandLogos || []).filter((company) => mediaUrl(company.logo));
+  const artists = data.artists || [];
+  const testimonials = data.performances || [];
 
   return (
     <section
       id="facts"
       aria-label="Facts & Figures"
-      className="relative overflow-hidden bg-slate-50 py-20 sm:py-32"
+      className="w-full border-t border-white/10 bg-ink-2 py-24 lg:py-36"
     >
-      {data.backgroundImage && typeof data.backgroundImage === "object" && data.backgroundImage.url && (
-        <Image
-          className="absolute left-1/2 top-0 max-w-none -translate-y-1/4 translate-x-[-30%]"
-          src={data.backgroundImage.url}
-          alt=""
-          width={1558}
-          height={946}
-        />
-      )}
-      <div className="container mx-auto px-4 relative">
-        <div className="mx-auto max-w-2xl md:text-center">
-          <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
+      <div className="mx-auto w-full max-w-[90rem] px-5 sm:px-10 lg:px-16">
+        <div className="mb-16 max-w-[60ch] lg:mb-20">
+          <p className="mb-5 text-[11px] uppercase tracking-[0.28em] text-accent">
+            {data.eyebrow || "Facts & figures"}
+          </p>
+          <h2 className="mb-5 font-display text-4xl font-bold leading-none tracking-[-0.03em] text-white sm:text-5xl">
             {data.title}
           </h2>
-          <p className="mt-4 text-lg tracking-tight text-slate-700">
-            {data.description}
-          </p>
+          <p className="m-0 text-lg leading-relaxed text-zinc-400">{data.description}</p>
         </div>
-        <div className="mt-20 lg:mt-32 text-center">
-          <p className="font-display text-xl text-slate-900">
-            {data.brandsTitle}
-          </p>
+
+        {/* Partner logo wall — light chips on the dark grid */}
+        {logos.length > 0 && (
           <ul
-            role="list"
-            className="mt-16 flex items-center justify-center gap-x-8 sm:flex-col sm:gap-x-0 sm:gap-y-10 xl:flex-row xl:gap-x-12 xl:gap-y-0"
+            aria-label={data.brandsTitle}
+            className="m-0 grid list-none grid-cols-2 border-l border-t border-white/10 p-0 sm:grid-cols-3 lg:grid-cols-4"
           >
-            {[0, 1, 2].map((groupIndex) => (
-              <li key={groupIndex}>
-                <ul
-                  role="list"
-                  className="flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0"
-                >
-                  {(data.brandLogos || []).slice(groupIndex * 3, groupIndex * 3 + 3).map((company) => (
-                    <li key={company.id || company.name} className="flex">
-                      {company.logo && typeof company.logo === "object" && company.logo.url && (
-                        <Image src={company.logo.url} alt={company.name} width={120} height={60} unoptimized/>
-                      )}
-                    </li>
-                  ))}
-                </ul>
+            {logos.map((company) => (
+              <li
+                key={company.id || company.name}
+                className="flex h-28 items-center justify-center border-b border-r border-white/10 p-5 sm:h-30"
+              >
+                <span className="flex h-full w-full items-center justify-center bg-paper px-4">
+                  <Image
+                    src={mediaUrl(company.logo) as string}
+                    alt={company.name}
+                    width={150}
+                    height={54}
+                    className="h-auto max-h-12 w-auto max-w-36"
+                    unoptimized
+                  />
+                </span>
               </li>
             ))}
           </ul>
-        </div>
-        <div className="mt-20 lg:mt-32 text-center">
-          <p className="font-display text-xl text-slate-900">
-            {data.artistsTitle}
-          </p>
-          <div
-            className="mt-16 font-serif text-2xl text-slate-900 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-12">
-            {(data.artists || []).map((artist) => (
-              <span key={artist.id || artist.name}>{artist.name}</span>
-            ))}
+        )}
+
+        {/* Shared the stage with */}
+        {artists.length > 0 && (
+          <div className="mt-16 grid grid-cols-1 items-start gap-8 lg:mt-20 lg:grid-cols-[19rem_1fr] lg:gap-16">
+            <p className="m-0 text-[13px] uppercase tracking-[0.2em] text-zinc-500">
+              {data.artistsTitle}
+            </p>
+            <p className="m-0 flex flex-wrap items-baseline gap-x-4 gap-y-3 font-display text-xl font-light text-zinc-200 sm:text-2xl">
+              {artists.map((artist, index) => (
+                <React.Fragment key={artist.id || artist.name}>
+                  {index > 0 && <span className="text-accent" aria-hidden="true">·</span>}
+                  <span>{artist.name}</span>
+                </React.Fragment>
+              ))}
+            </p>
           </div>
-        </div>
-        <div className="mt-20 lg:mt-32 text-center">
-          <p className="font-display text-xl text-slate-900">
-            {data.performancesTitle}
-          </p>
-        </div>
-        <ul
-          role="list"
-          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
-        >
-          {performanceColumns.map((column, columnIndex) => (
-            <li key={columnIndex}>
-              <ul role="list" className="flex flex-col gap-y-6 sm:gap-y-8">
-                {column.map((performance) => (
-                  <li key={performance.id || `${performance.name}-${performance.year}`}>
-                    <figure
-                      className="relative rounded-2xl bg-white p-6 shadow-xl shadow-slate-900/10">
-                      <QuoteIcon className="absolute left-6 top-6 fill-slate-100 opacity-15"/>
-                      <blockquote className="relative">
-                        <p className="text-lg tracking-tight text-slate-900">
-                          {performance.content}
-                        </p>
-                      </blockquote>
-                      <figcaption
-                        className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
-                        <div>
-                          <div className="font-display text-base text-slate-900">
-                            {performance.name}
-                          </div>
-                          <div className="mt-1 text-sm text-slate-500">
-                            {performance.year}
-                          </div>
-                          {performance.links &&
-                            performance.links.length > 0 && (
-                              <div className="mt-1 text-sm text-blue-500">
-                                {performance.links.map((link) => (
-                                  <div key={link.id || `${performance.name}-${link.name}`}>
-                                    <a href={link.url} target="_blank"
-                                       rel="noopener noreferrer">{link.name}</a>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                        </div>
-                      </figcaption>
-                      {performance.image && typeof performance.image === "object" && performance.image.url && (
-                        <div className="mt-5 overflow-hidden rounded-xl bg-slate-50">
-                          <Image
-                            className="h-40 w-full object-cover"
-                            src={performance.image.url}
-                            alt={performance.name}
-                            width={640}
-                            height={320}
-                            sizes="(min-width: 1024px) 24rem, (min-width: 640px) 42rem, 100vw"
-                          />
-                        </div>
-                      )}
-                    </figure>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
+        )}
+
+        {/* Testimonials */}
+        {testimonials.length > 0 && (
+          <div className="mt-16 lg:mt-20">
+            <h3 className="sr-only">{data.performancesTitle}</h3>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {testimonials.map((testimonial) => (
+                <figure
+                  key={testimonial.id || `${testimonial.name}-${testimonial.year}`}
+                  className="m-0 flex flex-col gap-6 border border-white/10 bg-ink-3 p-9"
+                >
+                  <blockquote className="m-0 font-display text-xl font-light leading-snug text-stone-100 sm:text-[1.375rem]">
+                    &ldquo;{testimonial.content}&rdquo;
+                  </blockquote>
+                  <figcaption className="mt-auto border-t border-white/10 pt-5 text-[13px] uppercase tracking-[0.16em] text-zinc-400">
+                    {testimonial.name} · {testimonial.year}
+                    {testimonial.links && testimonial.links.length > 0 && (
+                      <span className="mt-2 flex flex-wrap gap-x-4 normal-case tracking-normal">
+                        {testimonial.links.map((link) => (
+                          <a
+                            key={link.id || link.name}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-accent no-underline hover:underline"
+                          >
+                            {link.name}
+                          </a>
+                        ))}
+                      </span>
+                    )}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
-  )
+  );
 }

@@ -3,9 +3,6 @@
 import Image from 'next/image'
 import React, { useState } from 'react'
 
-import { Button } from '@/components/Button'
-import { Container } from '@/components/Container'
-
 type ContactField = {
   name: string
   label: string
@@ -14,8 +11,15 @@ type ContactField = {
   id?: string | null
 }
 
+type SocialLink = {
+  label: string
+  url: string
+  id?: string | null
+}
+
 type ContactData = {
   enable?: boolean | null
+  eyebrow?: string | null
   title: string
   subtitle?: string | null
   backgroundImage?: {
@@ -26,7 +30,16 @@ type ContactData = {
   submitButtonText?: string | null
 }
 
-export function Contact({ data }: { data: ContactData }) {
+const fieldClasses =
+  'w-full box-border bg-ink-field border border-white/15 text-white text-base px-4 py-3.5 transition-colors focus:border-accent focus:outline-2 focus:outline-accent/35 focus:outline-offset-1 placeholder:text-zinc-500'
+
+export function Contact({
+  data,
+  socialLinks,
+}: {
+  data: ContactData
+  socialLinks?: SocialLink[] | null
+}) {
   const fields = data?.formFields || []
   const initialData = fields.reduce<Record<string, string>>((acc, field) => {
     acc[field.name] = ''
@@ -40,6 +53,21 @@ export function Contact({ data }: { data: ContactData }) {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   if (!data?.enable) return null
+
+  const backgroundUrl =
+    data.backgroundImage && typeof data.backgroundImage === 'object'
+      ? data.backgroundImage.url
+      : null
+
+  const socials =
+    socialLinks && socialLinks.length > 0
+      ? socialLinks
+      : [
+          { label: 'Instagram', url: 'https://instagram.com/peliveon' },
+          { label: 'Facebook', url: 'https://facebook.com/peliveon' },
+          { label: 'TikTok', url: 'https://tiktok.com/@peliveon' },
+          { label: 'YouTube', url: 'https://youtube.com/@pelive' },
+        ]
 
   const validateField = (name: string, value: string): string => {
     switch (name) {
@@ -76,6 +104,8 @@ export function Contact({ data }: { data: ContactData }) {
 
     const errors: Record<string, string> = {}
     Object.keys(formData).forEach((key) => {
+      const field = fields.find((f) => f.name === key)
+      if (field && !field.required && !formData[key]) return
       const error = validateField(key, formData[key] || '')
       if (error) errors[key] = error
     })
@@ -118,122 +148,140 @@ export function Contact({ data }: { data: ContactData }) {
   }
 
   return (
-    <section id="contact" className="relative bg-zinc-950 py-32">
-      {data.backgroundImage && typeof data.backgroundImage === 'object' && data.backgroundImage.url && (
-        <Image
-          className="absolute inset-0 h-full w-full object-cover opacity-40"
-          src={data.backgroundImage.url}
-          alt=""
-          fill
-          sizes="100vw"
-        />
+    <section id="contact" className="relative w-full overflow-hidden bg-ink py-24 lg:py-36">
+      {backgroundUrl && (
+        <div className="absolute inset-y-0 right-0 w-[42%]" aria-hidden="true">
+          <Image
+            src={backgroundUrl}
+            alt=""
+            fill
+            sizes="42vw"
+            className="object-cover object-[50%_30%] opacity-20"
+          />
+        </div>
       )}
-      <div className="absolute inset-0 bg-zinc-950/80" />
-      <Container>
-        <div className="relative mx-auto max-w-5xl">
-          <div className="text-center mb-20">
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl tracking-tight text-slate-50 mb-6">
-              {data.title}
-            </h2>
-            <p className="mt-4 font-bold tracking-tight text-lg sm:text-xl text-white max-w-3xl mx-auto">
-              {data.subtitle}
-            </p>
-          </div>
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-ink from-45% to-ink/70"
+        aria-hidden="true"
+      />
 
-          <div className="bg-zinc-900/50 backdrop-blur-xl p-12 rounded-3xl border border-zinc-800 shadow-2xl">
-            <form onSubmit={handleSubmit} className="space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {fields.map((field) => (
-                  <div
-                    key={field.id || field.name}
-                    className={field.type === 'textarea' ? 'space-y-2 md:col-span-2' : 'space-y-2'}
-                  >
-                    <label htmlFor={field.name} className="block text-sm font-medium text-zinc-300 uppercase tracking-wide">
-                      {field.label}
-                    </label>
-                    {field.type === 'textarea' ? (
-                      <textarea
-                        id={field.name}
-                        name={field.name}
-                        value={formData[field.name] || ''}
-                        onChange={handleChange}
-                        required={field.required || undefined}
-                        rows={6}
-                        aria-required={field.required || undefined}
-                        aria-describedby={fieldErrors[field.name] ? `${field.name}-error` : undefined}
-                        className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:ring-2 focus:ring-zinc-600 focus:border-zinc-600 focus:bg-zinc-800/70 transition-all duration-200 resize-none"
-                      />
-                    ) : (
-                      <input
-                        type={field.type === 'email' ? 'email' : 'text'}
-                        id={field.name}
-                        name={field.name}
-                        value={formData[field.name] || ''}
-                        onChange={handleChange}
-                        required={field.required || undefined}
-                        aria-required={field.required || undefined}
-                        aria-describedby={fieldErrors[field.name] ? `${field.name}-error` : undefined}
-                        className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:ring-2 focus:ring-zinc-600 focus:border-zinc-600 focus:bg-zinc-800/70 transition-all duration-200"
-                      />
-                    )}
-                    {fieldErrors[field.name] && (
-                      <p id={`${field.name}-error`} className="text-rose-400 text-sm mt-1" role="alert">
-                        {fieldErrors[field.name]}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              <div className="pt-4">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-4 px-8 text-base font-medium relative"
-                  aria-describedby={submitStatus !== 'idle' ? 'submit-status' : undefined}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Sending...
-                    </>
-                  ) : (data.submitButtonText || 'Send Message')}
-                </Button>
-              </div>
-            </form>
-
-            {submitStatus !== 'idle' && (
-              <div
-                id="submit-status"
-                className={`mt-6 p-6 rounded-xl border ${
-                  submitStatus === 'success'
-                    ? 'bg-emerald-500/10 text-emerald-200 border-emerald-500/20'
-                    : 'bg-rose-500/10 text-rose-200 border-rose-500/20'
-                }`}
-                role="alert"
-                aria-live="polite"
-              >
-                {submitMessage}
-              </div>
-            )}
-          </div>
-
-          <div className="text-center mt-12">
-            <p className="text-slate-300 text-lg">
-              Prefer to email directly? Reach us at{' '}
+      <div className="relative mx-auto grid w-full max-w-[90rem] grid-cols-1 items-start gap-14 px-5 sm:px-10 lg:grid-cols-[1fr_1.25fr] lg:gap-24 lg:px-16">
+        <div>
+          <p className="mb-5 text-[11px] uppercase tracking-[0.28em] text-accent">
+            {data.eyebrow || 'Book us'}
+          </p>
+          <h2 className="mb-6 font-display text-4xl font-bold leading-none tracking-[-0.03em] text-white sm:text-5xl">
+            {data.title}
+          </h2>
+          {data.subtitle && (
+            <p className="mb-10 max-w-[44ch] text-lg leading-relaxed text-zinc-400">{data.subtitle}</p>
+          )}
+          <div className="flex flex-col gap-5 border-t border-white/10 pt-7">
+            <div>
+              <p className="mb-1.5 text-[11px] uppercase tracking-[0.2em] text-zinc-500">Booking</p>
               <a
                 href={`mailto:${data.email}`}
-                className="text-slate-50 hover:text-white font-medium transition-colors duration-200"
+                className="font-display text-xl font-medium text-stone-100 no-underline transition-colors hover:text-accent sm:text-[1.375rem]"
               >
                 {data.email}
               </a>
-            </p>
+            </div>
+            <div>
+              <p className="mb-1.5 text-[11px] uppercase tracking-[0.2em] text-zinc-500">Follow</p>
+              <p className="m-0 flex flex-wrap gap-4 font-display text-sm uppercase tracking-[0.1em]">
+                {socials.map((social) => (
+                  <a
+                    key={social.id || social.label}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-zinc-300 no-underline transition-colors hover:text-accent"
+                  >
+                    {social.label}
+                  </a>
+                ))}
+              </p>
+            </div>
           </div>
         </div>
-      </Container>
+
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-6 border border-white/10 bg-ink-panel p-6 sm:p-11"
+        >
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {fields.map((field) => (
+              <div
+                key={field.id || field.name}
+                className={
+                  field.type === 'textarea' ? 'flex flex-col gap-2 md:col-span-2' : 'flex flex-col gap-2'
+                }
+              >
+                <label
+                  htmlFor={field.name}
+                  className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-400"
+                >
+                  {field.label}
+                </label>
+                {field.type === 'textarea' ? (
+                  <textarea
+                    id={field.name}
+                    name={field.name}
+                    value={formData[field.name] || ''}
+                    onChange={handleChange}
+                    required={field.required || undefined}
+                    rows={6}
+                    aria-required={field.required || undefined}
+                    aria-describedby={fieldErrors[field.name] ? `${field.name}-error` : undefined}
+                    className={`${fieldClasses} resize-y`}
+                  />
+                ) : (
+                  <input
+                    type={field.type === 'email' ? 'email' : 'text'}
+                    id={field.name}
+                    name={field.name}
+                    value={formData[field.name] || ''}
+                    onChange={handleChange}
+                    required={field.required || undefined}
+                    aria-required={field.required || undefined}
+                    aria-describedby={fieldErrors[field.name] ? `${field.name}-error` : undefined}
+                    className={fieldClasses}
+                  />
+                )}
+                {fieldErrors[field.name] && (
+                  <p id={`${field.name}-error`} className="m-0 text-sm text-rose-400" role="alert">
+                    {fieldErrors[field.name]}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="inline-flex min-h-[3.5rem] items-center justify-center self-start bg-accent px-9 font-display text-sm font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:bg-accent-hover disabled:opacity-60"
+            aria-describedby={submitStatus !== 'idle' ? 'submit-status' : undefined}
+          >
+            {isSubmitting ? 'Sending…' : data.submitButtonText || 'Send Message'}
+          </button>
+
+          {submitStatus !== 'idle' && (
+            <p
+              id="submit-status"
+              role="alert"
+              aria-live="polite"
+              className={`m-0 border px-5 py-4 text-[15px] ${
+                submitStatus === 'success'
+                  ? 'border-emerald-500/35 bg-emerald-500/10 text-emerald-200'
+                  : 'border-accent/35 bg-accent/10 text-rose-300'
+              }`}
+            >
+              {submitMessage}
+            </p>
+          )}
+        </form>
+      </div>
     </section>
   )
 }
