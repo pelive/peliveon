@@ -5,8 +5,12 @@
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-lexend), ui-sans-serif, system-ui, sans-serif;
+  --font-tagline: var(--font-michroma), var(--font-lexend), ui-sans-serif, system-ui, sans-serif;
 
-  /* PE LIVE design system — dark theatrical base, red as sole accent */
+  /* PE LIVE design system — dark theatrical base.
+     Burgundy leads (buttons, solids); magenta is the secondary accent
+     (labels, hairlines, glows, hover states — never a full background);
+     blush carries the tagline. All lifted from the heart artwork. */
   --color-ink: #0a0a0b;
   --color-ink-2: #0d0d0f;
   --color-ink-3: #141417;
@@ -15,9 +19,12 @@
   --color-paper: #f4f1ec;
   --color-paper-ink: #14100f;
   --color-paper-muted: #5c534e;
-  --color-accent: #dc2626;
-  --color-accent-hover: #b91c1c;
-  --color-accent-deep: #a81b1b;
+  --color-accent: #8a1240;
+  --color-accent-hover: #5c0b2b;
+  --color-accent-deep: #8a1240;
+  --color-magenta: #ff3ea5;
+  --color-magenta-soft: #ff8ec9;
+  --color-blush: #f9b4d6;
 }
 
 @keyframes kenburns {
@@ -38,6 +45,36 @@
   }
 }
 
+/* Neon-sign flicker for the hero lockup */
+@keyframes flicker {
+  0%,
+  47%,
+  49%,
+  92%,
+  94%,
+  100% {
+    opacity: 1;
+  }
+  48% {
+    opacity: 0.78;
+  }
+  93% {
+    opacity: 0.82;
+  }
+}
+
+.animate-flicker {
+  animation: flicker 8s steps(1, end) infinite;
+}
+
+.text-neon {
+  color: transparent;
+  -webkit-text-stroke: 2.5px #ffc2e2;
+  text-shadow:
+    0 0 20px rgba(255, 62, 165, 0.95),
+    0 0 70px rgba(255, 62, 165, 0.5);
+}
+
 .animate-kenburns {
   animation: kenburns 26s ease-in-out infinite alternate;
 }
@@ -48,7 +85,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .animate-kenburns,
-  .animate-marquee {
+  .animate-marquee,
+  .animate-flicker {
     animation: none;
   }
 }
@@ -111,7 +149,7 @@
   --card-foreground: oklch(97% 0.001 100deg);
   --popover: oklch(15% 0.002 280deg);
   --popover-foreground: oklch(97% 0.001 100deg);
-  --primary: oklch(58% 0.216 27deg);
+  --primary: #8a1240;
   --primary-foreground: oklch(98.5% 0 0deg);
   --secondary: oklch(26.9% 0 0deg);
   --secondary-foreground: oklch(98.5% 0 0deg);
@@ -123,7 +161,7 @@
   --destructive-foreground: oklch(63.7% 0.237 25.331deg);
   --border: oklch(100% 0 0deg / 12%);
   --input: oklch(100% 0 0deg / 15%);
-  --ring: oklch(58% 0.216 27deg);
+  --ring: #ff3ea5;
   --chart-1: oklch(48.8% 0.243 264.376deg);
   --chart-2: oklch(69.6% 0.17 162.48deg);
   --chart-3: oklch(76.9% 0.188 70.08deg);

@@ -38,7 +38,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     <div className="bg-ink pt-40 pb-24">
       <PageClient />
       <div className="container mb-16">
-        <p className="mb-4 text-[11px] uppercase tracking-[0.28em] text-accent">News</p>
+        <p className="mb-4 text-[11px] uppercase tracking-[0.28em] text-magenta">News</p>
         <h1 className="m-0 font-display text-4xl font-bold leading-none tracking-[-0.03em] text-white sm:text-5xl">
           From the road
         </h1>

@@ -1,6 +1,8 @@
 import React from "react";
 import Image from "next/image";
 
+import { Logo } from "@/components/Logo/Logo";
+
 import type { Event } from "@/payload-types";
 
 type HeroLogo = {
@@ -19,6 +21,7 @@ type HeroData = {
 	ticketLabel: string;
 	ticketUrl: string;
 	secondaryCtaLabel?: string | null;
+	tagline?: string | null;
 	fallback?: {
 		eyebrow?: string | null;
 		titlePrefix?: string | null;
@@ -71,6 +74,9 @@ export function Hero({ data, featuredEvent }: { data: HeroData; featuredEvent?: 
 				fallback?.titlePrefix || data.titlePrefix,
 				fallback?.titleHighlight || data.titleHighlight,
 			);
+	// New field: null until the global is re-saved in the admin — default on.
+	// An explicitly emptied field ('') still hides the tagline.
+	const tagline = data.tagline ?? "Sing · Feel · Connect";
 	const backgroundUrl =
 		data.backgroundImage && typeof data.backgroundImage === "object"
 			? data.backgroundImage.url
@@ -97,19 +103,30 @@ export function Hero({ data, featuredEvent }: { data: HeroData; featuredEvent?: 
 				<div className="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/40 to-ink" aria-hidden="true" />
 
 				<div className="relative mx-auto w-full max-w-[90rem] px-5 pb-16 pt-40 sm:px-10 lg:px-16 lg:pb-20">
-					<p className="mb-4 flex items-center gap-3.5 font-display text-xs font-medium uppercase tracking-[0.34em] text-stone-100">
-						<span className="block h-px w-11 bg-accent" aria-hidden="true" />
+					<p className="mb-5 flex items-center gap-3.5 font-display text-xs font-medium uppercase tracking-[0.3em] text-zinc-200">
+						<span className="block h-px w-11 bg-magenta shadow-[0_0_8px_rgba(255,62,165,0.8)]" aria-hidden="true" />
 						{eyebrow}
 					</p>
-					<h1 className="font-display text-6xl font-extrabold uppercase leading-[0.88] tracking-[-0.035em] text-white sm:text-8xl lg:text-[8.25rem]">
-						{lineOne}
-						{lineTwo && (
-							<>
-								<br />
-								<span className="text-accent">{lineTwo}</span>
-							</>
-						)}
-					</h1>
+					<div className="flex items-center gap-7 animate-flicker sm:gap-11">
+						<Logo className="hidden h-28 w-auto flex-none drop-shadow-[0_0_26px_rgba(255,62,165,0.55)] sm:block lg:h-40" priority="high" loading="eager" />
+						<div>
+							<h1 className="font-tagline text-4xl uppercase leading-[1.08] tracking-[0.02em] text-neon sm:text-6xl lg:text-[5.25rem]">
+								{lineOne}
+								{lineTwo && (
+									<>
+										<br />
+										{lineTwo}
+									</>
+								)}
+							</h1>
+							{tagline && (
+								<p className="mt-4 flex items-center gap-4 font-tagline text-xs uppercase tracking-[0.3em] text-magenta-soft [text-shadow:0_0_14px_rgba(255,62,165,0.65)] sm:mt-6 sm:text-lg">
+									{tagline}
+									<span className="block h-px w-full max-w-44 flex-1 bg-gradient-to-r from-magenta to-transparent" aria-hidden="true" />
+								</p>
+							)}
+						</div>
+					</div>
 					{!isFeatured && fallback?.subtitle && (
 						<p className="mt-6 max-w-[52ch] text-lg leading-relaxed text-zinc-300">
 							{fallback.subtitle}
@@ -148,7 +165,7 @@ export function Hero({ data, featuredEvent }: { data: HeroData; featuredEvent?: 
 									href={featuredEvent.ticketUrl || data.ticketUrl}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="inline-flex min-h-[3.25rem] items-center justify-center gap-3 bg-accent px-8 font-display text-sm font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+									className="inline-flex min-h-[3.25rem] items-center justify-center gap-3 bg-accent px-8 font-display text-sm font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-magenta"
 								>
 									{data.ticketLabel}
 									<span aria-hidden="true" className="text-lg leading-none">→</span>
@@ -159,7 +176,7 @@ export function Hero({ data, featuredEvent }: { data: HeroData; featuredEvent?: 
 								className={
 									isFeatured
 										? "inline-flex min-h-[3.25rem] items-center justify-center border border-white/35 px-7 font-display text-sm font-medium uppercase tracking-[0.14em] text-stone-100 transition-colors hover:border-white hover:bg-white/5"
-										: "inline-flex min-h-[3.25rem] items-center justify-center gap-3 bg-accent px-8 font-display text-sm font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+										: "inline-flex min-h-[3.25rem] items-center justify-center gap-3 bg-accent px-8 font-display text-sm font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-magenta"
 								}
 							>
 								{data.secondaryCtaLabel || "Book the band"}

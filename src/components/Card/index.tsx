@@ -32,7 +32,7 @@ export const Card: React.FC<{
   return (
     <article
       className={cn(
-        'overflow-hidden border border-white/10 bg-ink-3 transition-colors duration-300 hover:cursor-pointer hover:border-accent',
+        'overflow-hidden border border-white/10 bg-ink-3 transition-colors duration-300 hover:cursor-pointer hover:border-magenta',
         className,
       )}
       ref={cardRef}
@@ -44,7 +44,7 @@ export const Card: React.FC<{
       )}
       <div className="p-6 sm:p-7">
         {showCategories && hasCategories && (
-          <p className="mb-2.5 text-[11px] uppercase tracking-[0.2em] text-accent">
+          <p className="mb-2.5 text-[11px] uppercase tracking-[0.2em] text-magenta">
             {categories?.map((category, index) => {
               if (typeof category === 'object') {
                 const categoryTitle = category.title || 'Untitled category'

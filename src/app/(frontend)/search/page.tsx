@@ -64,7 +64,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       <PageClient />
       <div className="container mb-16">
         <div className="mx-auto max-w-[50rem] text-center">
-          <p className="mb-4 text-[11px] uppercase tracking-[0.28em] text-accent">Search</p>
+          <p className="mb-4 text-[11px] uppercase tracking-[0.28em] text-magenta">Search</p>
           <h1 className="mb-8 font-display text-3xl font-semibold text-white sm:text-4xl lg:mb-12">
             Find a show or a story
           </h1>

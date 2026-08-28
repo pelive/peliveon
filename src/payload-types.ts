@@ -2022,6 +2022,10 @@ export interface FrontPage {
   id: number;
   hero: {
     eyebrow: string;
+    /**
+     * Brand tagline shown under the hero title and in the footer
+     */
+    tagline?: string | null;
     titlePrefix: string;
     titleHighlight: string;
     ticketLabel: string;
@@ -2256,6 +2260,7 @@ export interface FrontPageSelect<T extends boolean = true> {
     | T
     | {
         eyebrow?: T;
+        tagline?: T;
         titlePrefix?: T;
         titleHighlight?: T;
         ticketLabel?: T;

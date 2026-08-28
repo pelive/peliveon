@@ -1,6 +1,6 @@
 import React from 'react'
 
-import type { Footer as FooterType } from '@/payload-types'
+import type { Config, Footer as FooterType } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
 import { getCachedGlobal } from '@/utilities/getGlobals'
@@ -27,10 +27,13 @@ const defaultSocials = [
 ]
 
 export async function Footer() {
-  const [footer, upcomingEvents] = await Promise.all([
+  const [footer, frontPage, upcomingEvents] = await Promise.all([
     getCachedGlobal('footer', 1)().catch(() => null) as Promise<FooterType | null>,
+    getCachedGlobal('frontPage', 1)().catch(() => null) as Promise<Config['globals']['frontPage'] | null>,
     getUpcomingEvents(),
   ])
+
+  const tagline2 = frontPage?.hero?.tagline ?? 'Sing · Feel · Connect'
 
   // Ticket CTA only exists while there is a featured event that has not
   // passed yet (getUpcomingEvents already excludes past events).
@@ -70,10 +73,15 @@ export async function Footer() {
       <div className="mx-auto w-full max-w-[90rem] px-5 sm:px-10 lg:px-16">
         <div className="grid grid-cols-1 gap-12 border-b border-white/10 pb-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
           <div>
-            <div className="mb-4 flex items-center gap-3">
+            <div className="mb-3 flex items-center gap-3">
               <Logo className="h-10 w-auto" />
-              <span className="block h-1.5 w-1.5 bg-accent" aria-hidden="true" />
+              <span className="block h-6 w-px bg-magenta/45" aria-hidden="true" />
+              <span className="font-display text-lg font-extrabold leading-none tracking-[-0.02em] text-stone-100">
+                PE LIVE
+              </span>
+              <span className="block h-1.5 w-1.5 bg-magenta" aria-hidden="true" />
             </div>
+            <p className="mb-4 font-tagline text-[10px] uppercase tracking-[0.3em] text-blush">{tagline2}</p>
             <p className="m-0 max-w-[34ch] text-[15px] leading-relaxed text-zinc-400">{tagline}</p>
           </div>
 
@@ -86,7 +94,7 @@ export async function Footer() {
                   href={item.url}
                   target={item.newTab ? '_blank' : undefined}
                   rel={item.newTab ? 'noopener noreferrer' : undefined}
-                  className="text-zinc-200 no-underline transition-colors hover:text-accent"
+                  className="text-zinc-200 no-underline transition-colors hover:text-magenta"
                 >
                   {item.label}
                 </a>
@@ -103,7 +111,7 @@ export async function Footer() {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-zinc-200 no-underline transition-colors hover:text-accent"
+                  className="text-zinc-200 no-underline transition-colors hover:text-magenta"
                 >
                   {social.label}
                 </a>
@@ -115,7 +123,7 @@ export async function Footer() {
             <p className="mb-4 text-[11px] uppercase tracking-[0.22em] text-zinc-500">Booking</p>
             <a
               href={`mailto:${bookingEmail}`}
-              className="font-display text-xl font-medium text-stone-100 no-underline transition-colors hover:text-accent"
+              className="font-display text-xl font-medium text-stone-100 no-underline transition-colors hover:text-magenta"
             >
               {bookingEmail}
             </a>
@@ -125,7 +133,7 @@ export async function Footer() {
                   href={ticketUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-6 inline-flex items-center gap-2.5 border border-white/30 px-5 py-3.5 font-display text-xs font-semibold uppercase tracking-[0.16em] text-white no-underline transition-colors hover:border-accent hover:bg-accent/10"
+                  className="mt-6 inline-flex items-center gap-2.5 border border-white/30 px-5 py-3.5 font-display text-xs font-semibold uppercase tracking-[0.16em] text-white no-underline transition-colors hover:border-magenta hover:bg-magenta/10"
                 >
                   Get Tickets <span aria-hidden="true">→</span>
                 </a>
@@ -141,7 +149,7 @@ export async function Footer() {
               href={creditUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="border-b border-accent text-zinc-400 no-underline transition-colors hover:text-white"
+              className="border-b border-magenta text-zinc-400 no-underline transition-colors hover:text-white"
             >
               {creditLabel}
             </a>

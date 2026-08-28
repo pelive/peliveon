@@ -39,7 +39,7 @@ export default async function ContactPage() {
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-ink/60 to-ink" aria-hidden="true" />
         <div className="relative mx-auto w-full max-w-[90rem] px-5 pb-10 sm:px-10 lg:px-16">
-          <p className="mb-3.5 text-[11px] uppercase tracking-[0.28em] text-accent">Contact</p>
+          <p className="mb-3.5 text-[11px] uppercase tracking-[0.28em] text-magenta">Contact</p>
           <h1 className="m-0 font-display text-4xl font-bold leading-[0.95] tracking-[-0.03em] text-white sm:text-5xl lg:text-6xl">
             Bring PE LIVE to your stage.
           </h1>

@@ -160,7 +160,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   if (slug === 'home') {
     return {
       title: 'PE LIVE - Gospel Music Band',
-      description: "Gospel music like you've never seen before.",
+      description: 'Sing · Feel · Connect — Black American-style Gospel from Ghent, Belgium.',
       alternates: {
         canonical: '/',
       },
@@ -182,7 +182,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 
   return {
     title: 'PE LIVE',
-    description: "Gospel music like you've never seen before.",
+    description: 'Sing · Feel · Connect — Black American-style Gospel from Ghent, Belgium.',
     alternates: {
       canonical: `/${decodedSlug}`,
     },

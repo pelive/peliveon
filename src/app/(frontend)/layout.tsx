@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 
 import { cn } from '@/utilities/ui'
-import { Inter, Lexend } from 'next/font/google'
+import { Inter, Lexend, Michroma } from 'next/font/google'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
@@ -29,11 +29,18 @@ const lexend = Lexend({
   variable: '--font-lexend',
 })
 
+const michroma = Michroma({
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  variable: '--font-michroma',
+})
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
 
   return (
-    <html className={cn('h-full scroll-smooth antialiased', inter.variable, lexend.variable)} lang="en" suppressHydrationWarning>
+    <html className={cn('h-full scroll-smooth antialiased', inter.variable, lexend.variable, michroma.variable)} lang="en" suppressHydrationWarning>
       <head>
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />

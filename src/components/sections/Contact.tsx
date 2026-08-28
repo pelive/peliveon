@@ -31,7 +31,7 @@ type ContactData = {
 }
 
 const fieldClasses =
-  'w-full box-border bg-ink-field border border-white/15 text-white text-base px-4 py-3.5 transition-colors focus:border-accent focus:outline-2 focus:outline-accent/35 focus:outline-offset-1 placeholder:text-zinc-500'
+  'w-full box-border bg-ink-field border border-white/15 text-white text-base px-4 py-3.5 transition-colors focus:border-magenta focus:outline-2 focus:outline-magenta/35 focus:outline-offset-1 placeholder:text-zinc-500'
 
 export function Contact({
   data,
@@ -167,7 +167,7 @@ export function Contact({
 
       <div className="relative mx-auto grid w-full max-w-[90rem] grid-cols-1 items-start gap-14 px-5 sm:px-10 lg:grid-cols-[1fr_1.25fr] lg:gap-24 lg:px-16">
         <div>
-          <p className="mb-5 text-[11px] uppercase tracking-[0.28em] text-accent">
+          <p className="mb-5 text-[11px] uppercase tracking-[0.28em] text-magenta">
             {data.eyebrow || 'Book us'}
           </p>
           <h2 className="mb-6 font-display text-4xl font-bold leading-none tracking-[-0.03em] text-white sm:text-5xl">
@@ -181,7 +181,7 @@ export function Contact({
               <p className="mb-1.5 text-[11px] uppercase tracking-[0.2em] text-zinc-500">Booking</p>
               <a
                 href={`mailto:${data.email}`}
-                className="font-display text-xl font-medium text-stone-100 no-underline transition-colors hover:text-accent sm:text-[1.375rem]"
+                className="font-display text-xl font-medium text-stone-100 no-underline transition-colors hover:text-magenta sm:text-[1.375rem]"
               >
                 {data.email}
               </a>
@@ -195,7 +195,7 @@ export function Contact({
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-zinc-300 no-underline transition-colors hover:text-accent"
+                    className="text-zinc-300 no-underline transition-colors hover:text-magenta"
                   >
                     {social.label}
                   </a>

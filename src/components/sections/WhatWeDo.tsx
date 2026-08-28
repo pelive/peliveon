@@ -40,7 +40,7 @@ export function WhatWeDo({ data }: { data: WhatWeDoData }) {
       <div className="mx-auto w-full max-w-[90rem] px-5 sm:px-10 lg:px-16">
         <div className="mb-12 flex flex-wrap items-end justify-between gap-10 lg:mb-16">
           <div>
-            <p className="mb-5 text-[11px] uppercase tracking-[0.28em] text-accent">
+            <p className="mb-5 text-[11px] uppercase tracking-[0.28em] text-magenta">
               {data.eyebrow || "What we do"}
             </p>
             <h2 className="font-display text-4xl font-bold leading-[0.98] tracking-[-0.03em] text-white sm:text-5xl lg:text-6xl">
@@ -58,9 +58,9 @@ export function WhatWeDo({ data }: { data: WhatWeDoData }) {
               <Tab
                 key={service.id || service.title}
                 className={clsx(
-                  "flex-none cursor-pointer border-b-2 border-transparent px-5 py-5 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent",
+                  "flex-none cursor-pointer border-b-2 border-transparent px-5 py-5 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-magenta",
                   "lg:border-b lg:border-l-2 lg:border-b-white/10 lg:px-8 lg:py-7",
-                  "data-selected:border-accent data-selected:bg-white/5 lg:data-selected:border-l-accent lg:data-selected:border-b-white/10",
+                  "data-selected:border-magenta data-selected:bg-white/5 lg:data-selected:border-l-magenta lg:data-selected:border-b-white/10",
                   "text-zinc-400 data-selected:text-white hover:text-white",
                 )}
               >
@@ -97,7 +97,7 @@ export function WhatWeDo({ data }: { data: WhatWeDoData }) {
                     </p>
                     <a
                       href="#contact"
-                      className="inline-flex items-center gap-2.5 border-b border-accent pb-1.5 font-display text-[13px] font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:text-accent"
+                      className="inline-flex items-center gap-2.5 border-b border-magenta pb-1.5 font-display text-[13px] font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:text-magenta"
                     >
                       Request this set <span aria-hidden="true">→</span>
                     </a>

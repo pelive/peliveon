@@ -27,7 +27,7 @@ export const PostHero: React.FC<{
       <div className="container relative z-10 pb-10">
         <div className="mx-auto max-w-3xl">
           {categories && categories.length > 0 && (
-            <p className="mb-3.5 text-[11px] uppercase tracking-[0.28em] text-accent">
+            <p className="mb-3.5 text-[11px] uppercase tracking-[0.28em] text-magenta">
               {categories.map((category, index) => {
                 if (typeof category === 'object' && category !== null) {
                   const titleToUse = category.title || 'Untitled category'
