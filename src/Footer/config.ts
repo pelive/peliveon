@@ -12,7 +12,7 @@ export const Footer: GlobalConfig = {
     {
       name: 'tagline',
       type: 'textarea',
-      defaultValue: 'Black American-style Gospel from Ghent, Belgium. Gospel music with an attitude.',
+      defaultValue: 'Black American-style Gospel from Ghent, Belgium.',
     },
     {
       name: 'bookingEmail',

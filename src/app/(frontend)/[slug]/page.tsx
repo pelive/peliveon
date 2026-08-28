@@ -159,7 +159,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 
   if (slug === 'home') {
     return {
-      title: 'PE LIVE - Gospel Music Band',
+      title: 'PE LIVE — Sing · Feel · Connect',
       description: 'Sing · Feel · Connect — Black American-style Gospel from Ghent, Belgium.',
       alternates: {
         canonical: '/',

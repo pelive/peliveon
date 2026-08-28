@@ -62,7 +62,7 @@ export async function Footer() {
 
   const socials = footer?.socialLinks && footer.socialLinks.length > 0 ? footer.socialLinks : defaultSocials
   const tagline =
-    footer?.tagline || 'Black American-style Gospel from Ghent, Belgium. Gospel music with an attitude.'
+    footer?.tagline || 'Black American-style Gospel from Ghent, Belgium.'
   const bookingEmail = footer?.bookingEmail || 'info@pelive.be'
   const ticketUrl = featuredEvent ? featuredEvent.ticketUrl || footer?.ticketUrl || null : null
   const creditLabel = footer?.creditLabel || 'Pilarres'

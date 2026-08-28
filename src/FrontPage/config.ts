@@ -79,17 +79,17 @@ export const FrontPage: GlobalConfig = {
                     {
                       name: 'eyebrow',
                       type: 'text',
-                      defaultValue: 'Gospel · Ghent, Belgium',
+                      defaultValue: 'PE LIVE · Ghent, Belgium',
                     },
                     {
                       name: 'titlePrefix',
                       type: 'text',
-                      defaultValue: 'Gospel music',
+                      defaultValue: 'Sing. Feel.',
                     },
                     {
                       name: 'titleHighlight',
                       type: 'text',
-                      defaultValue: 'with an attitude.',
+                      defaultValue: 'Connect.',
                     },
                     {
                       name: 'subtitle',

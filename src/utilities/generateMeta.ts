@@ -26,7 +26,7 @@ export const generateMeta = async (args: {
 
   const ogImage = getImageURL(doc?.meta?.image)
 
-  const title = doc?.meta?.title ? doc?.meta?.title + ' | PE LIVE' : 'PE LIVE - Gospel Music Band'
+  const title = doc?.meta?.title ? doc?.meta?.title + ' | PE LIVE' : 'PE LIVE — Sing · Feel · Connect'
 
   return {
     description: doc?.meta?.description,
