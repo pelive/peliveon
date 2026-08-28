@@ -1,22 +1,37 @@
 /**
- * One-shot schema sync against the database in POSTGRES_URL.
+ * Schema sync against the database in POSTGRES_URL.
  *
  * Payload's vercel-postgres adapter pushes schema changes on connect whenever
  * NODE_ENV !== 'production' (dev push). This script forces that path once and
  * exits, so new optional fields become columns without running the dev server.
+ * Purely additive changes apply non-interactively; a change that could lose
+ * data is never applied automatically (Payload cancels it in CI).
  *
- * Usage: POSTGRES_URL=postgres://... npm run sync:schema
- * (or put POSTGRES_URL and PAYLOAD_SECRET in .env first)
+ * Runs automatically before every build via the `prebuild` script with
+ * `--optional`: when POSTGRES_URL is unset (local build without a database)
+ * or SKIP_SCHEMA_SYNC=1, it skips instead of failing. Run it directly with
+ * `npm run sync:schema` to require a database.
  */
 import { config as dotenvConfig } from 'dotenv'
 
 dotenvConfig()
 
+const optional = process.argv.includes('--optional')
+
 ;(process.env as Record<string, string>).NODE_ENV = 'development'
 process.env.PAYLOAD_SECRET = process.env.PAYLOAD_SECRET || 'schema-sync-only-secret'
 
 async function run() {
+  if (optional && process.env.SKIP_SCHEMA_SYNC === '1') {
+    console.log('SKIP_SCHEMA_SYNC=1 — skipping schema sync.')
+    process.exit(0)
+  }
+
   if (!process.env.POSTGRES_URL) {
+    if (optional) {
+      console.log('POSTGRES_URL is not set — skipping schema sync.')
+      process.exit(0)
+    }
     console.error('POSTGRES_URL is not set — aborting.')
     process.exit(1)
   }
