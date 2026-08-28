@@ -24,9 +24,7 @@ type WhatWeDoData = {
 };
 
 export function WhatWeDo({ data }: { data: WhatWeDoData }) {
-  if (!data?.enable || !data.services || data.services.length === 0) return null;
-
-  const services = data.services;
+  const services = data?.services || [];
 
   const [tabOrientation, setTabOrientation] = useState<"horizontal" | "vertical">("horizontal");
   const [backgroundImage, setBackgroundImage] = useState<string | null>(
@@ -47,6 +45,8 @@ export function WhatWeDo({ data }: { data: WhatWeDoData }) {
       lgMediaQuery.removeEventListener("change", onMediaQueryChange);
     };
   }, []);
+
+  if (!data?.enable || services.length === 0) return null;
 
   return (
     <section

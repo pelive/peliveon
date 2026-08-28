@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import React from "react";
 
@@ -68,7 +66,6 @@ export function FactsAndFigures({ data }: { data: FactsData }) {
           alt=""
           width={1558}
           height={946}
-          unoptimized
         />
       )}
       <div className="container mx-auto px-4 relative">
@@ -167,8 +164,9 @@ export function FactsAndFigures({ data }: { data: FactsData }) {
                             className="h-40 w-full object-cover"
                             src={performance.image.url}
                             alt={performance.name}
-                            width={56}
-                            height={56}
+                            width={640}
+                            height={320}
+                            sizes="(min-width: 1024px) 24rem, (min-width: 640px) 42rem, 100vw"
                           />
                         </div>
                       )}

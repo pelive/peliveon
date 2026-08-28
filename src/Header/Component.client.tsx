@@ -51,12 +51,23 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerTheme])
 
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileMenuOpen(false)
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [mobileMenuOpen])
+
   const defaultNavItems: NavItem[] = [
-    { label: 'Home', url: '#home' },
-    { label: 'About', url: '#about' },
-    { label: 'Services', url: '#services' },
-    { label: 'Up Next', url: '#upcoming' },
-    { label: 'Contact', url: '#contact' },
+    { label: 'Home', url: '/#home' },
+    { label: 'About', url: '/#about' },
+    { label: 'Services', url: '/#works' },
+    { label: 'Up Next', url: '/#upcoming' },
+    { label: 'Contact', url: '/#contact' },
   ]
 
   const navItems: NavItem[] =
@@ -102,6 +113,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden text-white p-2"
               aria-label="Toggle menu"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               {mobileMenuOpen ? (
                 <CloseIcon className="h-6 w-6" />
@@ -115,7 +128,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-zinc-950 md:hidden">
+        <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu" className="fixed inset-0 z-50 bg-zinc-950 md:hidden">
           <div className="container py-10">
             <div className="flex items-center justify-between mb-8">
               <Link href="/" onClick={() => setMobileMenuOpen(false)}>

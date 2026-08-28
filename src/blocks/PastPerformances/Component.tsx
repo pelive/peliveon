@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
 
 import type { PastPerformances as PastPerformancesType } from '@/payload-types'
 
@@ -18,20 +17,16 @@ interface Event {
 }
 
 export const PastPerformancesBlock: React.FC<{ block: PastPerformancesType }> = ({ block }) => {
-  const { enable, title, subtitle, maxEvents, showGallery, groupByYear, fallbackContent } = block || {}
+  const { enable, title, subtitle, maxEvents } = block || {}
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        console.log('Fetching past events from /api/past-performances...')
         const response = await fetch('/api/past-performances')
-        console.log('Response status:', response.status)
         const data = await response.json()
-        console.log('Past performances API response:', data)
         setEvents(data.pastEvents || [])
-        console.log('Set past events to:', data.pastEvents || [])
       } catch (error) {
         console.error('Error fetching past events:', error)
       } finally {
@@ -46,7 +41,7 @@ export const PastPerformancesBlock: React.FC<{ block: PastPerformancesType }> = 
 
   if (loading) {
     return (
-      <section className="relative w-screen bg-zinc-900 py-32">
+      <section className="relative w-full bg-zinc-900 py-32">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl text-center">
             <h2 className="mb-6 font-display text-3xl sm:text-4xl md:text-5xl text-slate-50">
@@ -68,7 +63,7 @@ export const PastPerformancesBlock: React.FC<{ block: PastPerformancesType }> = 
 
   if (!loading && events.length === 0) {
     return (
-      <section className="relative w-screen bg-zinc-900 py-32">
+      <section className="relative w-full bg-zinc-900 py-32">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl text-center">
             <h2 className="mb-6 font-display text-3xl sm:text-4xl md:text-5xl text-slate-50">
@@ -89,7 +84,7 @@ export const PastPerformancesBlock: React.FC<{ block: PastPerformancesType }> = 
   }
 
   return (
-    <section className="relative w-screen bg-zinc-900 py-32">
+    <section className="relative w-full bg-zinc-900 py-32">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="mb-6 font-display text-3xl sm:text-4xl md:text-5xl text-slate-50">

@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Image from "next/image";
 
@@ -31,7 +29,7 @@ export function Hero({ data }: { data: HeroData }) {
 	return (
 		<section
 			id="home"
-			className="relative w-screen h-screen min-h-[700px] overflow-hidden">
+			className="relative w-full h-screen min-h-[700px] overflow-hidden">
 			{data.backgroundImage && typeof data.backgroundImage === "object" && data.backgroundImage.url && (
 				<Image
 					className="absolute top-1/2 w-full min-h-[700px] -translate-y-1/2 opacity-95 -z-20 object-cover"
@@ -40,7 +38,7 @@ export function Hero({ data }: { data: HeroData }) {
 					priority={true}
 					width={2347}
 					height={1244}
-					unoptimized
+					sizes="100vw"
 				/>
 			)}
 			<Container className="absolute inset-0 flex items-center justify-center">

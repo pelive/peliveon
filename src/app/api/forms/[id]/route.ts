@@ -14,6 +14,7 @@ export async function GET(
       collection: 'forms',
       id: id,
       depth: 2, // Populate relationships
+      overrideAccess: false,
     })
 
     if (!form) {

@@ -6,8 +6,11 @@ import { Container } from '@/components/Container'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 
 export const metadata: Metadata = {
-  title: 'Contact - PE LIVE',
+  title: 'Contact',
   description: 'Get in touch with PE LIVE gospel music band for bookings and inquiries.',
+  alternates: {
+    canonical: '/contact',
+  },
 }
 
 export default async function ContactPage() {
@@ -15,7 +18,7 @@ export default async function ContactPage() {
   const contactData = frontPage?.contact
 
   return (
-    <main className="min-h-screen">
+    <div className="min-h-screen">
       <Container className="py-16">
         <div className="mx-auto max-w-4xl">
           <div className="text-center mb-12">
@@ -23,12 +26,12 @@ export default async function ContactPage() {
               Contact PE LIVE
             </h1>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              Ready to bring the power and passion of PE LIVE to your event? We'd love to hear from you!
+              Ready to bring the power and passion of PE LIVE to your event? We&apos;d love to hear from you!
             </p>
           </div>
         </div>
       </Container>
       {contactData ? <Contact data={contactData} /> : null}
-    </main>
+    </div>
   )
 }

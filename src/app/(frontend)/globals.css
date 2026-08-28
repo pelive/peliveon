@@ -1,5 +1,12 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-lexend), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-georgia), ui-serif, Georgia, serif;
+}
 
 @layer base {
   h1,
@@ -144,12 +151,6 @@
 }
 
 html {
-  opacity: 0;
   scroll-behavior: smooth;
   scroll-padding-top: 6rem; /* Account for header height */
-}
-
-html[data-theme='dark'],
-html[data-theme='light'] {
-  opacity: initial;
 }

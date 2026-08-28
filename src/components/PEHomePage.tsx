@@ -13,15 +13,11 @@ export async function PEHomePage() {
   const frontPage = (await getCachedGlobal('frontPage', 1)()) as Config['globals']['frontPage'] | null
 
   if (!frontPage) {
-    return (
-      <main>
-        <UpNext />
-      </main>
-    )
+    return <UpNext />
   }
 
   return (
-    <main>
+    <>
       <Hero data={frontPage.hero} />
       <WhoWeAre data={frontPage.whoWeAre} />
       <WhatWeDo data={frontPage.whatWeDo} />
@@ -29,6 +25,6 @@ export async function PEHomePage() {
       <FactsAndFigures data={frontPage.factsAndFigures} />
       <Contact data={frontPage.contact} />
       <UpNext />
-    </main>
+    </>
   )
 }

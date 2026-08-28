@@ -27,9 +27,7 @@ type ContactData = {
 }
 
 export function Contact({ data }: { data: ContactData }) {
-  if (!data?.enable) return null
-
-  const fields = data.formFields || []
+  const fields = data?.formFields || []
   const initialData = fields.reduce<Record<string, string>>((acc, field) => {
     acc[field.name] = ''
     return acc
@@ -40,6 +38,8 @@ export function Contact({ data }: { data: ContactData }) {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [submitMessage, setSubmitMessage] = useState('')
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+
+  if (!data?.enable) return null
 
   const validateField = (name: string, value: string): string => {
     switch (name) {
@@ -125,7 +125,7 @@ export function Contact({ data }: { data: ContactData }) {
           src={data.backgroundImage.url}
           alt=""
           fill
-          unoptimized
+          sizes="100vw"
         />
       )}
       <div className="absolute inset-0 bg-zinc-950/80" />

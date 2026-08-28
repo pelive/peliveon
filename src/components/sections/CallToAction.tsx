@@ -1,5 +1,3 @@
-"use client";
-
 import Image from 'next/image'
 
 import { Button } from '@/components/Button'
@@ -29,10 +27,9 @@ export function CallToAction({ data }: { data: CallToActionData }) {
           className="absolute top-1/2 w-full h-screen -translate-y-1/2 opacity-[45%] object-cover"
           src={data.backgroundImage.url}
           alt=""
-          priority={true}
           width={2347}
           height={1244}
-          unoptimized
+          sizes="100vw"
         />
       )}
       <Container className="relative">

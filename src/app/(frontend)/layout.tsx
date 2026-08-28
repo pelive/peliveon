@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 
 import { cn } from '@/utilities/ui'
 import { Inter, Lexend, Noto_Serif_Georgian } from 'next/font/google'
@@ -44,12 +44,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="//ticketsgent.be" />
         <link rel="dns-prefetch" href="//ntgent.be" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <OrganizationStructuredData 
+        <OrganizationStructuredData
           data={{
             name: "PE Live",
             description: "PE Live is a pioneering Black American-style Gospel band reinventing Gospel music in Belgium",
@@ -66,6 +63,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body className="flex h-full flex-col bg-black bg-cover bg-center bg-fixed">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-black"
+        >
+          Skip to main content
+        </a>
         <ErrorBoundary>
           <Providers>
             <AdminBar
@@ -76,7 +79,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
             <Header />
             <ErrorBoundary>
-              {children}
+              <main id="main-content" className="flex-1">
+                {children}
+              </main>
             </ErrorBoundary>
             <Footer />
           </Providers>
@@ -86,11 +91,41 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   )
 }
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+}
+
 export const metadata: Metadata = {
   metadataBase: new URL(getServerSideURL()),
+  title: {
+    template: '%s | PE LIVE',
+    default: 'PE LIVE - Gospel Music Band',
+  },
+  description:
+    'PE LIVE is a pioneering Gospel band bringing Black American-style Gospel music to Belgium. Experience electrifying performances, unique dance moves, and soul-stirring music.',
+  keywords: ['PE LIVE', 'Gospel music', 'Belgium', 'Black American Gospel', 'concerts', 'events', 'band', 'music', 'performances'],
+  authors: [{ name: 'PE LIVE' }],
+  creator: 'PE LIVE',
+  publisher: 'PE LIVE',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: mergeOpenGraph(),
   twitter: {
     card: 'summary_large_image',
-    creator: '@payloadcms',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 }

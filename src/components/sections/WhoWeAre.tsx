@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Image from "next/image";
 
@@ -22,17 +20,16 @@ export function WhoWeAre({ data }: { data: WhoWeAreData }) {
     <section
       id="about"
       aria-label="Who We Are"
-      className="relative w-screen bg-zinc-900 py-32 -z-20"
+      className="relative w-full overflow-hidden bg-zinc-900 py-32"
     >
       {data.backgroundImage && typeof data.backgroundImage === "object" && data.backgroundImage.url && (
         <Image
           className="absolute top-1/2 w-full h-full -translate-y-1/2 opacity-[25%] -z-10 object-cover"
           src={data.backgroundImage.url}
           alt=""
-          priority={true}
           width={2347}
           height={1244}
-          unoptimized
+          sizes="100vw"
         />
       )}
       <Container>

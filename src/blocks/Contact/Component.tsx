@@ -7,19 +7,41 @@ import type { Contact as ContactType } from '@/payload-types'
 
 export const ContactBlock: React.FC<{ block: ContactType }> = ({ block }) => {
   const [formData, setFormData] = useState<Record<string, string>>({})
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
+  const [statusMessage, setStatusMessage] = useState('')
 
   const { title, subtitle, backgroundImage, email, formFields, submitButtonText } = block
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log('Form submitted:', formData)
-    // Reset form
-    const resetData: Record<string, string> = {}
-    formFields?.forEach(field => {
-      if (field.name) resetData[field.name] = ''
-    })
-    setFormData(resetData)
+    setStatus('sending')
+    setStatusMessage('')
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      const responseData = await response.json()
+
+      if (response.ok) {
+        setStatus('success')
+        setStatusMessage(responseData.message || 'Thank you for your message!')
+        const resetData: Record<string, string> = {}
+        formFields?.forEach(field => {
+          if (field.name) resetData[field.name] = ''
+        })
+        setFormData(resetData)
+      } else {
+        setStatus('error')
+        setStatusMessage(responseData.error || 'Failed to send message.')
+      }
+    } catch (_error) {
+      setStatus('error')
+      setStatusMessage('Failed to send message. Please try again later.')
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -85,7 +107,7 @@ export const ContactBlock: React.FC<{ block: ContactType }> = ({ block }) => {
     <section
       id="contact"
       aria-label="Contact"
-      className="relative w-screen bg-zinc-900 py-32"
+      className="relative w-full bg-zinc-900 py-32"
     >
       {backgroundImage && typeof backgroundImage === 'object' && backgroundImage.url && (
         <Image
@@ -93,7 +115,7 @@ export const ContactBlock: React.FC<{ block: ContactType }> = ({ block }) => {
           src={backgroundImage.url}
           alt=""
           fill
-          unoptimized
+          sizes="100vw"
         />
       )}
       <div className="absolute inset-0 bg-zinc-950/80" />
@@ -121,11 +143,22 @@ export const ContactBlock: React.FC<{ block: ContactType }> = ({ block }) => {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-lg bg-red-600 px-4 py-3 text-base font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-colors duration-200"
+                disabled={status === 'sending'}
+                className="flex w-full justify-center rounded-lg bg-red-600 px-4 py-3 text-base font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-colors duration-200 disabled:opacity-60"
               >
-                {submitButtonText}
+                {status === 'sending' ? 'Sending...' : submitButtonText}
               </button>
             </div>
+
+            {(status === 'success' || status === 'error') && (
+              <p
+                role="alert"
+                aria-live="polite"
+                className={status === 'success' ? 'text-emerald-400' : 'text-rose-400'}
+              >
+                {statusMessage}
+              </p>
+            )}
           </form>
 
           <div className="mt-12 text-center">

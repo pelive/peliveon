@@ -13,7 +13,7 @@ export const WhoWeAreBlock: React.FC<{ block: WhoWeAreType }> = ({ block }) => {
     <section
       id="about"
       aria-label="Who We Are"
-      className="relative w-screen bg-zinc-900 py-32 -z-20"
+      className="relative w-full bg-zinc-900 py-32 -z-20"
     >
       {backgroundImage && typeof backgroundImage === 'object' && backgroundImage.url && (
         <Image
@@ -22,7 +22,7 @@ export const WhoWeAreBlock: React.FC<{ block: WhoWeAreType }> = ({ block }) => {
           alt=""
           width={2347}
           height={1244}
-          unoptimized
+          sizes="100vw"
         />
       )}
       <div className="container mx-auto px-4">
