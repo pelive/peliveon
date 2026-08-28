@@ -67,16 +67,15 @@ export function Hero({ data, featuredEvent }: { data: HeroData; featuredEvent?: 
 	// Default mode (no upcoming featured event): band fallback, booking CTA only.
 	const isFeatured = Boolean(featuredEvent);
 	const fallback = data.fallback;
-	const eyebrow = isFeatured ? data.eyebrow : fallback?.eyebrow || data.eyebrow;
+	const eyebrow = isFeatured ? data.eyebrow : fallback?.eyebrow || "PE LIVE · Ghent, Belgium";
+	// Default mode never shows the featured-show branding: when the CMS
+	// fallback fields are empty, the tagline itself is the headline.
 	const [lineOne, lineTwo] = isFeatured
 		? titleLines(data.titlePrefix, data.titleHighlight)
-		: titleLines(
-				fallback?.titlePrefix || data.titlePrefix,
-				fallback?.titleHighlight || data.titleHighlight,
-			);
+		: titleLines(fallback?.titlePrefix || "Sing. Feel.", fallback?.titleHighlight || "Connect.");
 	// New field: null until the global is re-saved in the admin — default on.
 	// An explicitly emptied field ('') still hides the tagline.
-	const tagline = data.tagline ?? "Sing · Feel · Connect";
+	const tagline = isFeatured ? (data.tagline ?? "Sing · Feel · Connect") : null;
 	const backgroundUrl =
 		data.backgroundImage && typeof data.backgroundImage === "object"
 			? data.backgroundImage.url

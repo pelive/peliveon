@@ -50,7 +50,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <OrganizationStructuredData
           data={{
             name: "PE Live",
-            description: "PE Live is a pioneering Black American-style Gospel band reinventing Gospel music in Belgium",
+            description: "Sing · Feel · Connect — PE LIVE is a pioneering Black American-style Gospel band from Ghent, Belgium",
             url: getServerSideURL(),
             logo: `${getServerSideURL()}/logos/pelive-flat.svg`,
             contactPoint: {
@@ -101,11 +101,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(getServerSideURL()),
   title: {
     template: '%s | PE LIVE',
-    default: 'PE LIVE - Gospel Music Band',
+    default: 'PE LIVE — Sing · Feel · Connect',
   },
   description:
-    'PE LIVE is a pioneering Gospel band bringing Black American-style Gospel music to Belgium. Experience electrifying performances, unique dance moves, and soul-stirring music.',
-  keywords: ['PE LIVE', 'Gospel music', 'Belgium', 'Black American Gospel', 'concerts', 'events', 'band', 'music', 'performances'],
+    'Sing · Feel · Connect — PE LIVE brings Black American-style Gospel from Ghent, Belgium. Electrifying performances, unique dance moves, and soul-stirring music.',
+  keywords: ['PE LIVE', 'Sing Feel Connect', 'Gospel music', 'Belgium', 'Black American Gospel', 'concerts', 'events', 'band', 'music', 'performances'],
   authors: [{ name: 'PE LIVE' }],
   creator: 'PE LIVE',
   publisher: 'PE LIVE',

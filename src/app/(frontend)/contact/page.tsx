@@ -7,7 +7,7 @@ import { getCachedGlobal } from '@/utilities/getGlobals'
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description: 'Get in touch with PE LIVE gospel music band for bookings and inquiries.',
+  description: 'Get in touch with PE LIVE for bookings and inquiries. Sing · Feel · Connect.',
   alternates: {
     canonical: '/contact',
   },

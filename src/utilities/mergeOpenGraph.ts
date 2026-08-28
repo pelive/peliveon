@@ -5,17 +5,17 @@ const defaultOpenGraph: Metadata['openGraph'] = {
   type: 'website',
   locale: 'en_US',
   description:
-    'PE LIVE is a pioneering Gospel band bringing Black American-style Gospel music to Belgium. Experience electrifying performances, unique dance moves, and soul-stirring music.',
+    'Sing · Feel · Connect — PE LIVE brings Black American-style Gospel from Ghent, Belgium. Electrifying performances, unique dance moves, and soul-stirring music.',
   images: [
     {
       url: `${getServerSideURL()}/pictures/1.jpg`,
       width: 1200,
       height: 630,
-      alt: 'PE LIVE Gospel Band Performance',
+      alt: 'PE LIVE in concert',
     },
   ],
   siteName: 'PE LIVE',
-  title: 'PE LIVE - Gospel Music Band',
+  title: 'PE LIVE — Sing · Feel · Connect',
 }
 
 export const mergeOpenGraph = (og?: Metadata['openGraph']): Metadata['openGraph'] => {
