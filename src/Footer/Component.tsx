@@ -28,7 +28,7 @@ const defaultSocials = [
 
 export async function Footer() {
   const [footer, upcomingEvents] = await Promise.all([
-    getCachedGlobal('footer', 1)() as Promise<FooterType | null>,
+    getCachedGlobal('footer', 1)().catch(() => null) as Promise<FooterType | null>,
     getUpcomingEvents(),
   ])
 

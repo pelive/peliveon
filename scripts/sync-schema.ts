@@ -44,6 +44,15 @@ async function run() {
   // Confirm the connection (push happens during connect above).
   await payload.db.drizzle.execute('SELECT 1')
 
+  // Verify the runtime's core queries against the just-synced schema. If any
+  // column is missing these throw, the script exits 1, and the build fails
+  // loudly instead of the site silently degrading to fallback rendering.
+  await payload.findGlobal({ slug: 'frontPage', depth: 0 })
+  await payload.findGlobal({ slug: 'header', depth: 0 })
+  await payload.findGlobal({ slug: 'footer', depth: 0 })
+  await payload.find({ collection: 'events', limit: 1 })
+  console.log('Verified: globals and events queries succeed against the synced schema.')
+
   // Payload stamps the dev-push migration row on every successful push, so
   // this timestamp is hard evidence of when the schema was last applied.
   try {
