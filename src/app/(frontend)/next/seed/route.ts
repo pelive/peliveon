@@ -65,7 +65,7 @@ export async function seedFrontPage(payload: Payload) {
 
   const media = {
     heroBackground: await uploadMedia('pictures/1.jpg', 'PE Live concert performance with dramatic lighting and engaged audience'),
-    heroLogoPeLive: await uploadMedia('logos/pelive-small.svg', 'PE Live logo'),
+    heroLogoPeLive: await uploadMedia('logos/pelive-flat.svg', 'PE Live logo'),
     heroLogoGent: await uploadMedia('logos/gent-colorful.svg', 'Stad Gent logo'),
     heroLogoNtgent: await uploadMedia('logos/ntgent.svg', 'NTGent logo'),
     whoWeAreBackground: await uploadMedia('pictures/10.jpg', 'PE Live gospel choir performance with unified group presentation'),
