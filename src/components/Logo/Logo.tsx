@@ -18,13 +18,13 @@ export const Logo = (props: Props) => {
     /* eslint-disable @next/next/no-img-element */
     <img
       alt="PE Live Logo"
-      width={512}
-      height={532}
+      width={1200}
+      height={1248}
       loading={loading}
       fetchPriority={priority}
       decoding="async"
       className={cn('h-10 w-auto', className)}
-      src="/logos/pelive-mark.webp"
+      src="/logos/pelive-flat.svg"
     />
   )
 }

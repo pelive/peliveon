@@ -52,7 +52,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             name: "PE Live",
             description: "PE Live is a pioneering Black American-style Gospel band reinventing Gospel music in Belgium",
             url: getServerSideURL(),
-            logo: `${getServerSideURL()}/logos/pelive-small.svg`,
+            logo: `${getServerSideURL()}/logos/pelive-flat.svg`,
             contactPoint: {
               email: "info@pelive.be",
               contactType: "customer service"
