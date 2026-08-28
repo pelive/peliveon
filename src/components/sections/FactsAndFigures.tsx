@@ -42,6 +42,10 @@ type FactsData = {
 const mediaUrl = (value?: MediaValue): string | null =>
   value && typeof value === "object" && value.url ? value.url : null;
 
+// Rotated through for testimonials without their own photo — rendered heavily
+// blurred and darkened, so the subject only provides texture.
+const DEFAULT_TESTIMONIAL_PHOTOS = ["/pictures/1.jpg", "/pictures/2.jpg", "/pictures/3.jpg"];
+
 export function FactsAndFigures({ data }: { data: FactsData }) {
   if (!data?.enable) return null;
 
@@ -114,22 +118,46 @@ export function FactsAndFigures({ data }: { data: FactsData }) {
           <div className="mt-16 lg:mt-20">
             <h3 className="sr-only">{data.performancesTitle}</h3>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {testimonials.map((testimonial) => (
+              {testimonials.map((testimonial, index) => {
+                const photo = mediaUrl(testimonial.image);
+                const fallbackPhoto =
+                  DEFAULT_TESTIMONIAL_PHOTOS[index % DEFAULT_TESTIMONIAL_PHOTOS.length];
+                return (
                 <figure
                   key={testimonial.id || `${testimonial.name}-${testimonial.year}`}
                   className="m-0 flex flex-col border border-white/10 bg-ink-3"
                 >
-                  {mediaUrl(testimonial.image) && (
-                    <div className="relative h-50 w-full overflow-hidden">
+                  <div className="relative h-50 w-full overflow-hidden">
+                    {photo ? (
                       <Image
-                        src={mediaUrl(testimonial.image) as string}
+                        src={photo}
                         alt={`${testimonial.name}, ${testimonial.year}`}
                         fill
                         sizes="(min-width: 1024px) 28rem, 100vw"
                         className="object-cover object-[50%_28%]"
                       />
-                    </div>
-                  )}
+                    ) : (
+                      <>
+                        <Image
+                          src={fallbackPhoto}
+                          alt=""
+                          fill
+                          sizes="(min-width: 1024px) 28rem, 100vw"
+                          className="scale-110 object-cover object-[50%_30%] blur-[6px] brightness-[0.55] saturate-[0.6]"
+                        />
+                        <div
+                          className="absolute inset-0 bg-gradient-to-b from-ink-3/20 to-ink-3/85"
+                          aria-hidden="true"
+                        />
+                        <span
+                          aria-hidden="true"
+                          className="absolute inset-0 flex items-center justify-center pt-8 font-display text-8xl font-extrabold leading-none text-accent/75"
+                        >
+                          &ldquo;
+                        </span>
+                      </>
+                    )}
+                  </div>
                   <div className="flex flex-1 flex-col gap-6 p-9 pt-8">
                   <blockquote className="m-0 font-display text-xl font-light leading-snug text-stone-100 sm:text-[1.375rem]">
                     &ldquo;{testimonial.content}&rdquo;
@@ -154,7 +182,8 @@ export function FactsAndFigures({ data }: { data: FactsData }) {
                   </figcaption>
                   </div>
                 </figure>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
