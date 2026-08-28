@@ -8,6 +8,7 @@ type HeroLogo = {
 	logo?: {
 		url?: string | null;
 	} | number | null;
+	darkenOnLight?: boolean | null;
 	id?: string | null;
 };
 
@@ -190,7 +191,7 @@ export function Hero({ data, featuredEvent }: { data: HeroData; featuredEvent?: 
 													alt={duplicate ? "" : company.name}
 													width={120}
 													height={40}
-													className="h-8 w-auto opacity-85"
+													className={`h-8 w-auto opacity-85 ${company.darkenOnLight ? "brightness-0" : ""}`}
 													unoptimized
 												/>
 											</li>

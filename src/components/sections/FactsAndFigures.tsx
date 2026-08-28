@@ -15,6 +15,7 @@ type FactsData = {
   brandLogos?: {
     name: string;
     logo: MediaValue;
+    darkenOnLight?: boolean | null;
     id?: string | null;
   }[] | null;
   artistsTitle: string;
@@ -82,7 +83,7 @@ export function FactsAndFigures({ data }: { data: FactsData }) {
                     alt={company.name}
                     width={150}
                     height={54}
-                    className="h-auto max-h-12 w-auto max-w-36"
+                    className={`h-auto max-h-12 w-auto max-w-36 ${company.darkenOnLight ? "brightness-0" : ""}`}
                     unoptimized
                   />
                 </span>
@@ -116,8 +117,20 @@ export function FactsAndFigures({ data }: { data: FactsData }) {
               {testimonials.map((testimonial) => (
                 <figure
                   key={testimonial.id || `${testimonial.name}-${testimonial.year}`}
-                  className="m-0 flex flex-col gap-6 border border-white/10 bg-ink-3 p-9"
+                  className="m-0 flex flex-col border border-white/10 bg-ink-3"
                 >
+                  {mediaUrl(testimonial.image) && (
+                    <div className="relative h-50 w-full overflow-hidden">
+                      <Image
+                        src={mediaUrl(testimonial.image) as string}
+                        alt={`${testimonial.name}, ${testimonial.year}`}
+                        fill
+                        sizes="(min-width: 1024px) 28rem, 100vw"
+                        className="object-cover object-[50%_28%]"
+                      />
+                    </div>
+                  )}
+                  <div className="flex flex-1 flex-col gap-6 p-9 pt-8">
                   <blockquote className="m-0 font-display text-xl font-light leading-snug text-stone-100 sm:text-[1.375rem]">
                     &ldquo;{testimonial.content}&rdquo;
                   </blockquote>
@@ -139,6 +152,7 @@ export function FactsAndFigures({ data }: { data: FactsData }) {
                       </span>
                     )}
                   </figcaption>
+                  </div>
                 </figure>
               ))}
             </div>

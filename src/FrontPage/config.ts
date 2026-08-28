@@ -112,6 +112,15 @@ export const FrontPage: GlobalConfig = {
                       relationTo: 'media',
                       required: true,
                     },
+                    {
+                      name: 'darkenOnLight',
+                      type: 'checkbox',
+                      defaultValue: false,
+                      admin: {
+                        description:
+                          'Enable for white/light logo artwork so it stays visible on light backgrounds',
+                      },
+                    },
                   ],
                 },
               ],
@@ -343,6 +352,15 @@ export const FrontPage: GlobalConfig = {
                       type: 'relationship',
                       relationTo: 'media',
                       required: true,
+                    },
+                    {
+                      name: 'darkenOnLight',
+                      type: 'checkbox',
+                      defaultValue: false,
+                      admin: {
+                        description:
+                          'Enable for white/light logo artwork so it stays visible on light backgrounds',
+                      },
                     },
                   ],
                 },

@@ -2044,6 +2044,10 @@ export interface FrontPage {
       | {
           name: string;
           logo: number | Media;
+          /**
+           * Enable for white/light logo artwork so it stays visible on light backgrounds
+           */
+          darkenOnLight?: boolean | null;
           id?: string | null;
         }[]
       | null;
@@ -2121,6 +2125,10 @@ export interface FrontPage {
       | {
           name: string;
           logo: number | Media;
+          /**
+           * Enable for white/light logo artwork so it stays visible on light backgrounds
+           */
+          darkenOnLight?: boolean | null;
           id?: string | null;
         }[]
       | null;
@@ -2267,6 +2275,7 @@ export interface FrontPageSelect<T extends boolean = true> {
           | {
               name?: T;
               logo?: T;
+              darkenOnLight?: T;
               id?: T;
             };
       };
@@ -2332,6 +2341,7 @@ export interface FrontPageSelect<T extends boolean = true> {
           | {
               name?: T;
               logo?: T;
+              darkenOnLight?: T;
               id?: T;
             };
         artistsTitle?: T;
