@@ -40,7 +40,6 @@ export const RenderBlocks: React.FC<{
           const { blockType } = block
 
           // Debug: Log block data
-          console.log(`RenderBlocks - block ${index}:`, block)
 
           if (blockType && blockType in blockComponents) {
             const Block = blockComponents[blockType]

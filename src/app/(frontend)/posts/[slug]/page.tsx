@@ -70,7 +70,7 @@ export default async function Post({ params: paramsPromise }: Args) {
   if (!post) return <PayloadRedirects url={url} />
 
   return (
-    <article className="pt-16 pb-16">
+    <article className="bg-ink pb-16">
       <PageClient />
 
       {/* Allows redirects for valid pages too */}
@@ -101,7 +101,14 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const decodedSlug = decodeURIComponent(slug)
   const post = await queryPostBySlug({ slug: decodedSlug })
 
-  return generateMeta({ doc: post })
+  const meta = await generateMeta({ doc: post })
+
+  return {
+    ...meta,
+    alternates: {
+      canonical: `/posts/${decodedSlug}`,
+    },
+  }
 }
 
 const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {

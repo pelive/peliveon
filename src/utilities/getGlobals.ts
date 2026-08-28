@@ -1,9 +1,8 @@
-import type { Config } from 'src/payload-types'
+import type { Config } from '@/payload-types'
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { unstable_cache } from 'next/cache'
-import { isDatabaseAvailable } from './checkDatabase'
 
 type Global = keyof Config['globals']
 

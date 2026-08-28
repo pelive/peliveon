@@ -1,9 +1,7 @@
-"use client";
-
 import React from "react";
 import Image from "next/image";
 
-import { Container } from "@/components/Container";
+import type { Event } from "@/payload-types";
 
 type HeroLogo = {
 	name: string;
@@ -19,68 +17,163 @@ type HeroData = {
 	titleHighlight: string;
 	ticketLabel: string;
 	ticketUrl: string;
+	secondaryCtaLabel?: string | null;
 	backgroundImage?: {
 		url?: string | null;
 	} | number | null;
 	partnerLogos?: HeroLogo[] | null;
 };
 
-export function Hero({ data }: { data: HeroData }) {
+const formatEventDate = (date: string): string =>
+	new Date(date).toLocaleDateString("en-GB", {
+		weekday: "short",
+		day: "numeric",
+		month: "short",
+		year: "numeric",
+	});
+
+const formatEventTime = (date: string): string =>
+	new Date(date).toLocaleTimeString("en-GB", {
+		hour: "2-digit",
+		minute: "2-digit",
+	});
+
+function titleLines(data: HeroData): [string, string | null] {
+	const prefix = (data.titlePrefix || "").trim();
+	const highlight = (data.titleHighlight || "").trim();
+
+	if (prefix && prefix !== "#") return [prefix, highlight || null];
+
+	// No usable first line — break the highlight across two lines instead.
+	const space = highlight.indexOf(" ");
+	if (space > 0) return [highlight.slice(0, space), highlight.slice(space + 1)];
+	return [highlight, null];
+}
+
+export function Hero({ data, featuredEvent }: { data: HeroData; featuredEvent?: Event | null }) {
 	if (!data) return null;
 
+	const [lineOne, lineTwo] = titleLines(data);
+	const backgroundUrl =
+		data.backgroundImage && typeof data.backgroundImage === "object"
+			? data.backgroundImage.url
+			: null;
+	const logos = (data.partnerLogos || []).filter(
+		(company) => company.logo && typeof company.logo === "object" && company.logo.url,
+	);
+
 	return (
-		<section
-			id="home"
-			className="relative w-screen h-screen min-h-[700px] overflow-hidden">
-			{data.backgroundImage && typeof data.backgroundImage === "object" && data.backgroundImage.url && (
-				<Image
-					className="absolute top-1/2 w-full min-h-[700px] -translate-y-1/2 opacity-95 -z-20 object-cover"
-					src={data.backgroundImage.url}
-					alt=""
-					priority={true}
-					width={2347}
-					height={1244}
-					unoptimized
-				/>
-			)}
-			<Container className="absolute inset-0 flex items-center justify-center">
-				<div className="flex flex-col items-center justify-center text-center">
-					<p className="font-display text-4xl sm:text-7xl text-slate-100 uppercase">
+		<>
+			<section id="home" className="relative flex min-h-screen w-full flex-col justify-end overflow-hidden bg-ink">
+				{backgroundUrl && (
+					<div className="absolute inset-0 overflow-hidden">
+						<Image
+							className="h-full w-full object-cover object-[50%_35%] animate-kenburns"
+							src={backgroundUrl}
+							alt=""
+							priority
+							fill
+							sizes="100vw"
+						/>
+					</div>
+				)}
+				<div className="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/40 to-ink" aria-hidden="true" />
+
+				<div className="relative mx-auto w-full max-w-[90rem] px-5 pb-16 pt-40 sm:px-10 lg:px-16 lg:pb-20">
+					<p className="mb-4 flex items-center gap-3.5 font-display text-xs font-medium uppercase tracking-[0.34em] text-stone-100">
+						<span className="block h-px w-11 bg-accent" aria-hidden="true" />
 						{data.eyebrow}
 					</p>
-					<h1 className="mt-7 text-3xl sm:text-5xl lg:text-7xl font-bold whitespace-nowrap text-slate-200 px-4 uppercase will-change-transform">
-						{data.titlePrefix}
-						<span className="relative bg-red-600">{data.titleHighlight}</span>
+					<h1 className="font-display text-6xl font-extrabold uppercase leading-[0.88] tracking-[-0.035em] text-white sm:text-8xl lg:text-[8.25rem]">
+						{lineOne}
+						{lineTwo && (
+							<>
+								<br />
+								<span className="text-accent">{lineTwo}</span>
+							</>
+						)}
 					</h1>
-					<p className="mt-5 font-display text-lg text-slate-100 uppercase">
-						{data.ticketLabel} <span className="relative text-red-600">|| </span>
-						<a href={data.ticketUrl} target="_blank" rel="noopener noreferrer">
-							&#x1F517; ticketsgent.be
-						</a>
-					</p>
-					{data.partnerLogos && data.partnerLogos.length > 0 && (
-						<ul
-							role="list"
-							className="mt-8 flex flex-row items-center justify-center gap-y-0 gap-x-8 xl:gap-x-12"
-						>
-							<li>
-								<ul
-									role="list"
-									className="flex flex-row items-center sm:gap-x-12"
-								>
-									{data.partnerLogos.map((company) => (
-										<li key={company.id || company.name} className="flex">
-											{company.logo && typeof company.logo === "object" && company.logo.url && (
-												<Image src={company.logo.url} alt={company.name} width={120} height={60} unoptimized />
-											)}
-										</li>
-									))}
-								</ul>
-							</li>
-						</ul>
-					)}
+
+					<div className="mt-8 flex flex-wrap items-end justify-between gap-8 lg:mt-11">
+						{featuredEvent && (
+							<dl className="flex w-full flex-col border-y border-white/15 sm:w-auto sm:flex-row sm:items-stretch">
+								<div className="flex items-baseline justify-between gap-4 border-b border-white/15 py-3 sm:block sm:min-w-36 sm:border-b-0 sm:border-r sm:py-4 sm:pr-7">
+									<dt className="text-[11px] uppercase tracking-[0.2em] text-zinc-400">Date</dt>
+									<dd className="m-0 font-display text-base font-semibold text-white sm:mt-1.5 sm:text-xl">
+										{formatEventDate(featuredEvent.eventDate)}
+									</dd>
+								</div>
+								<div className="flex items-baseline justify-between gap-4 border-b border-white/15 py-3 sm:block sm:border-b-0 sm:border-r sm:px-7 sm:py-4">
+									<dt className="text-[11px] uppercase tracking-[0.2em] text-zinc-400">
+										{featuredEvent.doorsTime ? "Doors / Show" : "Show"}
+									</dt>
+									<dd className="m-0 font-display text-base font-semibold text-white sm:mt-1.5 sm:text-xl">
+										{featuredEvent.doorsTime || formatEventTime(featuredEvent.eventDate)}
+									</dd>
+								</div>
+								<div className="flex items-baseline justify-between gap-4 py-3 sm:block sm:py-4 sm:pl-7">
+									<dt className="text-[11px] uppercase tracking-[0.2em] text-zinc-400">Venue</dt>
+									<dd className="m-0 font-display text-base font-semibold text-white sm:mt-1.5 sm:text-xl">
+										{featuredEvent.location}
+									</dd>
+								</div>
+							</dl>
+						)}
+
+						<div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
+							<a
+								href={data.ticketUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-flex min-h-[3.25rem] items-center justify-center gap-3 bg-accent px-8 font-display text-sm font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+							>
+								{data.ticketLabel}
+								<span aria-hidden="true" className="text-lg leading-none">→</span>
+							</a>
+							<a
+								href="#contact"
+								className="inline-flex min-h-[3.25rem] items-center justify-center border border-white/35 px-7 font-display text-sm font-medium uppercase tracking-[0.14em] text-stone-100 transition-colors hover:border-white hover:bg-white/5"
+							>
+								{data.secondaryCtaLabel || "Book the band"}
+							</a>
+						</div>
+					</div>
 				</div>
-			</Container>
-		</section>
+			</section>
+
+			{logos.length > 0 && (
+				<div className="overflow-hidden border-y border-white/10 bg-paper">
+					<div className="mx-auto flex max-w-[90rem] items-center gap-6 px-5 py-6 sm:gap-10 sm:px-10 lg:px-16">
+						<p className="m-0 flex-none text-[11px] uppercase tracking-[0.2em] text-paper-muted">
+							Stages &amp; partners
+						</p>
+						<div className="flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_6%,#000_94%,transparent)]">
+							<div className="flex w-max items-center gap-16 animate-marquee">
+								{[false, true].map((duplicate) => (
+									<ul
+										key={duplicate ? "duplicate" : "original"}
+										aria-hidden={duplicate || undefined}
+										className="m-0 flex list-none items-center gap-16 p-0"
+									>
+										{logos.map((company) => (
+											<li key={company.id || company.name} className="flex flex-none">
+												<Image
+													src={(company.logo as { url?: string | null }).url as string}
+													alt={duplicate ? "" : company.name}
+													width={120}
+													height={40}
+													className="h-8 w-auto opacity-85"
+													unoptimized
+												/>
+											</li>
+										))}
+									</ul>
+								))}
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
+		</>
 	);
 }

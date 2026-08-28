@@ -12,6 +12,7 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import { isDatabaseAvailable } from '@/utilities/checkDatabase'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { generateMeta } from '@/utilities/generateMeta'
 
 type Args = {
   params: Promise<{
@@ -126,7 +127,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   // If admin content exists, use it
   if (page) {
     return (
-      <article className="pt-16 pb-24">
+      <article className="bg-ink pt-32 pb-24">
         <PageClient />
         <PayloadRedirects disableNotFound url={url} />
         {draft && <LivePreviewListener />}
@@ -155,19 +156,35 @@ export default async function Page({ params: paramsPromise }: Args) {
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = 'home' } = await paramsPromise
-  
+
   if (slug === 'home') {
     return {
-      title: {
-        template: '%s - PE LIVE',
-        default: 'PE LIVE - Gospel Music Band',
+      title: 'PE LIVE - Gospel Music Band',
+      description: "Gospel music like you've never seen before.",
+      alternates: {
+        canonical: '/',
       },
-      description: 'Gospel music like you\'ve never seen before.',
+    }
+  }
+
+  const decodedSlug = decodeURIComponent(slug)
+  const page = await queryPageBySlug({ slug: decodedSlug })
+
+  if (page) {
+    const meta = await generateMeta({ doc: page })
+    return {
+      ...meta,
+      alternates: {
+        canonical: `/${decodedSlug}`,
+      },
     }
   }
 
   return {
     title: 'PE LIVE',
-    description: 'Gospel music like you\'ve never seen before.',
+    description: "Gospel music like you've never seen before.",
+    alternates: {
+      canonical: `/${decodedSlug}`,
+    },
   }
 }

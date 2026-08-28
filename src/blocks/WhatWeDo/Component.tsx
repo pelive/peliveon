@@ -29,7 +29,7 @@ export const WhatWeDoBlock: React.FC<{ block: WhatWeDoType }> = ({ block }) => {
   if (!services || services.length === 0) return null
 
   return (
-    <section id="services" aria-label="What We Do" className="relative w-screen bg-white py-32">
+    <section id="services" aria-label="What We Do" className="relative w-full bg-white py-32">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl tracking-tight text-slate-900">
@@ -78,7 +78,7 @@ export const WhatWeDoBlock: React.FC<{ block: WhatWeDoType }> = ({ block }) => {
                 alt=""
                 width={2347}
                 height={1244}
-                unoptimized
+                sizes="100vw"
               />
             </div>
           )}

@@ -1,5 +1,6 @@
-import clsx from 'clsx'
 import React from 'react'
+
+import { cn } from '@/utilities/ui'
 
 interface Props {
   className?: string
@@ -22,7 +23,7 @@ export const Logo = (props: Props) => {
       loading={loading}
       fetchPriority={priority}
       decoding="async"
-      className={clsx('max-w-[6rem] w-full h-[60px]', className)}
+      className={cn('h-10 w-auto', className)}
       src="/logos/pelive.svg"
     />
   )

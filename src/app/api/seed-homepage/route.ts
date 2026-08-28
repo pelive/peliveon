@@ -1,10 +1,18 @@
 import { NextResponse } from 'next/server'
+import { headers } from 'next/headers'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
 export async function POST() {
   try {
     const payload = await getPayload({ config })
+
+    const requestHeaders = await headers()
+    const { user } = await payload.auth({ headers: requestHeaders })
+
+    if (!user) {
+      return NextResponse.json({ error: 'Action forbidden.' }, { status: 403 })
+    }
 
     // Check if Home page already exists
     const existingPage = await payload.find({

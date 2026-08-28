@@ -122,6 +122,9 @@ export interface Config {
     frontPage: FrontPageSelect<false> | FrontPageSelect<true>;
   };
   locale: null;
+  widgets: {
+    collections: CollectionsWidget;
+  };
   user: User;
   jobs: {
     tasks: {
@@ -736,9 +739,6 @@ export interface Form {
       )[]
     | null;
   submitButtonLabel?: string | null;
-  /**
-   * Choose whether to display an on-page message or redirect to a different page after they submit the form.
-   */
   confirmationType?: ('message' | 'redirect') | null;
   confirmationMessage?: {
     root: {
@@ -758,9 +758,6 @@ export interface Form {
   redirect?: {
     url: string;
   };
-  /**
-   * Send custom emails when the form submits. Use comma separated lists to send the same email to multiple recipients. To reference a value from this form, wrap that field's name with double curly brackets, i.e. {{firstName}}. You can use a wildcard {{*}} to output all data and {{*:table}} to format it as an HTML table in the email.
-   */
   emails?:
     | {
         emailTo?: string | null;
@@ -769,9 +766,6 @@ export interface Form {
         replyTo?: string | null;
         emailFrom?: string | null;
         subject: string;
-        /**
-         * Enter the message that should be sent in this email.
-         */
         message?: {
           root: {
             type: string;
@@ -956,6 +950,10 @@ export interface Event {
     [k: string]: unknown;
   };
   location: string;
+  /**
+   * Optional doors/show times shown on the featured event, e.g. "19:30 / 20:00"
+   */
+  doorsTime?: string | null;
   /**
    * Only one event can be featured at a time
    */
@@ -1658,6 +1656,7 @@ export interface EventsSelect<T extends boolean = true> {
   summary?: T;
   fullDescription?: T;
   location?: T;
+  doorsTime?: T;
   featured?: T;
   image?: T;
   ticketUrl?: T;
@@ -1974,6 +1973,24 @@ export interface Header {
  */
 export interface Footer {
   id: number;
+  tagline?: string | null;
+  bookingEmail?: string | null;
+  ticketUrl?: string | null;
+  /**
+   * Social profiles shown in the footer and contact section
+   */
+  socialLinks?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * "Website by …" credit in the footer bottom bar
+   */
+  creditLabel?: string | null;
+  creditUrl?: string | null;
   navItems?:
     | {
         link: {
@@ -2009,6 +2026,10 @@ export interface FrontPage {
     titleHighlight: string;
     ticketLabel: string;
     ticketUrl: string;
+    /**
+     * Label of the outlined button next to Get Tickets (links to the contact section)
+     */
+    secondaryCtaLabel?: string | null;
     backgroundImage: number | Media;
     partnerLogos?:
       | {
@@ -2020,6 +2041,7 @@ export interface FrontPage {
   };
   whoWeAre: {
     enable?: boolean | null;
+    eyebrow?: string | null;
     backgroundImage?: (number | null) | Media;
     title: string;
     content: {
@@ -2037,9 +2059,29 @@ export interface FrontPage {
       };
       [k: string]: unknown;
     };
+    /**
+     * Headline numbers shown under the text, e.g. "10+ / Years on stage"
+     */
+    stats?:
+      | {
+          value: string;
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Photo collage next to the text (first image is the large one)
+     */
+    images?:
+      | {
+          image: number | Media;
+          id?: string | null;
+        }[]
+      | null;
   };
   whatWeDo: {
     enable?: boolean | null;
+    eyebrow?: string | null;
     title: string;
     subtitle?: string | null;
     services?:
@@ -2061,6 +2103,7 @@ export interface FrontPage {
   };
   factsAndFigures: {
     enable?: boolean | null;
+    eyebrow?: string | null;
     title: string;
     description: string;
     backgroundImage?: (number | null) | Media;
@@ -2098,8 +2141,19 @@ export interface FrontPage {
         }[]
       | null;
   };
+  upNext?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    /**
+     * Short line shown next to the section title
+     */
+    infoLine?: string | null;
+    moreTitle?: string | null;
+    pastTitle?: string | null;
+  };
   contact: {
     enable?: boolean | null;
+    eyebrow?: string | null;
     title: string;
     subtitle?: string | null;
     backgroundImage?: (number | null) | Media;
@@ -2146,6 +2200,18 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  tagline?: T;
+  bookingEmail?: T;
+  ticketUrl?: T;
+  socialLinks?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  creditLabel?: T;
+  creditUrl?: T;
   navItems?:
     | T
     | {
@@ -2177,6 +2243,7 @@ export interface FrontPageSelect<T extends boolean = true> {
         titleHighlight?: T;
         ticketLabel?: T;
         ticketUrl?: T;
+        secondaryCtaLabel?: T;
         backgroundImage?: T;
         partnerLogos?:
           | T
@@ -2190,14 +2257,29 @@ export interface FrontPageSelect<T extends boolean = true> {
     | T
     | {
         enable?: T;
+        eyebrow?: T;
         backgroundImage?: T;
         title?: T;
         content?: T;
+        stats?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              id?: T;
+            };
+        images?:
+          | T
+          | {
+              image?: T;
+              id?: T;
+            };
       };
   whatWeDo?:
     | T
     | {
         enable?: T;
+        eyebrow?: T;
         title?: T;
         subtitle?: T;
         services?:
@@ -2223,6 +2305,7 @@ export interface FrontPageSelect<T extends boolean = true> {
     | T
     | {
         enable?: T;
+        eyebrow?: T;
         title?: T;
         description?: T;
         backgroundImage?: T;
@@ -2260,10 +2343,20 @@ export interface FrontPageSelect<T extends boolean = true> {
               id?: T;
             };
       };
+  upNext?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        infoLine?: T;
+        moreTitle?: T;
+        pastTitle?: T;
+      };
   contact?:
     | T
     | {
         enable?: T;
+        eyebrow?: T;
         title?: T;
         subtitle?: T;
         backgroundImage?: T;
@@ -2282,6 +2375,16 @@ export interface FrontPageSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

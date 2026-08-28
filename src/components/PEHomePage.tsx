@@ -8,27 +8,30 @@ import { UpNext } from '@/components/sections/UpNext'
 import { WhatWeDo } from '@/components/sections/WhatWeDo'
 import { WhoWeAre } from '@/components/sections/WhoWeAre'
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { getUpcomingEvents } from '@/utilities/getEvents'
 
 export async function PEHomePage() {
-  const frontPage = (await getCachedGlobal('frontPage', 1)()) as Config['globals']['frontPage'] | null
+  const [frontPage, footer, upcomingEvents] = await Promise.all([
+    getCachedGlobal('frontPage', 1)() as Promise<Config['globals']['frontPage'] | null>,
+    getCachedGlobal('footer', 1)() as Promise<Config['globals']['footer'] | null>,
+    getUpcomingEvents(),
+  ])
 
   if (!frontPage) {
-    return (
-      <main>
-        <UpNext />
-      </main>
-    )
+    return <UpNext />
   }
 
+  const featuredEvent = upcomingEvents.find((event) => event.featured === 'featured') || null
+
   return (
-    <main>
-      <Hero data={frontPage.hero} />
+    <>
+      <Hero data={frontPage.hero} featuredEvent={featuredEvent} />
       <WhoWeAre data={frontPage.whoWeAre} />
       <WhatWeDo data={frontPage.whatWeDo} />
+      <UpNext copy={frontPage.upNext} />
       <CallToAction data={frontPage.callToAction} />
       <FactsAndFigures data={frontPage.factsAndFigures} />
-      <Contact data={frontPage.contact} />
-      <UpNext />
-    </main>
+      <Contact data={frontPage.contact} socialLinks={footer?.socialLinks} />
+    </>
   )
 }

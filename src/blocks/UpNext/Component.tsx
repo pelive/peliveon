@@ -17,7 +17,7 @@ interface Event {
   ticketUrl?: string
 }
 
-export const UpNextBlock: React.FC<{ block: UpNextType; key?: string }> = ({ block, key }) => {
+export const UpNextBlock: React.FC<{ block: UpNextType }> = ({ block }) => {
   const { title, subtitle, maxEvents, showFeatured, fallbackContent } = block
   const [featuredEvent, setFeaturedEvent] = useState<Event | null>(null)
   const [additionalEvents, setAdditionalEvents] = useState<Event[]>([])
@@ -42,7 +42,7 @@ export const UpNextBlock: React.FC<{ block: UpNextType; key?: string }> = ({ blo
 
   if (loading) {
     return (
-      <section id="upcoming" aria-label="Upcoming Events" className="relative w-screen bg-slate-50 py-32">
+      <section id="upcoming" aria-label="Upcoming Events" className="relative w-full bg-slate-50 py-32">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-display text-3xl sm:text-4xl md:text-5xl tracking-tight text-slate-900">
@@ -60,7 +60,7 @@ export const UpNextBlock: React.FC<{ block: UpNextType; key?: string }> = ({ blo
 
   if (!loading && !featuredEvent && additionalEvents.length === 0) {
     return (
-      <section id="upcoming" aria-label="Upcoming Events" className="relative w-screen bg-slate-50 py-32">
+      <section id="upcoming" aria-label="Upcoming Events" className="relative w-full bg-slate-50 py-32">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-display text-3xl sm:text-4xl md:text-5xl tracking-tight text-slate-900">
@@ -84,7 +84,7 @@ export const UpNextBlock: React.FC<{ block: UpNextType; key?: string }> = ({ blo
   }
 
   return (
-    <section id="upcoming" aria-label="Upcoming Events" className="relative w-screen bg-slate-50 py-32">
+    <section id="upcoming" aria-label="Upcoming Events" className="relative w-full bg-slate-50 py-32">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl tracking-tight text-slate-900">
@@ -107,7 +107,7 @@ export const UpNextBlock: React.FC<{ block: UpNextType; key?: string }> = ({ blo
                       src={featuredEvent.image.url}
                       alt={featuredEvent.title || 'Featured Event'}
                       fill
-                      unoptimized
+                      sizes="100vw"
                     />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/65 to-black/35" />

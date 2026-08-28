@@ -1,34 +1,21 @@
 import { NextResponse } from 'next/server'
-import { getPayload } from 'payload'
-import config from '@/payload.config'
+
+import { getPastEvents } from '@/utilities/getEvents'
 
 export async function GET() {
   try {
-    const payload = await getPayload({ config })
-    
-    const now = new Date()
-    
-    // Get all events and sort by date (most recent first)
-    const events = await payload.find({
-      collection: 'events',
-      sort: '-eventDate',
-      limit: 50,
-    })
+    const pastEvents = await getPastEvents()
 
-    // Filter for past events (dates that have already passed)
-    const pastEvents = events.docs.filter(event => {
-      const eventDate = new Date(event.eventDate as string)
-      return eventDate < now
-    })
-
-    return NextResponse.json({
-      pastEvents
-    })
+    return NextResponse.json(
+      { pastEvents },
+      {
+        headers: {
+          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=3600',
+        },
+      },
+    )
   } catch (error) {
     console.error('Error fetching past performances:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch past performances' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to fetch past performances' }, { status: 500 })
   }
 }
