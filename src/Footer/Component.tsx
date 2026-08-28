@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import React from 'react'
 
 import type { Footer as FooterType } from '@/payload-types'
@@ -52,6 +51,11 @@ export async function Footer() {
           newTab: link.newTab,
         }))
       : defaultNavItems
+  const normalizedNavItems = navItems.map((item) => ({
+    ...item,
+    // Bare #anchor links only work on the homepage - route them through "/".
+    url: item.url.startsWith('#') && item.url.length > 1 ? `/${item.url}` : item.url,
+  }))
 
   const socials = footer?.socialLinks && footer.socialLinks.length > 0 ? footer.socialLinks : defaultSocials
   const tagline =
@@ -76,7 +80,7 @@ export async function Footer() {
           <div>
             <p className="mb-4 text-[11px] uppercase tracking-[0.22em] text-zinc-500">Explore</p>
             <nav className="flex flex-col gap-3 text-[15px]" aria-label="Footer navigation">
-              {navItems.map((item) => (
+              {normalizedNavItems.map((item) => (
                 <a
                   key={`${item.label}-${item.url}`}
                   href={item.url}
@@ -142,14 +146,6 @@ export async function Footer() {
               {creditLabel}
             </a>
             .
-          </p>
-          <p className="m-0 flex gap-5">
-            <Link href="/posts" className="text-zinc-500 no-underline transition-colors hover:text-zinc-200">
-              News
-            </Link>
-            <Link href="/search" className="text-zinc-500 no-underline transition-colors hover:text-zinc-200">
-              Search
-            </Link>
           </p>
         </div>
       </div>

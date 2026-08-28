@@ -65,7 +65,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data, ticketU
     { label: 'Contact', url: '/#contact' },
   ]
 
-  const navItems: NavItem[] =
+  const navItems: NavItem[] = (
     _data?.navItems?.map(({ link }) => ({
       label: link.label,
       url:
@@ -78,6 +78,12 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data, ticketU
             : '#',
       newTab: link.newTab,
     })) || defaultNavItems
+  ).map((item) => ({
+    ...item,
+    // Bare #anchor links only work on the homepage - route them through "/"
+    // so the menu works from every page.
+    url: item.url.startsWith('#') && item.url.length > 1 ? `/${item.url}` : item.url,
+  }))
 
   return (
     <>
